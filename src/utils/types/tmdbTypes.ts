@@ -4,4 +4,13 @@ export type CreateNewTokenResponse = {
   request_token: string;
 };
 
-export type SignInResponse = CreateNewTokenResponse;
+export type ValidateTokenResponse = CreateNewTokenResponse;
+
+export type SignInResponse = {
+  success: boolean;
+  session_id: string;
+};
+
+export type SignOutResponse = {
+  success: boolean;
+};

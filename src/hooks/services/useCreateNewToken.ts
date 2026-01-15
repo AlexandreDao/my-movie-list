@@ -15,6 +15,7 @@ const useCreateNewToken = () => {
     queryKey: ["create-new-token"],
     queryFn: queryFn,
     staleTime: 60 * 1000 * 60, // 1 hour
+    throwOnError: true,
   });
 };
 

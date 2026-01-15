@@ -1,5 +1,13 @@
-import { CreateNewTokenResponseMapped } from "@/utils/types/tmdbMappedTypes";
-import { CreateNewTokenResponse } from "@/utils/types/tmdbTypes";
+import {
+  CreateNewTokenResponseMapped,
+  SignInResponseMapped,
+  SignOutResponseMapped,
+} from "@/utils/types/tmdbMappedTypes";
+import {
+  CreateNewTokenResponse,
+  SignInResponse,
+  SignOutResponse,
+} from "@/utils/types/tmdbTypes";
 
 export const createNewTokenResponseMapper = (
   data: CreateNewTokenResponse,
@@ -11,4 +19,21 @@ export const createNewTokenResponseMapper = (
   };
 };
 
-export const signInResponseMapper = createNewTokenResponseMapper;
+export const validateTokenResponseMapper = createNewTokenResponseMapper;
+
+export const signInResponseMapper = (
+  data: SignInResponse,
+): SignInResponseMapped => {
+  return {
+    success: data.success,
+    sessionId: data.session_id,
+  };
+};
+
+export const signOutResponseMapper = (
+  data: SignOutResponse,
+): SignOutResponseMapped => {
+  return {
+    success: data.success,
+  };
+};
