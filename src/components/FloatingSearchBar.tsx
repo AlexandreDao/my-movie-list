@@ -47,7 +47,6 @@ const FloatingSearchBar: React.FC<FloatingSearchBarProps> = ({containerStyle, se
           value={searchString}
           ref={inputRef}
           placeholder={"search a movie name:"}
-          //placeholderTextColor={}
           onBlur={() => setIsCollapsed(searchString.length === 0)}
           onSubmitEditing={() => setIsCollapsed(searchString.length === 0)}
           {...textInputProps}
