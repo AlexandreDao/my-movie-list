@@ -1,10 +1,10 @@
 import { FC, useRef, useState } from "react";
 import {
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   TextInputProps,
-  TouchableOpacity,
   useWindowDimensions,
   ViewStyle,
 } from "react-native";
@@ -56,12 +56,12 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
 
   return (
     <Animated.View style={[styles.searchBar, containerStyle, animatedWidth]}>
-      <TouchableOpacity
+      <Pressable
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
       >
         <Text>{"[...]"}</Text>
-      </TouchableOpacity>
+      </Pressable>
       {isCollapsed ? null : (
         <TextInput
           style={styles.inputStyle}
