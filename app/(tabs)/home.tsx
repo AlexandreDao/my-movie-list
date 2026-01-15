@@ -25,7 +25,8 @@ const home = () => {
     <KeyboardAvoidingView keyboardVerticalOffset={hearderHeight} behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.mainContainer}>
       <FlatList
         style={{width: "100%"}}
-        contentContainerStyle={{alignItems: "center"}}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: "space-evenly"}}
         data={searchInput ? moviesToDisplay.current : moviesData}
         renderItem={({item}) => 
           <MovieDisplay data={item} style={{marginVertical: 10}}/>
@@ -48,12 +49,12 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#383838",
+    backgroundColor: "#282828",
   },
   searchBar: {
     position: 'absolute',
     bottom: 24,
-    right: 20,
+    marginRight: "5%",
   },
   text: {
     color: "white",

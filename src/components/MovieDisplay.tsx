@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 import { MovieDataEntry } from "../utils/types";
 
 const BASE_URL = "http://image.tmdb.org/t/p/";
@@ -15,20 +15,17 @@ const MovieDisplay: React.FC<MovieDisplayProps> = ({data, style}) => {
   return (
     <TouchableOpacity style={[styles.mainContainer, style]}>
       <Image src={posterPath} height={235} width={155} resizeMode={"contain"}/>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{data.title}</Text>
-      </View>
+      <Text style={styles.text}>{data.title}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: "#222BD4",
-    width: "85%",
+    //backgroundColor: "#222BD4",
+    width: 155,
     borderRadius: 10,
-    height: 250,
-    flexDirection: "row",
+    //flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 5,
     paddingVertical: 10,
