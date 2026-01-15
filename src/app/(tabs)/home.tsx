@@ -1,7 +1,7 @@
-import { DummyData } from "@/DummyData";
-import FloatingSearchBar from "@/src/components/FloatingSearchBar";
-import MovieDisplay from "@/src/components/MovieDisplay";
-import { MovieDataEntry } from "@/src/utils/types";
+import { DummyData } from "@/../DummyData";
+import FloatingSearchBar from "@/components/FloatingSearchBar";
+import MovieDisplay from "@/components/MovieDisplay";
+import { MovieDataEntry } from "@/utils/types";
 import { useHeaderHeight } from "@react-navigation/elements";
 import React, { useRef, useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
