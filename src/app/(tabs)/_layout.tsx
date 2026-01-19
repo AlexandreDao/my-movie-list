@@ -1,12 +1,12 @@
+import { CustomTabButton } from "@/components/CustomTabButton";
 import { useAppDispatch } from "@/hooks";
 import useSignOut from "@/hooks/services/useSignOut";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { isAxiosError } from "axios";
-import { Tabs } from "expo-router";
-import { Alert, TouchableOpacity } from "react-native";
-
+import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 const LogoutButton = () => {
   const { mutateAsync } = useSignOut();
   const dispatch = useAppDispatch();
@@ -36,16 +36,41 @@ const LogoutButton = () => {
     </TouchableOpacity>
   );
 };
+
+//TODO: put back logout button + adjust icon size same as tab icon
+// use ref for login to switch field
+// blur under tab and animate tab switching
+// add pressed effect on tab button
+// adjust tab bar space from bottom
 export const TabLayout = () => {
   return (
     <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{ title: "Home", headerRight: () => <LogoutButton /> }}
-      />
-      <Tabs.Screen name="my-movie" options={{ title: "My Movie" }} />
+      <TabSlot />
+      <TabList style={styles.tabList}>
+        <TabTrigger name="index" href="/" asChild>
+          <CustomTabButton icon="home">Home</CustomTabButton>
+        </TabTrigger>
+        <TabTrigger name="my-movie" href="/my-movie" asChild>
+          <CustomTabButton icon="local-movies">My movie</CustomTabButton>
+        </TabTrigger>
+      </TabList>
     </Tabs>
   );
 };
+
+const styles = StyleSheet.create({
+  tabList: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    alignSelf: "center",
+    bottom: 24,
+    borderRadius: 24,
+    padding: 2,
+    paddingLeft: 10,
+    backgroundColor: "black",
+  },
+});
 
 export default TabLayout;
