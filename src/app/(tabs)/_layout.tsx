@@ -1,10 +1,10 @@
 import { useAppDispatch } from "@/hooks";
 import useSignOut from "@/hooks/services/useSignOut";
+import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { isAxiosError } from "axios";
 import { Tabs } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import { Alert, TouchableOpacity } from "react-native";
 
 const LogoutButton = () => {
@@ -40,7 +40,7 @@ export const TabLayout = () => {
   return (
     <Tabs>
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{ title: "Home", headerRight: () => <LogoutButton /> }}
       />
       <Tabs.Screen name="my-movie" options={{ title: "My Movie" }} />

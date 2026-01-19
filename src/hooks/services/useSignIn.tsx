@@ -5,8 +5,9 @@ import { SignInResponse } from "@/utils/types/tmdbTypes";
 import { useMutation } from "@tanstack/react-query";
 import useValidateToken from "./useValidateToken";
 
-const mutationFnFactory = (validateToken: any) => {
-  return async ({ username, password }: Credentials) => {
+const useSignIn = () => {
+  const { mutateAsync: validateToken } = useValidateToken();
+  const mutationFn = async ({ username, password }: Credentials) => {
     const validateTokenData = await validateToken({ username, password });
     const { data } = await tmdbSingleton.post<SignInResponse>(
       "/authentication/session/new",
@@ -16,11 +17,6 @@ const mutationFnFactory = (validateToken: any) => {
     );
     return signInResponseMapper(data);
   };
-};
-
-const useSignIn = () => {
-  const { mutateAsync: validateToken } = useValidateToken();
-  const mutationFn = mutationFnFactory(validateToken);
 
   return useMutation({
     mutationFn: mutationFn,

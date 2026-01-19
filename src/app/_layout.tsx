@@ -26,7 +26,7 @@ const StackRootLayout = () => {
         <Stack.Screen name="(tabs)" />
       </Stack.Protected>
       <Stack.Protected guard={!isLoggedIn}>
-        <Stack.Screen name="sign-in" />
+        <Stack.Screen name="index" />
       </Stack.Protected>
     </Stack>
   );

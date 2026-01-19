@@ -1,5 +1,5 @@
+import SecureStore from "@/utils/storages/SecureStorage";
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 
 const tmdbSingleton = axios.create({
   baseURL: `${process.env.EXPO_PUBLIC_TMDB_API_URL}/${process.env.EXPO_PUBLIC_TMDB_API_VERSION}`,

@@ -5,8 +5,11 @@ import { Credentials } from "@/utils/types/formType";
 import { ValidateTokenResponse } from "@/utils/types/tmdbTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const mutationFnFactory = (requestToken: string) => {
-  return async ({ username, password }: Credentials) => {
+const useValidateToken = () => {
+  const queryClient = useQueryClient();
+  const { data } = useCreateNewToken();
+  const requestToken = data?.requestToken || "";
+  const mutationFn = async ({ username, password }: Credentials) => {
     if (!requestToken) {
       throw new Error("Request token is not available");
     }
@@ -21,12 +24,6 @@ const mutationFnFactory = (requestToken: string) => {
 
     return validateTokenResponseMapper(data);
   };
-};
-
-const useValidateToken = () => {
-  const queryClient = useQueryClient();
-  const { data } = useCreateNewToken();
-  const mutationFn = mutationFnFactory(data?.requestToken || "");
 
   return useMutation({
     mutationFn: mutationFn,

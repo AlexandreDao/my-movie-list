@@ -19,6 +19,7 @@ const PasswordInput: FC<TextInputProps> = (props) => {
         {...props}
       />
       <Pressable
+        style={styles.icon}
         hitSlop={12}
         onPress={() => setSecureTextEntry((prev) => !prev)}
       >
@@ -33,17 +34,22 @@ const PasswordInput: FC<TextInputProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
     height: 48,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
-    paddingHorizontal: 12,
     marginBottom: 12,
   },
   input: {
     flex: 1,
+    borderRadius: 8,
+    paddingLeft: 12,
+    paddingRight: 48,
+  },
+  icon: {
+    position: "absolute",
+    right: 12,
+    top: 12,
   },
 });
 
