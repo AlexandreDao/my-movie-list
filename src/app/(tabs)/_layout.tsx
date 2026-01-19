@@ -40,7 +40,7 @@ export const TabLayout = () => {
   return (
     <Tabs>
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{ title: "Home", headerRight: () => <LogoutButton /> }}
       />
       <Tabs.Screen name="my-movie" options={{ title: "My Movie" }} />

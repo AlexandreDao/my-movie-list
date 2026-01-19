@@ -1,9 +1,10 @@
-import { DummyData } from "@/../DummyData";
+//import { DummyData } from "@/../DummyData";
 import FloatingSearchBar from "@/components/FloatingSearchBar";
 import MovieDisplay from "@/components/MovieDisplay";
-import { MovieDataEntry } from "@/utils/types";
+import useGetPopMovies from "@/hooks/services/useGetPopMovies";
+import useSearchMovies from "@/hooks/services/useSearchMovies";
 import { useHeaderHeight } from "@react-navigation/elements";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -13,21 +14,11 @@ import {
 
 const Home = () => {
   const hearderHeight = useHeaderHeight();
-  const moviesData: MovieDataEntry[] = DummyData.results;
-  const moviesToDisplay = useRef<MovieDataEntry[]>([]);
+  const { data: moviesData } = useGetPopMovies();
+  //const moviesToDisplay = useRef<MovieDataEntryMapped[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
-
-  const filterMovies = (filter: string) => {
-    if (filter === "") {
-      moviesToDisplay.current = [];
-    }
-    moviesToDisplay.current = moviesData.filter((entry: MovieDataEntry) => {
-      return entry.title
-        .normalize()
-        .toLowerCase()
-        .includes(filter.normalize().toLowerCase());
-    });
-  };
+  const [query, setQuery] = useState<string>("");
+  const { data: moviesToDisplay } = useSearchMovies(query);
 
   return (
     <KeyboardAvoidingView
@@ -39,7 +30,7 @@ const Home = () => {
         style={styles.listStyle}
         numColumns={2}
         columnWrapperStyle={styles.columnWrapperStyle}
-        data={searchInput ? moviesToDisplay.current : moviesData}
+        data={query ? moviesToDisplay : moviesData}
         renderItem={({ item }) => (
           <MovieDisplay data={item} style={{ marginVertical: 10 }} />
         )}
@@ -48,8 +39,8 @@ const Home = () => {
       <FloatingSearchBar
         containerStyle={styles.searchBar}
         searchString={searchInput}
+        onSubmit={() => setQuery(searchInput)}
         onChangeText={(newText) => {
-          filterMovies(newText);
           setSearchInput(newText);
         }}
       />

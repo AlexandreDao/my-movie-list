@@ -14,3 +14,15 @@ export type SignInResponseMapped = {
 };
 
 export type SignOutResponseMapped = SignOutResponse;
+
+export type MovieDataEntryMapped = {
+  id: number;
+  originalLanguage: string;
+  originalTitle: string;
+  overview: string;
+  backdropPath: string;
+  posterPath: string;
+  releaseDate: string;
+  title: string;
+  voteAverage: number;
+};
