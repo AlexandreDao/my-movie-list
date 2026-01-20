@@ -1,8 +1,8 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { FC, useRef, useState } from "react";
 import {
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TextInputProps,
   useWindowDimensions,
@@ -62,7 +62,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
       >
-        <Text>{"[...]"}</Text>
+        <FontAwesome name="search" size={28}  />
       </Pressable>
       {isCollapsed ? null : (
         <TextInput
