@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { TabTriggerSlotProps } from "expo-router/ui";
 import * as React from "react";
+import { forwardRef } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface CustomTabButtonProps
@@ -8,21 +9,21 @@ interface CustomTabButtonProps
   icon: keyof typeof MaterialIcons.glyphMap;
 }
 
-export const CustomTabButton = React.forwardRef<View, CustomTabButtonProps>(
-  (props, ref) => {
+export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
+  ({ isFocused, icon, children, ...props }, ref) => {
     return (
       <Pressable
         ref={ref}
         {...props}
-        style={[styles.button, props.isFocused && styles.focusedButton]}
+        style={[styles.button, isFocused && styles.focusedButton]}
       >
         <MaterialIcons
-          name={props.icon}
+          name={icon}
           size={18}
-          color={props.isFocused ? "#fff" : "grey"}
+          color={isFocused ? "#fff" : "grey"}
         />
-        <Text style={[styles.text, props.isFocused && styles.focusedText]}>
-          {props.children}
+        <Text style={[styles.text, isFocused && styles.focusedText]}>
+          {children}
         </Text>
       </Pressable>
     );

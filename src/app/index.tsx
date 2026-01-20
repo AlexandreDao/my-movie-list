@@ -1,7 +1,6 @@
 import Hyperlink from "@/components/Hyperlink";
 import PasswordInput from "@/components/PasswordInput";
-import useSignIn from "@/hooks/services/useSignIn";
-import useAppDispatch from "@/hooks/store/useAppDisptach";
+import { useAppDispatch, useSignIn } from "@/hooks";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
