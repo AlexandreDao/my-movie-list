@@ -13,7 +13,6 @@ const useGetPopMovies = () => {
     queryKey: ["get-popular-movies"],
     queryFn: queryFn,
     staleTime: 60 * 1000 * 60 * 24, // 24 hour
-    throwOnError: true,
   });
 };
 

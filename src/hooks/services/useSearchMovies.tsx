@@ -16,7 +16,6 @@ const useSearchMovies = (query: string) => {
     queryFn: () => queryFn(query),
     enabled: !!query,
     staleTime: 60 * 1000 * 60 * 24, // 24 hour
-    throwOnError: true,
   });
 };
 
