@@ -5,6 +5,7 @@ import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
 import { isAxiosError } from "axios";
+import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -26,6 +27,7 @@ export default function SignIn() {
   });
   const dispatch = useAppDispatch();
   const { mutate: signInMutation, isPending } = useSignIn();
+  const passwordInputRef = useRef<TextInput>(null);
 
   const onSubmit = (data: Credentials) => {
     signInMutation(
@@ -39,13 +41,13 @@ export default function SignIn() {
           if (isAxiosError(error)) {
             Alert.alert(
               "Sign In Error",
-              error.response?.data?.status_message || "Unknown error",
+              error.response?.data?.status_message || "Unknown error"
             );
           } else {
             Alert.alert("Sign In Error", "An unexpected error occurred");
           }
         },
-      },
+      }
     );
   };
 
@@ -73,6 +75,7 @@ export default function SignIn() {
                   value={value}
                   onChangeText={onChange}
                   autoCapitalize="none"
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
                 />
               )}
             />
@@ -81,7 +84,12 @@ export default function SignIn() {
               name="password"
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
-                <PasswordInput value={value} onChangeText={onChange} />
+                <PasswordInput
+                  value={value}
+                  onChangeText={onChange}
+                  ref={passwordInputRef}
+                  onSubmitEditing={handleSubmit(onSubmit)}
+                />
               )}
             />
             <Hyperlink

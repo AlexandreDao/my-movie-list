@@ -1,13 +1,13 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { TabTriggerSlotProps } from "expo-router/ui";
 import * as React from "react";
-import { forwardRef } from "react";
+import { forwardRef, PropsWithChildren } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-interface CustomTabButtonProps
-  extends React.PropsWithChildren, TabTriggerSlotProps {
+type CustomTabButtonProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
-}
+} & PropsWithChildren &
+  TabTriggerSlotProps;
 
 export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
   ({ isFocused, icon, children, ...props }, ref) => {
@@ -27,7 +27,7 @@ export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
         </Text>
       </Pressable>
     );
-  },
+  }
 );
 
 CustomTabButton.displayName = "CustomTabButton";
