@@ -14,3 +14,22 @@ export type SignInResponse = {
 export type SignOutResponse = {
   success: boolean;
 };
+
+export type MovieDataEntry = {
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  backdrop_path: string;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  vote_average: number;
+};
+
+export type GetMoviesResponse = {
+  page: number;
+  results: MovieDataEntry[];
+  total_pages: number;
+  total_results: number;
+};
