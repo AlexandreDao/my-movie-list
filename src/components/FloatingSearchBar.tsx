@@ -1,6 +1,7 @@
 import { FC, useRef, useState } from "react";
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
@@ -17,13 +18,15 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 
 type FloatingSearchBarProps = {
-  containerStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
   searchString: string;
+  onSubmit: () => void;
 } & TextInputProps;
 
 const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   containerStyle,
   searchString,
+  onSubmit,
   ...textInputProps
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
@@ -69,7 +72,10 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           ref={inputRef}
           placeholder={"search a movie name:"}
           onBlur={() => setIsCollapsed(searchString.length === 0)}
-          onSubmitEditing={() => setIsCollapsed(searchString.length === 0)}
+          onSubmitEditing={() => {
+            setIsCollapsed(searchString.length === 0);
+            onSubmit();
+          }}
           {...textInputProps}
         />
       )}

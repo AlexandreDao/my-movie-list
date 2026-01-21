@@ -1,20 +1,21 @@
+import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { FC } from "react";
 import {
   Image,
+  StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
-import { MovieDataEntry } from "../utils/types";
 
 type MovieDisplayProps = {
-  data: MovieDataEntry;
-  style?: ViewStyle;
+  data: MovieDataEntryMapped;
+  style?: StyleProp<ViewStyle>;
 };
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style }) => {
-  const posterPath = `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_POSTER_SIZE}${data.poster_path}`;
+  const posterPath = `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_POSTER_SIZE}${data.posterPath}`;
 
   return (
     <TouchableOpacity style={[styles.mainContainer, style]}>
