@@ -1,7 +1,7 @@
 import FloatingSearchBar from "@/components/FloatingSearchBar";
 import MovieDisplay from "@/components/MovieDisplay";
 import {
-  useBottomTabBarHeight,
+  useBottomTabBarTotalHeight,
   useGetPopMovies,
   useHeaderHeight,
   useSearchMovies,
@@ -19,7 +19,7 @@ import {
 } from "react-native";
 
 const Home = () => {
-  const hearderHeight = useHeaderHeight();
+  const headerHeight = useHeaderHeight();
   const {
     data: moviesData,
     error: getPopError,
@@ -32,7 +32,7 @@ const Home = () => {
     error: searchError,
     isError: isSearchError,
   } = useSearchMovies(query);
-  const bottomTabBarHeight = useBottomTabBarHeight();
+  const bottomTabBarHeight = useBottomTabBarTotalHeight();
 
   useEffect(() => {
     if (isGetPopError || isSearchError) {
@@ -56,7 +56,7 @@ const Home = () => {
     <View style={styles.mainContainer}>
       <KeyboardAvoidingView
         style={styles.container}
-        keyboardVerticalOffset={hearderHeight}
+        keyboardVerticalOffset={headerHeight}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <FlatList
@@ -80,7 +80,6 @@ const Home = () => {
         )}
         <FloatingSearchBar
           containerStyle={[
-            ,
             styles.searchBar,
             { bottom: bottomTabBarHeight + 12 },
           ]}

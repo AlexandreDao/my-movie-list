@@ -10,10 +10,18 @@ import {
   FC,
   PropsWithChildren,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
 } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, {
+  Easing,
+  ReduceMotion,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const MeasureCustomBottomTab: FC<PropsWithChildren> = ({ children }) => {
   const ref = useRef<View>(null);
@@ -23,7 +31,8 @@ const MeasureCustomBottomTab: FC<PropsWithChildren> = ({ children }) => {
     ref.current?.measure((x, y, width, height, pageX, pageY) => {
       setNavigationState((prev) => ({
         ...prev,
-        bottomTabBarHeight: height + 32,
+        bottomTabBarTotalHeight: height + 32,
+        bottomTabBarHeight: height,
       }));
     });
   }, []);
@@ -32,6 +41,54 @@ const MeasureCustomBottomTab: FC<PropsWithChildren> = ({ children }) => {
     <View ref={ref} style={styles.tabList}>
       {children}
     </View>
+  );
+};
+
+const FocusBackground = () => {
+  const { navigationState } = useContext(NavigationContext);
+  const prevPosition = useRef([0, 0]);
+  const translateX = useSharedValue(0);
+
+  useEffect(() => {
+    if (
+      prevPosition.current[0] !== 0 &&
+      prevPosition.current[0] !== navigationState.focusPosition[0]
+    ) {
+      translateX.value +=
+        navigationState.focusPosition[0] - prevPosition.current[0];
+    }
+    prevPosition.current = navigationState.focusPosition;
+  }, [navigationState.focusPosition]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: withTiming(translateX.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.circle),
+            reduceMotion: ReduceMotion.System,
+          }),
+        },
+      ],
+    };
+  });
+
+  return (
+    <Animated.View
+      style={[
+        {
+          position: "absolute",
+          width: 120,
+          backgroundColor: "grey",
+          height: navigationState.bottomTabBarHeight - 4,
+          left: 2,
+          top: 2,
+          borderRadius: 32,
+        },
+        animatedStyle,
+      ]}
+    />
   );
 };
 
@@ -46,6 +103,7 @@ export const TabLayout: FC = () => {
         <TabSlot />
         <TabList asChild>
           <MeasureCustomBottomTab>
+            <FocusBackground />
             <TabTrigger name="index" href="/" asChild>
               <CustomTabButton icon="home">Home</CustomTabButton>
             </TabTrigger>
@@ -72,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 2,
     paddingLeft: 10,
     backgroundColor: "black",
-    zIndex: 10,
+    zIndex: 1,
     flexDirection: "row",
   },
 });

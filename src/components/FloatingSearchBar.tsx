@@ -72,6 +72,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           ref={inputRef}
           placeholder={"search a movie name:"}
           onBlur={() => setIsCollapsed(searchString.length === 0)}
+          autoCapitalize="none"
           onSubmitEditing={() => {
             setIsCollapsed(searchString.length === 0);
             onSubmit();

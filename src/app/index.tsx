@@ -41,13 +41,13 @@ export default function SignIn() {
           if (isAxiosError(error)) {
             Alert.alert(
               "Sign In Error",
-              error.response?.data?.status_message || "Unknown error"
+              error.response?.data?.status_message || "Unknown error",
             );
           } else {
             Alert.alert("Sign In Error", "An unexpected error occurred");
           }
         },
-      }
+      },
     );
   };
 
@@ -76,6 +76,7 @@ export default function SignIn() {
                   onChangeText={onChange}
                   autoCapitalize="none"
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
+                  returnKeyType="next"
                 />
               )}
             />
@@ -89,6 +90,7 @@ export default function SignIn() {
                   onChangeText={onChange}
                   ref={passwordInputRef}
                   onSubmitEditing={handleSubmit(onSubmit)}
+                  returnKeyType="send"
                 />
               )}
             />

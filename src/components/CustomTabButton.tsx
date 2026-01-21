@@ -1,7 +1,7 @@
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TabTriggerSlotProps } from "expo-router/ui";
-import { forwardRef, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type CustomTabButtonProps = {
@@ -9,37 +9,48 @@ type CustomTabButtonProps = {
   children: string;
 } & TabTriggerSlotProps;
 
-export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
-  ({ isFocused, icon, children, ...props }, ref) => {
-    const { setNavigationState } = useContext(NavigationContext);
+export const CustomTabButton: FC<CustomTabButtonProps> = ({
+  isFocused,
+  icon,
+  children,
+  ...props
+}) => {
+  const { setNavigationState } = useContext(NavigationContext);
+  const ref = useRef<View>(null);
 
-    useEffect(() => {
-      if (isFocused) {
+  useEffect(() => {
+    if (isFocused) {
+      setNavigationState((prev) => ({
+        ...prev,
+        title: children,
+      }));
+    }
+  }, [isFocused]);
+
+  useLayoutEffect(() => {
+    if (isFocused) {
+      ref.current?.measure((x, y, width, height, pageX, pageY) => {
         setNavigationState((prev) => ({
           ...prev,
-          title: children,
+          focusPosition: [x, y],
         }));
-      }
-    }, [isFocused]);
+      });
+    }
+  }, [isFocused]);
 
-    return (
-      <Pressable
-        ref={ref}
-        {...props}
-        style={[styles.button, isFocused && styles.focusedButton]}
-      >
-        <MaterialIcons
-          name={icon}
-          size={18}
-          color={isFocused ? "#fff" : "grey"}
-        />
-        <Text style={[styles.text, isFocused && styles.focusedText]}>
-          {children}
-        </Text>
-      </Pressable>
-    );
-  },
-);
+  return (
+    <Pressable {...props} ref={ref} style={[styles.button]}>
+      <MaterialIcons
+        name={icon}
+        size={18}
+        color={isFocused ? "#fff" : "grey"}
+      />
+      <Text style={[styles.text, isFocused && styles.focusedText]}>
+        {children}
+      </Text>
+    </Pressable>
+  );
+};
 
 CustomTabButton.displayName = "CustomTabButton";
 

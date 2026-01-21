@@ -8,15 +8,19 @@ import {
 } from "react";
 
 type NavigationStateType = {
+  bottomTabBarTotalHeight: number;
   bottomTabBarHeight: number;
   headerHeight: number;
   title: string;
+  focusPosition: [number, number];
 };
 
 const NAVIGAITION_STATE_DEFAULT_VALUE: NavigationStateType = {
+  bottomTabBarTotalHeight: 0,
   bottomTabBarHeight: 0,
-  headerHeight: 0,
+  headerHeight: 72,
   title: "",
+  focusPosition: [0, 0],
 };
 
 type NavigationContextType = {

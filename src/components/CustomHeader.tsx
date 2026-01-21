@@ -39,6 +39,7 @@ const LogoutButton = () => {
 
 const CustomHeader = () => {
   const title = useHeaderTitle();
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <Text style={styles.title}>{title}</Text>
