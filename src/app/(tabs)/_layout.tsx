@@ -1,6 +1,6 @@
 import CustomTabBackground from "@/components/CustomTabBackground";
 import { CustomTabButton } from "@/components/CustomTabButton";
-import { useAppDispatch, useSignOut } from "@/hooks";
+import { useAppDispatch, useHeaderTitle, useSignOut } from "@/hooks";
 import {
   NavigationContext,
   NavigationProvider,
@@ -8,9 +8,7 @@ import {
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useRoute } from "@react-navigation/native";
 import { isAxiosError } from "axios";
-import { useNavigation } from "expo-router";
 import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import {
   FC,
@@ -19,7 +17,7 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const LogoutButton = () => {
   const { mutate } = useSignOut();
@@ -38,7 +36,7 @@ const LogoutButton = () => {
             if (isAxiosError(error)) {
               Alert.alert(
                 "Sign Out Error",
-                error.response?.data?.status_message || "Unknown error"
+                error.response?.data?.status_message || "Unknown error",
               );
             } else {
               Alert.alert("Sign Out Error", "An unexpected error occurred");
@@ -74,10 +72,12 @@ const MeasureCustomBottomTab: FC<PropsWithChildren> = ({ children }) => {
 
 const CustomHeader = (props) => {
   // TODO: get header title
-  const navigation = useNavigation();
-  const route = useRoute();
-  console.log(route);
-  return props.children;
+  const title = useHeaderTitle();
+  return (
+    <View style={{ height: 52 }}>
+      <Text>{title}</Text>
+    </View>
+  );
 };
 
 //TODO: put back logout button + adjust icon size same as tab icon

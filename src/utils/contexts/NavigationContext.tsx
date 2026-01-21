@@ -10,11 +10,13 @@ import {
 type NavigationStateType = {
   bottomTabBarHeight: number;
   headerHeight: number;
+  title: string;
 };
 
 const NAVIGAITION_STATE_DEFAULT_VALUE: NavigationStateType = {
   bottomTabBarHeight: 0,
   headerHeight: 0,
+  title: "",
 };
 
 type NavigationContextType = {
@@ -28,12 +30,12 @@ const NAVIGAITION_CONTEXT_DEFAULT_VALUE: NavigationContextType = {
 };
 
 const NavigationContext = createContext<NavigationContextType>(
-  NAVIGAITION_CONTEXT_DEFAULT_VALUE
+  NAVIGAITION_CONTEXT_DEFAULT_VALUE,
 );
 
 const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [navigationState, setNavigationState] = useState<NavigationStateType>(
-    NAVIGAITION_STATE_DEFAULT_VALUE
+    NAVIGAITION_STATE_DEFAULT_VALUE,
   );
   return (
     <NavigationContext.Provider value={{ navigationState, setNavigationState }}>

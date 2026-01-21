@@ -1,16 +1,27 @@
+import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TabTriggerSlotProps } from "expo-router/ui";
-import * as React from "react";
-import { forwardRef, PropsWithChildren } from "react";
+import { forwardRef, useContext, useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type CustomTabButtonProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
-} & PropsWithChildren &
-  TabTriggerSlotProps;
+  children: string;
+} & TabTriggerSlotProps;
 
 export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
   ({ isFocused, icon, children, ...props }, ref) => {
+    const { setNavigationState } = useContext(NavigationContext);
+
+    useEffect(() => {
+      if (isFocused) {
+        setNavigationState((prev) => ({
+          ...prev,
+          title: children,
+        }));
+      }
+    }, [isFocused]);
+
     return (
       <Pressable
         ref={ref}
@@ -27,7 +38,7 @@ export const CustomTabButton = forwardRef<View, CustomTabButtonProps>(
         </Text>
       </Pressable>
     );
-  }
+  },
 );
 
 CustomTabButton.displayName = "CustomTabButton";
