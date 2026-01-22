@@ -10,14 +10,15 @@ import {
 
 type MovieDisplayProps = {
   data: MovieDataEntryMapped;
+  onPress?: () => void;
   style?: ViewStyle;
 };
 
-const MovieDisplay: FC<MovieDisplayProps> = ({ data, style }) => {
+const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
   const posterPath = `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_POSTER_SIZE}${data.posterPath}`;
 
   return (
-    <TouchableOpacity style={[styles.mainContainer, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.mainContainer, style]}>
       <Image src={posterPath} height={235} width={155} resizeMode={"contain"} />
       <Text style={styles.text}>{data.title}</Text>
     </TouchableOpacity>

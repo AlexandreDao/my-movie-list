@@ -62,7 +62,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
       >
-        <FontAwesome name="search" size={28}  />
+        <FontAwesome name="search" size={28} />
       </Pressable>
       {isCollapsed ? null : (
         <TextInput

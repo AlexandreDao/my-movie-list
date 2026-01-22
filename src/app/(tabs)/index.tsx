@@ -1,9 +1,12 @@
 import FloatingSearchBar from "@/components/FloatingSearchBar";
+import MovieDetailsSheet from "@/components/MovieDetailsSheet";
 import MovieDisplay from "@/components/MovieDisplay";
 import { useGetPopMovies, useSearchMovies } from "@/hooks";
+import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { isAxiosError } from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -11,8 +14,8 @@ import {
   Platform,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   const hearderHeight = useHeaderHeight();
@@ -28,6 +31,18 @@ const Home = () => {
     error: searchError,
     isError: isSearchError,
   } = useSearchMovies(query);
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [sheetDetails, setSheetDetails] = useState<MovieDataEntryMapped | null>(
+    null,
+  );
+
+  const openSheet = (movieEntry: MovieDataEntryMapped) => {
+    //console.log("opening...");
+    //console.log(bottomSheetRef.current);
+    setSheetDetails(movieEntry);
+    bottomSheetRef.current?.expand();
+  };
 
   useEffect(() => {
     if (isGetPopError || isSearchError) {
@@ -47,8 +62,9 @@ const Home = () => {
     }
   }, [getPopError, searchError, isGetPopError, isSearchError]);
 
+  //mainContainer View might need to be changed into a SafeAreaView, But it was causing problems so it will remain a View for now.
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <KeyboardAvoidingView
         style={styles.container}
         keyboardVerticalOffset={hearderHeight}
@@ -59,9 +75,14 @@ const Home = () => {
           numColumns={2}
           columnWrapperStyle={styles.columnWrapperStyle}
           data={query ? moviesToDisplay : moviesData}
+          contentContainerStyle={{ paddingBottom: 80 }}
           ListEmptyComponent={null}
           renderItem={({ item }) => (
-            <MovieDisplay data={item} style={{ marginVertical: 10 }} />
+            <MovieDisplay
+              data={item}
+              onPress={() => openSheet(item)}
+              style={{ marginVertical: 10 }}
+            />
           )}
           keyExtractor={(entry) => entry.id.toString()}
         />
@@ -79,8 +100,11 @@ const Home = () => {
             setSearchInput(newText);
           }}
         />
+        {moviesData ? (
+          <MovieDetailsSheet ref={bottomSheetRef} data={sheetDetails} />
+        ) : null}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
