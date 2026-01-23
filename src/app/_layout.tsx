@@ -7,8 +7,10 @@ import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import * as Font from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Platform } from "react-native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Provider } from "react-redux";
 
 const queryClient = new QueryClient({
@@ -35,9 +37,10 @@ const StackRootLayout = () => {
   );
 };
 
+SplashScreen.preventAutoHideAsync();
+
 const RootLayout = () => {
   const [isReady, setIsReady] = useState(false);
-  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
     async function prepare() {
@@ -49,37 +52,37 @@ const RootLayout = () => {
             // add other font
           });
         }
+        await hydrateState(store);
       } catch (error) {
-        console.error("Font loading error:", error);
+        console.warn("Loading error:", error);
       } finally {
-        setFontsLoaded(true);
+        setIsReady(true);
       }
     }
     prepare();
   }, []);
 
   useEffect(() => {
-    const initializeApp = async () => {
-      await hydrateState(store);
-      setIsReady(true);
-    };
+    if (isReady) {
+      SplashScreen.hide();
+    }
+  }, [isReady]);
 
-    initializeApp();
-  }, []);
-
-  if (!isReady || !fontsLoaded) {
+  if (!isReady) {
     return null;
   }
 
   return (
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={{ persister: reactQueryPersistor }}
-    >
-      <Provider store={store}>
-        <StackRootLayout />
-      </Provider>
-    </PersistQueryClientProvider>
+    <KeyboardProvider>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: reactQueryPersistor }}
+      >
+        <Provider store={store}>
+          <StackRootLayout />
+        </Provider>
+      </PersistQueryClientProvider>
+    </KeyboardProvider>
   );
 };
 

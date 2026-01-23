@@ -7,8 +7,6 @@ import { NavigationProvider } from "@/utils/contexts/NavigationContext";
 import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import { FC } from "react";
 
-//TODO:
-// add pressed effect on tab button
 export const TabLayout: FC = () => {
   return (
     <NavigationProvider>

@@ -1,3 +1,4 @@
+import { useHeaderHeight } from "@/hooks";
 import { FC, useRef, useState } from "react";
 import {
   Pressable,
@@ -9,6 +10,7 @@ import {
   useWindowDimensions,
   ViewStyle,
 } from "react-native";
+import { KeyboardStickyView } from "react-native-keyboard-controller";
 import Animated, {
   Easing,
   ReduceMotion,
@@ -23,6 +25,9 @@ type FloatingSearchBarProps = {
   onSubmit: () => void;
 } & TextInputProps;
 
+const AnimatedKeyboardStickyView =
+  Animated.createAnimatedComponent(KeyboardStickyView);
+
 const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   containerStyle,
   searchString,
@@ -32,6 +37,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const inputRef = useRef<TextInput>(null);
   const { width: screenWidth } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
 
   const forceFocus = () => {
     inputRef.current?.focus();
@@ -58,7 +64,10 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   });
 
   return (
-    <Animated.View style={[styles.searchBar, containerStyle, animatedWidth]}>
+    <AnimatedKeyboardStickyView
+      offset={{ opened: headerHeight }}
+      style={[styles.searchBar, containerStyle, animatedWidth]}
+    >
       <Pressable
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
@@ -80,7 +89,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           {...textInputProps}
         />
       )}
-    </Animated.View>
+    </AnimatedKeyboardStickyView>
   );
 };
 

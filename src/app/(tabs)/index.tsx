@@ -3,23 +3,13 @@ import MovieDisplay from "@/components/MovieDisplay";
 import {
   useBottomTabBarTotalHeight,
   useGetPopMovies,
-  useHeaderHeight,
   useSearchMovies,
 } from "@/hooks";
 import { isAxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 
 const Home = () => {
-  const headerHeight = useHeaderHeight();
   const {
     data: moviesData,
     error: getPopError,
@@ -54,45 +44,40 @@ const Home = () => {
 
   return (
     <View style={styles.mainContainer}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        keyboardVerticalOffset={headerHeight}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <FlatList
-          style={styles.listStyle}
-          contentContainerStyle={{
-            paddingBottom: bottomTabBarHeight + 50,
-          }}
-          numColumns={2}
-          columnWrapperStyle={styles.columnWrapperStyle}
-          data={query ? moviesToDisplay : moviesData}
-          ListEmptyComponent={null}
-          renderItem={({ item }) => (
-            <MovieDisplay data={item} style={{ marginVertical: 10 }} />
-          )}
-          keyExtractor={(entry) => entry.id.toString()}
-        />
-        {searchInput && moviesToDisplay?.length === 0 && (
-          <Text style={styles.emptyListText}>
-            {"No movies correspond to this search"}
-          </Text>
+      <FlatList
+        style={styles.listStyle}
+        contentContainerStyle={{
+          paddingBottom: bottomTabBarHeight + 50,
+        }}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapperStyle}
+        data={query ? moviesToDisplay : moviesData}
+        ListEmptyComponent={null}
+        renderItem={({ item }) => (
+          <MovieDisplay data={item} style={{ marginVertical: 10 }} />
         )}
-        <FloatingSearchBar
-          containerStyle={[
-            styles.searchBar,
-            {
-              bottom: bottomTabBarHeight + 12,
-            },
-          ]}
-          searchString={searchInput}
-          onSubmit={() => setQuery(searchInput)}
-          onChangeText={(newText) => {
-            if (newText.length === 0) setQuery("");
-            setSearchInput(newText);
-          }}
-        />
-      </KeyboardAvoidingView>
+        keyExtractor={(entry) => entry.id.toString()}
+      />
+      {searchInput && moviesToDisplay?.length === 0 && (
+        <Text style={styles.emptyListText}>
+          {"No movies correspond to this search"}
+        </Text>
+      )}
+
+      <FloatingSearchBar
+        containerStyle={[
+          styles.searchBar,
+          {
+            bottom: bottomTabBarHeight + 12,
+          },
+        ]}
+        searchString={searchInput}
+        onSubmit={() => setQuery(searchInput)}
+        onChangeText={(newText) => {
+          if (newText.length === 0) setQuery("");
+          setSearchInput(newText);
+        }}
+      />
     </View>
   );
 };
@@ -101,11 +86,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#282828",
-  },
-  container: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#282828",
   },
   searchBar: {
     position: "absolute",

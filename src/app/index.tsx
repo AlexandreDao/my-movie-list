@@ -19,7 +19,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignIn() {
   const { control, handleSubmit } = useForm<Credentials>({
@@ -52,7 +51,7 @@ export default function SignIn() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -116,7 +115,7 @@ export default function SignIn() {
           </View>
         </Pressable>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
