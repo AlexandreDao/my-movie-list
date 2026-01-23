@@ -1,39 +1,41 @@
 import Hyperlink from "@/components/Hyperlink";
 import PasswordInput from "@/components/PasswordInput";
-import useSignIn from "@/hooks/services/useSignIn";
-import useAppDispatch from "@/hooks/store/useAppDisptach";
+import { useAppDispatch, useSignIn } from "@/hooks";
+import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
 import { isAxiosError } from "axios";
-import * as SecureStore from "expo-secure-store";
+import { FC, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Alert,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  View,
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SignIn() {
+const SignIn: FC = () => {
   const { control, handleSubmit } = useForm<Credentials>({
     defaultValues: { username: "", password: "" },
   });
   const dispatch = useAppDispatch();
   const { mutate: signInMutation, isPending } = useSignIn();
+  const passwordInputRef = useRef<TextInput>(null);
 
   const onSubmit = (data: Credentials) => {
     signInMutation(
       { username: data.username, password: data.password },
       {
         onSuccess: (response) => {
-          SecureStore.setItem("sessionId", response.sessionId);
           dispatch(signIn({ username: data.username }));
+          SecureStore.setItemAsync("sessionId", response.sessionId);
         },
         onError: (error) => {
           if (isAxiosError(error)) {
@@ -56,56 +58,67 @@ export default function SignIn() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Pressable
+          disabled={Platform.OS === "web"}
           style={styles.dismissKeyboardView}
           onPress={Keyboard.dismiss}
         >
-          <Text style={styles.title}>Log in</Text>
-          <Controller
-            control={control}
-            name="username"
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={value}
-                onChangeText={onChange}
-                autoCapitalize="none"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <PasswordInput value={value} onChangeText={onChange} />
-            )}
-          />
-          <Hyperlink
-            url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}/reset-password`}
-            displayedText="Reset password"
-          />
-          <Pressable
-            style={styles.button}
-            onPress={handleSubmit(onSubmit)}
-            disabled={isPending}
-          >
-            {isPending ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Log in</Text>
-            )}
-          </Pressable>
-          <Hyperlink
-            url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}/signup`}
-            displayedText="Join us"
-          />
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Log in</Text>
+            <Controller
+              control={control}
+              name="username"
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Username"
+                  value={value}
+                  onChangeText={onChange}
+                  autoCapitalize="none"
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
+                  returnKeyType="next"
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="password"
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <PasswordInput
+                  value={value}
+                  onChangeText={onChange}
+                  ref={passwordInputRef}
+                  onSubmitEditing={handleSubmit(onSubmit)}
+                  returnKeyType="send"
+                />
+              )}
+            />
+            <Hyperlink
+              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}reset-password`}
+              displayedText="Reset password"
+            />
+            <Pressable
+              style={styles.button}
+              onPress={handleSubmit(onSubmit)}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Log in</Text>
+              )}
+            </Pressable>
+            <Hyperlink
+              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}signup`}
+              displayedText="Join us"
+            />
+          </View>
         </Pressable>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -118,6 +131,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 24,
     textAlign: "center",
+  },
+  formContainer: {
+    width: "100%",
+    maxWidth: 448,
   },
   input: {
     height: 48,
@@ -150,5 +167,8 @@ const styles = StyleSheet.create({
   dismissKeyboardView: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
 });
+
+export default SignIn;

@@ -1,50 +1,32 @@
-import { useAppDispatch } from "@/hooks";
-import useSignOut from "@/hooks/services/useSignOut";
-import { signOut } from "@/utils/store/reducers/userReducer";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { isAxiosError } from "axios";
-import { Tabs } from "expo-router";
-import * as SecureStore from "expo-secure-store";
-import { Alert, TouchableOpacity } from "react-native";
+import CustomBottomTabBar from "@/components/CustomBottomTabBar";
+import CustomHeader from "@/components/CustomHeader";
+import CustomTabBackground from "@/components/CustomTabBackground";
+import { CustomTabButton } from "@/components/CustomTabButton";
+import CustomTabIndicator from "@/components/CustomTabIndicator";
+import { NavigationProvider } from "@/utils/contexts/NavigationContext";
+import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
+import { FC } from "react";
 
-const LogoutButton = () => {
-  const { mutateAsync } = useSignOut();
-  const dispatch = useAppDispatch();
-
+export const TabLayout: FC = () => {
   return (
-    <TouchableOpacity
-      style={{ padding: 12 }}
-      onPress={() => {
-        mutateAsync()
-          .then(() => {
-            dispatch(signOut());
-            SecureStore.deleteItemAsync("sessionId");
-          })
-          .catch((error) => {
-            if (isAxiosError(error)) {
-              Alert.alert(
-                "Sign Out Error",
-                error.response?.data?.status_message || "Unknown error",
-              );
-            } else {
-              Alert.alert("Sign Out Error", "An unexpected error occurred");
-            }
-          });
-      }}
-    >
-      <MaterialCommunityIcons name="exit-to-app" size={24} color="black" />
-    </TouchableOpacity>
-  );
-};
-export const TabLayout = () => {
-  return (
-    <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{ title: "Home", headerRight: () => <LogoutButton /> }}
-      />
-      <Tabs.Screen name="my-movie" options={{ title: "My Movie" }} />
-    </Tabs>
+    <NavigationProvider>
+      <Tabs>
+        <CustomHeader />
+        <TabSlot />
+        <TabList asChild>
+          <CustomBottomTabBar>
+            <CustomTabIndicator />
+            <TabTrigger name="index" href="/" asChild>
+              <CustomTabButton icon="home">Home</CustomTabButton>
+            </TabTrigger>
+            <TabTrigger name="my-movie" href="/my-movie" asChild>
+              <CustomTabButton icon="local-movies">My movie</CustomTabButton>
+            </TabTrigger>
+          </CustomBottomTabBar>
+        </TabList>
+        <CustomTabBackground />
+      </Tabs>
+    </NavigationProvider>
   );
 };
 

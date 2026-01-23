@@ -2,6 +2,7 @@ import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { FC } from "react";
 import {
   Image,
+  StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,7 +11,7 @@ import {
 
 type MovieDisplayProps = {
   data: MovieDataEntryMapped;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style }) => {
