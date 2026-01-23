@@ -4,11 +4,11 @@ import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
-import { useContext, useRef } from "react";
+import { FC, useContext, useRef } from "react";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const LogoutButton = () => {
+const LogoutButton: FC = () => {
   const { mutate } = useSignOut();
   const dispatch = useAppDispatch();
 
@@ -37,7 +37,7 @@ const LogoutButton = () => {
   );
 };
 
-const CustomHeader = () => {
+const CustomHeader: FC = () => {
   const title = useHeaderTitle();
   const isInitialized = useRef(false);
   const { setNavigationState } = useContext(NavigationContext);

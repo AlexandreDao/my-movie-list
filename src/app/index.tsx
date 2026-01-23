@@ -5,13 +5,12 @@ import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
 import { isAxiosError } from "axios";
-import { useRef } from "react";
+import { FC, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Alert,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   Pressable,
   StyleSheet,
@@ -19,8 +18,10 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SignIn() {
+const SignIn: FC = () => {
   const { control, handleSubmit } = useForm<Credentials>({
     defaultValues: { username: "", password: "" },
   });
@@ -51,7 +52,7 @@ export default function SignIn() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -115,9 +116,9 @@ export default function SignIn() {
           </View>
         </Pressable>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -169,3 +170,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default SignIn;

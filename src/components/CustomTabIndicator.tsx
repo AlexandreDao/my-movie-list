@@ -1,5 +1,5 @@
 import { useBottomTabBarHeight, useNavigationFocusPosition } from "@/hooks";
-import { useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
   Easing,
@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const CustomTabIndicator = () => {
+const CustomTabIndicator: FC = () => {
   const focusPosition = useNavigationFocusPosition();
   const bottomTabBarHeight = useBottomTabBarHeight();
   const prevPosition = useRef({ x: 2, y: 2 });

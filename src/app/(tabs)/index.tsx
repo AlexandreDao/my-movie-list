@@ -6,10 +6,10 @@ import {
   useSearchMovies,
 } from "@/hooks";
 import { isAxiosError } from "axios";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 
-const Home = () => {
+const Home: FC = () => {
   const {
     data: moviesData,
     error: getPopError,
