@@ -1,8 +1,10 @@
 import { useAppDispatch, useHeaderTitle, useSignOut } from "@/hooks";
+import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
+import { useContext, useRef } from "react";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -37,9 +39,24 @@ const LogoutButton = () => {
 
 const CustomHeader = () => {
   const title = useHeaderTitle();
+  const isInitialized = useRef(false);
+  const { setNavigationState } = useContext(NavigationContext);
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
+    <SafeAreaView
+      style={styles.container}
+      edges={["top"]}
+      onLayout={(e) => {
+        const { height } = e.nativeEvent.layout;
+        if (!isInitialized.current) {
+          setNavigationState((prev) => ({
+            ...prev,
+            headerHeight: height,
+          }));
+          isInitialized.current = true;
+        }
+      }}
+    >
       <Text style={styles.title}>{title}</Text>
       <LogoutButton />
     </SafeAreaView>

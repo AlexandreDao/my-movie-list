@@ -21,11 +21,11 @@ type NavigationStateType = {
 };
 
 const NAVIGAITION_STATE_DEFAULT_VALUE: NavigationStateType = {
-  bottomTabBarTotalHeight: 0,
-  bottomTabBarHeight: 0,
+  bottomTabBarTotalHeight: 76,
+  bottomTabBarHeight: 44,
   headerHeight: 72,
-  title: "",
-  focusPosition: { x: 0, y: 0 },
+  title: "Home",
+  focusPosition: { x: 2, y: 2 },
 };
 
 type NavigationContextType = {
@@ -46,6 +46,7 @@ const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [navigationState, setNavigationState] = useState<NavigationStateType>(
     NAVIGAITION_STATE_DEFAULT_VALUE,
   );
+
   return (
     <NavigationContext.Provider value={{ navigationState, setNavigationState }}>
       {children}

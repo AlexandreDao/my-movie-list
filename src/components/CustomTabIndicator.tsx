@@ -12,14 +12,11 @@ import Animated, {
 const CustomTabIndicator = () => {
   const focusPosition = useNavigationFocusPosition();
   const bottomTabBarHeight = useBottomTabBarHeight();
-  const prevPosition = useRef({ x: 0, y: 0 });
+  const prevPosition = useRef({ x: 2, y: 2 });
   const translateX = useSharedValue(0);
 
   useEffect(() => {
-    if (
-      prevPosition.current.x !== 0 &&
-      prevPosition.current.x !== focusPosition.x
-    ) {
+    if (prevPosition.current.x !== focusPosition.x) {
       translateX.value += focusPosition.x - prevPosition.current.x;
     }
     prevPosition.current = focusPosition;
