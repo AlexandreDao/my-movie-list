@@ -3,7 +3,7 @@ import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const LogoutButton = () => {
@@ -11,14 +11,12 @@ const LogoutButton = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <TouchableOpacity
+    <Pressable
       hitSlop={12}
       onPress={() => {
+        dispatch(signOut());
+        SecureStore.deleteItemAsync("sessionId");
         mutate(undefined, {
-          onSuccess: () => {
-            dispatch(signOut());
-            SecureStore.deleteItemAsync("sessionId");
-          },
           onError: (error) => {
             if (isAxiosError(error)) {
               Alert.alert(
@@ -33,7 +31,7 @@ const LogoutButton = () => {
       }}
     >
       <MaterialCommunityIcons name="exit-to-app" size={18} color="white" />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

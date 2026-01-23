@@ -48,3 +48,15 @@ export const useHeaderTitle = () => {
 
   return navigationState.title;
 };
+
+export const useNavigationFocusPosition = () => {
+  const { navigationState } = useContext(NavigationContext);
+
+  if (navigationState.focusPosition === undefined) {
+    throw new Error(
+      "Couldn't find the focus position. Are you inside a screen in Bottom Tab Navigator?",
+    );
+  }
+
+  return navigationState.focusPosition;
+};

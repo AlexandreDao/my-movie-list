@@ -7,12 +7,17 @@ import {
   useState,
 } from "react";
 
+export type Position = {
+  x: number;
+  y: number;
+};
+
 type NavigationStateType = {
   bottomTabBarTotalHeight: number;
   bottomTabBarHeight: number;
   headerHeight: number;
   title: string;
-  focusPosition: [number, number];
+  focusPosition: Position;
 };
 
 const NAVIGAITION_STATE_DEFAULT_VALUE: NavigationStateType = {
@@ -20,7 +25,7 @@ const NAVIGAITION_STATE_DEFAULT_VALUE: NavigationStateType = {
   bottomTabBarHeight: 0,
   headerHeight: 72,
   title: "",
-  focusPosition: [0, 0],
+  focusPosition: { x: 0, y: 0 },
 };
 
 type NavigationContextType = {

@@ -1,8 +1,18 @@
-import { NavigationContext } from "@/utils/contexts/NavigationContext";
+import {
+  NavigationContext,
+  Position,
+} from "@/utils/contexts/NavigationContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TabTriggerSlotProps } from "expo-router/ui";
-import { FC, useContext, useEffect, useLayoutEffect, useRef } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { FC, useContext, useEffect, useRef } from "react";
+import { Pressable, StyleSheet } from "react-native";
+import Animated, {
+  Easing,
+  ReduceMotion,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type CustomTabButtonProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
@@ -16,8 +26,17 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
   ...props
 }) => {
   const { setNavigationState } = useContext(NavigationContext);
-  const ref = useRef<View>(null);
+  const scale = useSharedValue(1);
+  const layoutRef = useRef<Position>(null);
 
+  const updatePosition = () => {
+    if (isFocused && layoutRef.current) {
+      setNavigationState((prev) => ({
+        ...prev,
+        focusPosition: layoutRef.current!,
+      }));
+    }
+  };
   useEffect(() => {
     if (isFocused) {
       setNavigationState((prev) => ({
@@ -27,27 +46,69 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
     }
   }, [isFocused]);
 
-  useLayoutEffect(() => {
-    if (isFocused) {
-      ref.current?.measure((x, y, width, height, pageX, pageY) => {
-        setNavigationState((prev) => ({
-          ...prev,
-          focusPosition: [x, y],
-        }));
-      });
-    }
+  useEffect(() => {
+    updatePosition();
   }, [isFocused]);
 
+  const textColorStyle = {
+    color: isFocused ? "white" : "grey",
+  };
+
+  const animatedScaleStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
   return (
-    <Pressable {...props} ref={ref} style={[styles.button]}>
-      <MaterialIcons
-        name={icon}
-        size={18}
-        color={isFocused ? "#fff" : "grey"}
-      />
-      <Text style={[styles.text, isFocused && styles.focusedText]}>
+    <Pressable
+      {...props}
+      onLayout={(e) => {
+        const { x, y } = e.nativeEvent.layout;
+
+        if (layoutRef.current === null) {
+          layoutRef.current = { x: Math.floor(x), y: Math.floor(y) };
+        }
+        updatePosition();
+      }}
+      onPressOut={() => {
+        scale.value = withTiming(
+          0.85,
+          {
+            duration: 300,
+            easing: Easing.linear,
+            reduceMotion: ReduceMotion.System,
+          },
+          (finished) => {
+            if (finished) {
+              scale.value = withTiming(1, {
+                duration: 300,
+                easing: Easing.elastic(2),
+                reduceMotion: ReduceMotion.System,
+              });
+            }
+          },
+        );
+      }}
+      style={(state) => {
+        return [
+          styles.button,
+          state.pressed && {
+            backgroundColor: "lightgrey",
+          },
+        ];
+      }}
+    >
+      <Animated.Text
+        style={[animatedScaleStyle, styles.animatedColor, textColorStyle]}
+      >
+        <MaterialIcons name={icon} size={18} />
+      </Animated.Text>
+      <Animated.Text
+        style={[styles.text, styles.animatedColor, textColorStyle]}
+      >
         {children}
-      </Text>
+      </Animated.Text>
     </Pressable>
   );
 };
@@ -66,14 +127,13 @@ const styles = StyleSheet.create({
   focusedButton: {
     backgroundColor: "grey",
   },
-  focusedText: {
-    color: "#fff",
+  text: {
     fontSize: 10,
     fontWeight: "500",
   },
-  text: {
-    color: "grey",
-    fontSize: 10,
-    fontWeight: "500",
+  animatedColor: {
+    transitionProperty: "color",
+    transitionDuration: "500ms",
+    transitionTimingFunction: "ease-in-out",
   },
 });

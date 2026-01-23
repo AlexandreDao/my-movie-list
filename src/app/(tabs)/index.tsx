@@ -81,7 +81,9 @@ const Home = () => {
         <FloatingSearchBar
           containerStyle={[
             styles.searchBar,
-            { bottom: bottomTabBarHeight + 12 },
+            {
+              bottom: bottomTabBarHeight + 12,
+            },
           ]}
           searchString={searchInput}
           onSubmit={() => setQuery(searchInput)}

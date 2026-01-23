@@ -95,7 +95,7 @@ export default function SignIn() {
               )}
             />
             <Hyperlink
-              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}/reset-password`}
+              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}reset-password`}
               displayedText="Reset password"
             />
             <Pressable
@@ -110,7 +110,7 @@ export default function SignIn() {
               )}
             </Pressable>
             <Hyperlink
-              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}/signup`}
+              url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}signup`}
               displayedText="Join us"
             />
           </View>
