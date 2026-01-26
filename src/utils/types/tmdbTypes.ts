@@ -33,3 +33,10 @@ export type GetMoviesResponse = {
   total_pages: number;
   total_results: number;
 };
+
+export type MovieStatus = {
+  id: number;
+  favorite: boolean;
+  rated: { value: number } | boolean;
+  watchlist: boolean;
+};

@@ -37,6 +37,8 @@ const Home = () => {
     null,
   );
 
+  //TODO: CHECK THAT THE CORRECT ICONS LIBRARY ARE USED / LOAD THE NEW LIBRARIES IN _layout AFTER MERGE
+
   const openSheet = (movieEntry: MovieDataEntryMapped) => {
     //console.log("opening...");
     //console.log(bottomSheetRef.current);

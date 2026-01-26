@@ -1,32 +1,53 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { FC } from "react";
-import { StyleSheet, Text, ViewStyle } from "react-native";
-import { Pressable } from "react-native-gesture-handler";
+import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 
 type AddToListButtonProps = {
-  type: string;
+  type: "Watchlist" | "Favorites";
   movieId: number | undefined;
+  isAdded: boolean | undefined;
   style?: ViewStyle;
 };
 
 const AddToListButton: FC<AddToListButtonProps> = ({
   type,
+  isAdded,
   movieId,
   style,
 }) => {
   return (
-    <Pressable style={[styles.mainContainer, style]}>
+    <Pressable
+      style={({ pressed }) => (pressed ? styles.containerHi : styles.container)}
+      onPress={() => console.log("test!!!")}
+    >
+      <Ionicons
+        name={isAdded ? "remove-circle-outline" : "add-circle-outline"}
+        size={24}
+        color="white"
+      />
       <Text style={styles.text}>{type}</Text>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     width: 170,
     height: 60,
+    borderRadius: 10,
     backgroundColor: "#1119B4",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
+  containerHi: {
+    width: 170,
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: "#4a4fb3",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
   },
   text: {
     fontSize: 20,

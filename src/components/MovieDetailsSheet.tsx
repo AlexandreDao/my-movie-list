@@ -1,23 +1,31 @@
 import AddToListButton from "@/components/AddToListButton";
 import CircleGrade from "@/components/CircleGrade";
+import { useGetMovieStatus } from "@/hooks";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { isAxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { forwardRef, useMemo } from "react";
-import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 type MovieDetailsSheetProps = {
   data: MovieDataEntryMapped | null;
-  style?: ViewStyle;
 };
 
 const MovieDetailsSheet = forwardRef<BottomSheet, MovieDetailsSheetProps>(
-  ({ data, style }, ref) => {
+  ({ data }, ref) => {
     const backdropPath = data
       ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${data?.backdropPath}`
       : "";
-
     const snapPoints = useMemo(() => ["100%", "50%"], []);
+    const {
+      data: movieStatus,
+      error: statusError,
+      isError: isStatusError,
+    } = useGetMovieStatus(data?.id);
+
+    if (isStatusError && isAxiosError(statusError))
+      console.log(statusError.message);
 
     return (
       <BottomSheet
@@ -54,8 +62,16 @@ const MovieDetailsSheet = forwardRef<BottomSheet, MovieDetailsSheetProps>(
             <View style={styles.bottomDetails}>
               <CircleGrade grade={data?.voteAverage} />
               <View style={styles.buttonContainer}>
-                <AddToListButton movieId={data?.id} type="Add WatchList" />
-                <AddToListButton movieId={data?.id} type="Add Favorites" />
+                <AddToListButton
+                  movieId={data?.id}
+                  type="Watchlist"
+                  isAdded={movieStatus?.watchlist}
+                />
+                <AddToListButton
+                  movieId={data?.id}
+                  type="Favorites"
+                  isAdded={movieStatus?.favorite}
+                />
               </View>
             </View>
           </View>

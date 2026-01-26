@@ -1,4 +1,5 @@
 export { default as useCreateNewToken } from "@/hooks/services/useCreateNewToken";
+export { default as useGetMovieStatus } from "@/hooks/services/useGetMovieStatus";
 export { default as useGetPopMovies } from "@/hooks/services/useGetPopMovies";
 export { default as useSearchMovies } from "@/hooks/services/useSearchMovies";
 export { default as useSignIn } from "@/hooks/services/useSignIn";
