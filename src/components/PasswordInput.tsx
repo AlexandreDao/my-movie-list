@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import React, { FC } from "react";
+import React, { forwardRef } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -8,17 +8,19 @@ import {
   View,
 } from "react-native";
 
-const PasswordInput: FC<TextInputProps> = (props) => {
+const PasswordInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
   return (
     <View style={styles.container}>
       <TextInput
+        ref={ref}
         style={styles.input}
         placeholder="Password"
         secureTextEntry={secureTextEntry}
         {...props}
       />
       <Pressable
+        style={styles.icon}
         hitSlop={12}
         onPress={() => setSecureTextEntry((prev) => !prev)}
       >
@@ -29,21 +31,28 @@ const PasswordInput: FC<TextInputProps> = (props) => {
       </Pressable>
     </View>
   );
-};
+});
+
+PasswordInput.displayName = "PasswordInput";
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
     height: 48,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
-    paddingHorizontal: 12,
     marginBottom: 12,
   },
   input: {
     flex: 1,
+    borderRadius: 8,
+    paddingLeft: 12,
+    paddingRight: 48,
+  },
+  icon: {
+    position: "absolute",
+    right: 12,
+    top: 12,
   },
 });
 

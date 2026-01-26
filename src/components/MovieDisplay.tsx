@@ -3,6 +3,7 @@ import { FC } from "react";
 import {
   Image,
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   View,
@@ -12,7 +13,7 @@ import {
 type MovieDisplayProps = {
   data: MovieDataEntryMapped;
   onPress?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {

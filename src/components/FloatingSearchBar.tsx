@@ -1,13 +1,16 @@
+import { useHeaderHeight } from "@/hooks";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { FC, useRef, useState } from "react";
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   TextInput,
   TextInputProps,
   useWindowDimensions,
   ViewStyle,
 } from "react-native";
+import { KeyboardStickyView } from "react-native-keyboard-controller";
 import Animated, {
   Easing,
   ReduceMotion,
@@ -17,10 +20,13 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 
 type FloatingSearchBarProps = {
-  containerStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
   searchString: string;
   onSubmit: () => void;
 } & TextInputProps;
+
+const AnimatedKeyboardStickyView =
+  Animated.createAnimatedComponent(KeyboardStickyView);
 
 const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   containerStyle,
@@ -31,6 +37,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const inputRef = useRef<TextInput>(null);
   const { width: screenWidth } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
 
   const forceFocus = () => {
     inputRef.current?.focus();
@@ -57,7 +64,10 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   });
 
   return (
-    <Animated.View style={[styles.searchBar, containerStyle, animatedWidth]}>
+    <AnimatedKeyboardStickyView
+      offset={{ opened: headerHeight }}
+      style={[styles.searchBar, containerStyle, animatedWidth]}
+    >
       <Pressable
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
@@ -71,6 +81,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           ref={inputRef}
           placeholder={"search a movie name:"}
           onBlur={() => setIsCollapsed(searchString.length === 0)}
+          autoCapitalize="none"
           onSubmitEditing={() => {
             setIsCollapsed(searchString.length === 0);
             onSubmit();
@@ -78,7 +89,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           {...textInputProps}
         />
       )}
-    </Animated.View>
+    </AnimatedKeyboardStickyView>
   );
 };
 
