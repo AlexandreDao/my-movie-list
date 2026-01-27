@@ -2,7 +2,7 @@ import { useBottomTabBarTotalHeight, useSearchScreening } from "@/hooks";
 import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { FC, useEffect, useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
@@ -15,7 +15,7 @@ const Map: FC = () => {
   const safeAreaInset = useSafeAreaInsets();
   const { title } = useLocalSearchParams<MapParam>();
   const { data } = useSearchScreening(title, initRegion.current);
-
+  const router = useRouter();
   useEffect(() => {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -54,7 +54,11 @@ const Map: FC = () => {
         ))}
       </MapView>
       <Pressable
-        onPress={() => console.log("back")}
+        onPress={() => {
+          if (router.canGoBack()) {
+            router.back();
+          }
+        }}
         hitSlop={24}
         style={[
           {
