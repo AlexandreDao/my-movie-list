@@ -1,9 +1,11 @@
-import { useBottomTabBarTotalHeight } from "@/hooks";
+import { useBottomTabBarTotalHeight, useSearchScreening } from "@/hooks";
+import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { useLocalSearchParams } from "expo-router";
 import React, { FC, useEffect, useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import MapView, { Region } from "react-native-maps";
+import MapView, { Marker, Region } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Map: FC = () => {
@@ -11,6 +13,8 @@ const Map: FC = () => {
   const mapRef = useRef<MapView>(null);
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const safeAreaInset = useSafeAreaInsets();
+  const { title } = useLocalSearchParams<MapParam>();
+  const { data } = useSearchScreening(title, initRegion.current);
 
   useEffect(() => {
     async function getCurrentLocation() {
@@ -42,13 +46,19 @@ const Map: FC = () => {
         showsMyLocationButton={false}
         showsCompass={false}
         toolbarEnabled
-      ></MapView>
+      >
+        {data?.map((theater) => (
+          <Marker key={theater.id} coordinate={theater} title={theater.name}>
+            <MaterialIcons name="local-movies" size={32} color="red" />
+          </Marker>
+        ))}
+      </MapView>
       <Pressable
         onPress={() => console.log("back")}
         hitSlop={24}
         style={[
           {
-            top: 12 + safeAreaInset.top,
+            top: safeAreaInset.top,
           },
           styles.back,
         ]}
