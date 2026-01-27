@@ -13,9 +13,10 @@ const Map: FC = () => {
   const mapRef = useRef<MapView>(null);
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const safeAreaInset = useSafeAreaInsets();
+  const router = useRouter();
   const { title } = useLocalSearchParams<MapParam>();
   const { data } = useSearchScreening(title, initRegion.current);
-  const router = useRouter();
+
   useEffect(() => {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
