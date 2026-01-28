@@ -1,5 +1,5 @@
 import { useHeaderHeight } from "@/hooks";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC, useRef, useState } from "react";
 import {
   Pressable,
@@ -72,7 +72,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
       >
-        <FontAwesome name="search" size={28} />
+        <MaterialIcons name="search" size={35} />
       </Pressable>
       {isCollapsed ? null : (
         <TextInput

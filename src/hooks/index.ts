@@ -1,5 +1,8 @@
 export * from "@/hooks/contexts/useNavigation";
+export { default as useAddToMainList } from "@/hooks/services/useAddToMainList";
 export { default as useCreateNewToken } from "@/hooks/services/useCreateNewToken";
+export { default as useGetAccountDetails } from "@/hooks/services/useGetAccountDetails";
+export { default as useGetMovieDetails } from "@/hooks/services/useGetMovieDetails";
 export { default as useGetMovieStatus } from "@/hooks/services/useGetMovieStatus";
 export { default as useGetPopMovies } from "@/hooks/services/useGetPopMovies";
 export { default as useSearchMovies } from "@/hooks/services/useSearchMovies";

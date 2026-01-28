@@ -6,5 +6,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "cSpell.words": ["gorhom", "tmdb", "Watchlist", "worklets", "Persistor"]
 }

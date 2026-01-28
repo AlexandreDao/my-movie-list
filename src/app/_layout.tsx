@@ -2,12 +2,7 @@ import { useAppSelector } from "@/hooks";
 import { reactQueryPersistor } from "@/utils/storages/reactQueryPersistor";
 import { store } from "@/utils/store";
 import { hydrateState } from "@/utils/store/middlewares/persistenceMiddleware";
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import * as Font from "expo-font";
@@ -40,6 +35,20 @@ const StackRootLayout = () => {
         <Stack.Protected guard={!isLoggedIn}>
           <Stack.Screen name="index" />
         </Stack.Protected>
+        <Stack.Protected guard={isLoggedIn}>
+          <Stack.Screen
+            name="movie-details-modal"
+            options={{
+              presentation: "formSheet",
+              sheetAllowedDetents: [1],
+              sheetInitialDetentIndex: 0,
+              sheetCornerRadius: 24,
+              contentStyle: {
+                backgroundColor: "#282828",
+              },
+            }}
+          />
+        </Stack.Protected>
       </Stack>
     </GestureHandlerRootView>
   );
@@ -55,11 +64,8 @@ const RootLayout = () => {
       try {
         if (Platform.OS === "android") {
           await Font.loadAsync({
-            ...FontAwesome.font,
-            ...Ionicons.font,
             ...MaterialIcons.font,
             ...MaterialCommunityIcons.font,
-            // add other font
           });
         }
         await hydrateState(store);

@@ -1,5 +1,4 @@
 import FloatingSearchBar from "@/components/FloatingSearchBar";
-import MovieDetailsSheet from "@/components/MovieDetailsSheet";
 import MovieDisplay from "@/components/MovieDisplay";
 import {
   useBottomTabBarTotalHeight,
@@ -7,9 +6,9 @@ import {
   useSearchMovies,
 } from "@/hooks";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { isAxiosError } from "axios";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import React, { FC, useEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 
 const Home: FC = () => {
@@ -25,20 +24,15 @@ const Home: FC = () => {
     error: searchError,
     isError: isSearchError,
   } = useSearchMovies(query);
+
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
-
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const [sheetDetails, setSheetDetails] = useState<MovieDataEntryMapped | null>(
-    null,
-  );
-
-  //TODO: CHECK THAT THE CORRECT ICONS LIBRARY ARE USED / LOAD THE NEW LIBRARIES IN _layout AFTER MERGE
+  const router = useRouter();
 
   const openSheet = (movieEntry: MovieDataEntryMapped) => {
-    //console.log("opening...");
-    //console.log(bottomSheetRef.current);
-    setSheetDetails(movieEntry);
-    bottomSheetRef.current?.expand();
+    router.navigate({
+      pathname: "/movie-details-modal",
+      params: { id: movieEntry?.id },
+    });
   };
 
   useEffect(() => {
@@ -59,7 +53,6 @@ const Home: FC = () => {
     }
   }, [getPopError, searchError, isGetPopError, isSearchError]);
 
-  //mainContainer View might need to be changed into a SafeAreaView, But it was causing problems so it will remain a View for now.
   return (
     <View style={styles.mainContainer}>
       <FlatList
@@ -85,7 +78,6 @@ const Home: FC = () => {
           {"No movies correspond to this search"}
         </Text>
       )}
-
       <FloatingSearchBar
         containerStyle={[
           styles.searchBar,
@@ -100,9 +92,6 @@ const Home: FC = () => {
           setSearchInput(newText);
         }}
       />
-      {moviesData ? (
-        <MovieDetailsSheet ref={bottomSheetRef} data={sheetDetails} />
-      ) : null}
     </View>
   );
 };
