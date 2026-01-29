@@ -12,7 +12,6 @@ const queryFn = async () => {
 
 const useSignOut = () => {
   return useMutation({
-    mutationKey: ["delete-token"],
     mutationFn: queryFn,
   });
 };

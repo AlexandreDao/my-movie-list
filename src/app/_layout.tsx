@@ -1,3 +1,4 @@
+import { AsyncSkia } from "@/components/AsyncSkia";
 import { useAppSelector } from "@/hooks";
 import { reactQueryPersistor } from "@/utils/storages/reactQueryPersistor";
 import { store } from "@/utils/store";
@@ -8,8 +9,8 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import * as Font from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Suspense, useEffect, useState } from "react";
+import { ActivityIndicator, Platform, StyleSheet, View } from "react-native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Provider } from "react-redux";
 
@@ -79,6 +80,11 @@ const RootLayout = () => {
         persistOptions={{ persister: reactQueryPersistor }}
       >
         <Provider store={store}>
+          <View style={StyleSheet.absoluteFill}>
+            <Suspense fallback={<ActivityIndicator />}>
+              <AsyncSkia />
+            </Suspense>
+          </View>
           <StackRootLayout />
         </Provider>
       </PersistQueryClientProvider>
