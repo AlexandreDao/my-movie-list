@@ -30,6 +30,9 @@ const StackRootLayout = () => {
       <Stack.Protected guard={isLoggedIn}>
         <Stack.Screen name="(tabs)" />
       </Stack.Protected>
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name="map" />
+      </Stack.Protected>
       <Stack.Protected guard={!isLoggedIn}>
         <Stack.Screen name="index" />
       </Stack.Protected>
