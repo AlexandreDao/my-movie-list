@@ -1,8 +1,9 @@
+import BackButton from "@/components/BackButton";
 import { useBottomTabBarTotalHeight, useSearchScreening } from "@/hooks";
 import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { FC, useEffect, useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
@@ -13,7 +14,6 @@ const Map: FC = () => {
   const mapRef = useRef<MapView>(null);
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const safeAreaInset = useSafeAreaInsets();
-  const router = useRouter();
   const { title } = useLocalSearchParams<MapParam>();
   const { data } = useSearchScreening(title, initRegion.current);
 
@@ -54,28 +54,14 @@ const Map: FC = () => {
           </Marker>
         ))}
       </MapView>
-      <Pressable
-        onPress={() => {
-          if (router.canGoBack()) {
-            router.back();
-          }
-        }}
-        hitSlop={24}
+      <BackButton
         style={[
           {
             top: safeAreaInset.top,
           },
           styles.back,
         ]}
-      >
-        <MaterialIcons
-          style={{ position: "absolute" }}
-          name="arrow-back"
-          size={30}
-          color="white"
-        />
-        <MaterialIcons name="arrow-back" size={24} color="black" />
-      </Pressable>
+      />
       <Pressable
         style={[
           {
