@@ -1,5 +1,5 @@
 // Helper to ensure Skia loads or throws inside of React Suspense on web.
-import React from "react";
+import React, { FC } from "react";
 
 import { LoadSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
 
@@ -14,7 +14,7 @@ function wrapPromise<T>(promise: Promise<T>) {
     (e: unknown) => {
       status = "error";
       result = e;
-    }
+    },
   );
   return {
     read(): T {
@@ -45,7 +45,7 @@ const getSuspendingPromise = () => {
 
 const getResolvedPromise = React.cache(getSuspendingPromise);
 
-export function AsyncSkia({}) {
+export const AsyncSkia: FC = ({}) => {
   getResolvedPromise();
   return null;
-}
+};

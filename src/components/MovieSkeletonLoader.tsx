@@ -1,6 +1,6 @@
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { Canvas } from "@shopify/react-native-skia";
-import React, { Fragment } from "react";
+import React, { FC, Fragment } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 const MAX_ROWS = 3;
@@ -20,7 +20,7 @@ const SPACE_BETWEEN_POSTER_AND_TEXT = 4;
 const PADDING_TOP = 20;
 const TOTAL_EXTRA_HEIGHT_PER_ROW = PADDING_TOP + SPACE_BETWEEN_POSTER_AND_TEXT;
 
-const MovieSkeletonLoader = () => {
+const MovieSkeletonLoader: FC = () => {
   const { width: windowsWidth } = useWindowDimensions();
   const posterPaddingHorizontal =
     (windowsWidth - POSTER_WIDTH * MAX_COLS) / (MAX_COLS + 1);
