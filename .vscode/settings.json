@@ -7,5 +7,5 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
-  "cSpell.words": ["tmdb", "worklets"]
+  "cSpell.words": ["tmdb", "canvaskit", "skia", "worklets"]
 }
