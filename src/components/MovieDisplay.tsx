@@ -40,9 +40,6 @@ const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     width: 165,
-    borderRadius: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 10,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

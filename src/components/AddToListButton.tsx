@@ -26,20 +26,15 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   accountId,
   movieId,
 }) => {
-  const { mutate: AddToListMutation, isPending: isAddPending } =
-    useAddToMainList();
+  const { mutate: AddToListMutation, isPending } = useAddToMainList();
   const [toAdd, setToAdd] = useState(!isAdded);
-
-  const isPending = isAddPending;
 
   const onPress = () => {
     AddToListMutation(
       { list: type, accountId: accountId, movieId: movieId, add: toAdd },
       {
-        onSuccess: (response) => {
+        onSuccess: () => {
           setToAdd(!toAdd);
-          console.log("Success!!! Added to " + type);
-          console.log(JSON.stringify(response));
         },
         onError: (error) => {
           if (isAxiosError(error)) {
@@ -77,7 +72,12 @@ const AddToListButton: FC<AddToListButtonProps> = ({
             size={30}
             color="white"
           />
-          <Text style={styles.text}>{type}</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>{toAdd ? "Add to" : "Remove from"}</Text>
+            <Text style={[styles.text, { textTransform: "capitalize" }]}>
+              {type}
+            </Text>
+          </View>
         </View>
       )}
     </Pressable>
@@ -86,7 +86,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: 170,
+    width: 180,
     height: 60,
     borderRadius: 10,
     backgroundColor: "#1119B4",
@@ -105,8 +105,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "row",
   },
+  textContainer: {
+    width: "65%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   text: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     color: "white",
   },

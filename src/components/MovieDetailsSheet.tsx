@@ -2,7 +2,6 @@ import AddToListButton from "@/components/AddToListButton";
 import CircleGrade from "@/components/CircleGrade";
 import { useGetMovieStatus } from "@/hooks";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
-import { isAxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { FC } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -14,6 +13,8 @@ type MovieDetailsSheetProps = {
   setIsVisible: (visible: boolean) => void;
 };
 
+//DEPRECATED ELEMENT: DO NOT USE
+
 const MovieDetailsSheet: FC<MovieDetailsSheetProps> = ({
   data,
   isVisible,
@@ -22,14 +23,7 @@ const MovieDetailsSheet: FC<MovieDetailsSheetProps> = ({
   const backdropPath = data
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${data?.backdropPath}`
     : "";
-  const {
-    data: movieStatus,
-    error: statusError,
-    isError: isStatusError,
-  } = useGetMovieStatus(data?.id);
-
-  if (isStatusError && isAxiosError(statusError))
-    console.log(statusError.message);
+  const { data: movieStatus } = useGetMovieStatus(data?.id);
 
   return (
     <Modal
@@ -40,7 +34,6 @@ const MovieDetailsSheet: FC<MovieDetailsSheetProps> = ({
       swipeDirection="down"
       useNativeDriver
       useNativeDriverForBackdrop
-      //backgroundStyle={styles.sheetBackGround}
     >
       <View style={styles.mainContainer}>
         <View>
@@ -68,12 +61,14 @@ const MovieDetailsSheet: FC<MovieDetailsSheetProps> = ({
             <View style={styles.buttonContainer}>
               <AddToListButton
                 movieId={data?.id}
-                type="Watchlist"
+                accountId={""}
+                type="watchlist"
                 isAdded={movieStatus?.watchlist}
               />
               <AddToListButton
                 movieId={data?.id}
-                type="Favorites"
+                accountId={""}
+                type="favorite"
                 isAdded={movieStatus?.favorite}
               />
             </View>
@@ -98,7 +93,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#282828",
   },
   detailsContainer: {
-    //backgroundColor: "blue",
     width: "88%",
   },
   bottomDetails: {

@@ -1,15 +1,13 @@
 import FloatingSearchBar from "@/components/FloatingSearchBar";
-import MovieDisplay from "@/components/MovieDisplay";
+import MovieList from "@/components/MovieList";
 import {
   useBottomTabBarTotalHeight,
   useGetPopMovies,
   useSearchMovies,
 } from "@/hooks";
-import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { isAxiosError } from "axios";
-import { useRouter } from "expo-router";
 import React, { FC, useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
 const Home: FC = () => {
   const {
@@ -26,52 +24,30 @@ const Home: FC = () => {
   } = useSearchMovies(query);
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
-  const router = useRouter();
-
-  const openSheet = (movieEntry: MovieDataEntryMapped) => {
-    router.navigate({
-      pathname: "/movie-details-modal",
-      params: { id: movieEntry?.id },
-    });
-  };
 
   useEffect(() => {
     if (isGetPopError || isSearchError) {
       if (isAxiosError(getPopError)) {
         Alert.alert(
-          "Could not Fetch movies: Popular",
+          "Could not fetch movies: Popular",
           getPopError.response?.data?.status_message || "Unknown error",
         );
       } else if (isAxiosError(searchError)) {
         Alert.alert(
-          "Could not Fetch movies: Search",
+          "Could not fetch movies: Search",
           searchError.response?.data?.status_message || "Unknown error",
         );
       } else {
-        Alert.alert("Could not Fetch movies", "An unexpected error occurred");
+        Alert.alert("Could not fetch movies", "An unexpected error occurred");
       }
     }
   }, [getPopError, searchError, isGetPopError, isSearchError]);
 
   return (
     <View style={styles.mainContainer}>
-      <FlatList
-        style={styles.listStyle}
-        contentContainerStyle={{
-          paddingBottom: bottomTabBarHeight + 50,
-        }}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapperStyle}
+      <MovieList
         data={query ? moviesToDisplay : moviesData}
-        ListEmptyComponent={null}
-        renderItem={({ item }) => (
-          <MovieDisplay
-            data={item}
-            onPress={() => openSheet(item)}
-            style={{ marginVertical: 10 }}
-          />
-        )}
-        keyExtractor={(entry) => entry.id.toString()}
+        contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
       />
       {searchInput && moviesToDisplay?.length === 0 && (
         <Text style={styles.emptyListText}>
@@ -106,12 +82,6 @@ const styles = StyleSheet.create({
   searchBar: {
     position: "absolute",
     marginRight: "5%",
-  },
-  listStyle: {
-    width: "100%",
-  },
-  columnWrapperStyle: {
-    justifyContent: "space-evenly",
   },
   text: {
     color: "white",

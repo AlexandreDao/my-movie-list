@@ -37,6 +37,9 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const inputRef = useRef<TextInput>(null);
   const { width: screenWidth } = useWindowDimensions();
+  const fullBarWidth = screenWidth * 0.9;
+  const buttonWidth = 55;
+  //const buttonWidth = screenWidth * 0.15;
   const headerHeight = useHeaderHeight();
 
   const forceFocus = () => {
@@ -44,7 +47,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   };
 
   const animatedWidth = useAnimatedStyle(() => {
-    const widthTarget = isCollapsed ? screenWidth * 0.15 : screenWidth * 0.9;
+    const widthTarget = isCollapsed ? buttonWidth : fullBarWidth;
 
     return {
       width: withTiming(
@@ -55,7 +58,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           reduceMotion: ReduceMotion.System,
         },
         (finished) => {
-          if (finished && widthTarget === screenWidth * 0.9) {
+          if (finished && widthTarget === fullBarWidth) {
             scheduleOnRN(forceFocus);
           }
         },
@@ -70,7 +73,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
     >
       <Pressable
         onPress={() => setIsCollapsed(!isCollapsed)}
-        style={[styles.buttonStyle, { width: screenWidth * 0.15 }]}
+        style={[styles.buttonStyle, { width: buttonWidth }]}
       >
         <MaterialIcons name="search" size={35} />
       </Pressable>
