@@ -1,4 +1,4 @@
-import { SignOutResponse } from "./tmdbTypes";
+import { MovieStatus, SignOutResponse } from "./tmdbTypes";
 
 export type CreateNewTokenResponseMapped = {
   success: boolean;
@@ -13,6 +13,11 @@ export type SignInResponseMapped = {
   sessionId: string;
 };
 
+export type PostListResponseMapped = {
+  statusCode: number;
+  statusMessage: string;
+};
+
 export type SignOutResponseMapped = SignOutResponse;
 
 export type MovieDataEntryMapped = {
@@ -25,4 +30,17 @@ export type MovieDataEntryMapped = {
   releaseDate: string;
   title: string;
   voteAverage: number;
+};
+
+export type MovieDetailsMapped = {
+  id: number;
+  originalLanguage: string;
+  originalTitle: string;
+  overview: string;
+  backdropPath: string;
+  posterPath: string;
+  releaseDate: string;
+  title: string;
+  voteAverage: number;
+  accountStates: MovieStatus;
 };
