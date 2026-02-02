@@ -15,6 +15,11 @@ export type SignOutResponse = {
   success: boolean;
 };
 
+export type PostListResponse = {
+  status_code: number;
+  status_message: string;
+};
+
 export type MovieDataEntry = {
   id: number;
   original_language: string;
@@ -32,4 +37,28 @@ export type GetMoviesResponse = {
   results: MovieDataEntry[];
   total_pages: number;
   total_results: number;
+};
+
+export type MovieStatus = {
+  id: number;
+  favorite: boolean;
+  rated: { value: number } | boolean;
+  watchlist: boolean;
+};
+
+export type MovieDetails = {
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  backdrop_path: string;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  vote_average: number;
+  account_states: MovieStatus;
+};
+
+export type AccountDetails = {
+  id: number;
 };

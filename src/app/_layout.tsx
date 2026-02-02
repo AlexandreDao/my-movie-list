@@ -11,6 +11,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { Suspense, useEffect, useState } from "react";
 import { ActivityIndicator, Platform, StyleSheet, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Provider } from "react-redux";
 
@@ -27,17 +28,33 @@ const StackRootLayout = () => {
   const isLoggedIn = !!username;
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isLoggedIn}>
-        <Stack.Screen name="(tabs)" />
-      </Stack.Protected>
-      <Stack.Protected guard={isLoggedIn}>
-        <Stack.Screen name="map" />
-      </Stack.Protected>
-      <Stack.Protected guard={!isLoggedIn}>
-        <Stack.Screen name="index" />
-      </Stack.Protected>
-    </Stack>
+    <GestureHandlerRootView>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Protected guard={isLoggedIn}>
+          <Stack.Screen name="(tabs)" />
+        </Stack.Protected>
+        <Stack.Protected guard={isLoggedIn}>
+          <Stack.Screen name="map" />
+        </Stack.Protected>
+        <Stack.Protected guard={!isLoggedIn}>
+          <Stack.Screen name="index" />
+        </Stack.Protected>
+        <Stack.Protected guard={isLoggedIn}>
+          <Stack.Screen
+            name="movie-details-modal"
+            options={{
+              presentation: "formSheet",
+              sheetAllowedDetents: [1],
+              sheetInitialDetentIndex: 0,
+              sheetCornerRadius: 24,
+              contentStyle: {
+                backgroundColor: "#282828",
+              },
+            }}
+          />
+        </Stack.Protected>
+      </Stack>
+    </GestureHandlerRootView>
   );
 };
 
@@ -53,7 +70,6 @@ const RootLayout = () => {
           await Font.loadAsync({
             ...MaterialIcons.font,
             ...MaterialCommunityIcons.font,
-            // add other font
           });
         }
         await hydrateState(store);

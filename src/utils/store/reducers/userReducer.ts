@@ -1,12 +1,14 @@
-import { SignInPayload } from "@/utils/types/storePayloadTypes";
+import { GetIdPayload, SignInPayload } from "@/utils/types/storePayloadTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UserState = {
   username: string;
+  accountId: string;
 };
 
 const INITIAL_STATE: UserState = {
   username: "",
+  accountId: "",
 };
 
 export const userSlice = createSlice({
@@ -19,10 +21,13 @@ export const userSlice = createSlice({
     signOut: (state) => {
       state.username = "";
     },
+    setUserId: (state, action: PayloadAction<GetIdPayload>) => {
+      state.accountId = action.payload.accountId;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { signIn, signOut } = userSlice.actions;
+export const { signIn, signOut, setUserId } = userSlice.actions;
 
 export default userSlice.reducer;
