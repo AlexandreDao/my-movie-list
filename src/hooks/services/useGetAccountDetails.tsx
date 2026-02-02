@@ -12,6 +12,7 @@ const useGetAccountDetails = (accountId?: string) => {
     queryKey: ["get-account-details", accountId],
     queryFn: queryFn,
     enabled: accountId === "",
+    retry: 0,
   });
 };
 

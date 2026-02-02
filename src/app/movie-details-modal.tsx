@@ -1,39 +1,37 @@
 import AddToListButton from "@/components/AddToListButton";
 import CircleGrade from "@/components/CircleGrade";
+import CollapsableOverview from "@/components/CollapsableOverview";
 import DownArrowButton from "@/components/DownArrowButton";
-import { useAppSelector, useGetMovieDetails } from "@/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useGetAccountDetails,
+  useGetMovieDetails,
+} from "@/hooks";
+import { setUserId } from "@/utils/store/reducers/userReducer";
 import { isAxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   ActivityIndicator,
   Alert,
   Image,
-  Pressable,
   StyleSheet,
   Text,
-  TextLayoutEvent,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const useIsTruncated = (maxLines: number) => {
-  const [isTruncated, setIsTruncated] = useState(false);
-  const [measured, setMeasured] = useState(false);
-
-  const onTextLayout = (e: TextLayoutEvent) => {
-    if (measured) return;
-    setIsTruncated(e.nativeEvent.lines.length > maxLines);
-    setMeasured(true);
-  };
-
-  return { isTruncated, onTextLayout };
-};
-
 const MovieDetailsModal: FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const dispatch = useAppDispatch();
   const accountId = useAppSelector((state) => state.user.accountId);
+  const {
+    data: accountDetails,
+    isError: isAccountError,
+    error: accountError,
+  } = useGetAccountDetails(accountId);
   const router = useRouter();
   const {
     data: movieDetails,
@@ -41,8 +39,6 @@ const MovieDetailsModal: FC = () => {
     isPending,
     isError: isDetailsError,
   } = useGetMovieDetails(id);
-  const [isOverviewFull, setIsOverviewFull] = useState(false);
-  const { isTruncated, onTextLayout } = useIsTruncated(4);
   const backdropPath = movieDetails
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${movieDetails?.backdropPath}`
     : "";
@@ -50,83 +46,89 @@ const MovieDetailsModal: FC = () => {
   //TO DO change the date to a prettier format
 
   useEffect(() => {
-    if (isDetailsError && isAxiosError(detailsError)) {
-      Alert.alert(
-        "Problem occurred when fetching movie details",
-        detailsError.response?.data?.status_message || "Unknown error",
-      );
-      router.back();
+    if (accountId === "" && accountDetails && !isAccountError) {
+      dispatch(setUserId({ accountId: accountDetails.id.toString() }));
+    }
+    if (isAccountError) {
+      if (isAxiosError(accountError)) {
+        Alert.alert(
+          "Account details fetch accountError",
+          accountError.response?.data?.status_message || "Unknown error",
+        );
+      } else {
+        Alert.alert("Account details fetch error");
+      }
+    }
+  }, [accountDetails, accountId, isAccountError, accountError, dispatch]);
+
+  useEffect(() => {
+    if (isDetailsError) {
+      if (isAxiosError(detailsError)) {
+        Alert.alert(
+          "Problem occurred when fetching movie details",
+          detailsError.response?.data?.status_message || "Unknown error",
+        );
+      } else {
+        Alert.alert("An unexpected error occurred");
+      }
+      if (router.canGoBack()) router.back();
     }
   }, [isDetailsError, detailsError, router]);
 
+  if (isPending || isDetailsError) {
+    return (
+      <SafeAreaView style={styles.modal}>
+        <ActivityIndicator color={"#ffffffaa"} size={100} />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.modal}>
-      {isPending || isDetailsError ? (
-        <ActivityIndicator color={"#ffffffaa"} size={100} />
-      ) : (
-        <View style={styles.mainContainer}>
-          <View>
-            <View style={styles.topContainer}>
-              <Image
-                src={backdropPath}
-                height={250}
-                width={400}
-                resizeMode={"contain"}
+      <View style={styles.mainContainer}>
+        <View style={styles.topContainer}>
+          <Image
+            src={backdropPath}
+            height={250}
+            width={400}
+            resizeMode={"contain"}
+          />
+          <DownArrowButton
+            onPress={() => {
+              if (router.canGoBack()) router.back();
+            }}
+            style={styles.downArrow}
+          />
+          <LinearGradient
+            colors={["transparent", "#282828"]}
+            style={styles.transparentGradient}
+          />
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text numberOfLines={2} style={styles.title}>
+            {movieDetails?.title}
+          </Text>
+          <Text style={styles.text}>{movieDetails?.releaseDate}</Text>
+          <CollapsableOverview text={movieDetails?.overview} />
+          <View style={styles.bottomDetails}>
+            <CircleGrade grade={movieDetails?.voteAverage} />
+            <View style={styles.buttonContainer}>
+              <AddToListButton
+                movieId={movieDetails?.id}
+                accountId={accountId}
+                type="watchlist"
+                isAdded={movieDetails?.accountStates?.watchlist}
               />
-              <DownArrowButton
-                onPress={() => router.back()}
-                style={styles.downArrow}
+              <AddToListButton
+                movieId={movieDetails?.id}
+                accountId={accountId}
+                type="favorite"
+                isAdded={movieDetails?.accountStates?.favorite}
               />
-            </View>
-            <LinearGradient
-              colors={["transparent", "#282828"]}
-              style={styles.transparentGradient}
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <Text numberOfLines={2} style={styles.title}>
-              {movieDetails?.title}
-            </Text>
-            <Text style={styles.text}>{movieDetails?.releaseDate}</Text>
-            <Text
-              style={[styles.overview, { position: "absolute", opacity: 0 }]}
-              onTextLayout={onTextLayout}
-            >
-              {movieDetails?.overview}
-            </Text>
-            <Text
-              numberOfLines={isOverviewFull ? 0 : 4}
-              style={styles.overview}
-            >
-              {movieDetails?.overview}
-            </Text>
-            {isTruncated && (
-              <Pressable onPress={() => setIsOverviewFull(!isOverviewFull)}>
-                <Text style={styles.showText}>
-                  {isOverviewFull ? "Show less" : "Show more"}
-                </Text>
-              </Pressable>
-            )}
-            <View style={styles.bottomDetails}>
-              <CircleGrade grade={movieDetails?.voteAverage} />
-              <View style={styles.buttonContainer}>
-                <AddToListButton
-                  movieId={movieDetails?.id}
-                  accountId={accountId}
-                  type="watchlist"
-                  isAdded={movieDetails?.accountStates?.watchlist}
-                />
-                <AddToListButton
-                  movieId={movieDetails?.id}
-                  accountId={accountId}
-                  type="favorite"
-                  isAdded={movieDetails?.accountStates?.favorite}
-                />
-              </View>
             </View>
           </View>
         </View>
-      )}
+      </View>
     </SafeAreaView>
   );
 };
@@ -167,19 +169,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
   },
-  overview: {
-    color: "white",
-    lineHeight: 20,
-    marginTop: 10,
-    fontSize: 16,
-  },
   text: {
     color: "white",
-  },
-  showText: {
-    color: "#646ae0",
-    textDecorationLine: "underline",
-    fontSize: 20,
   },
   downArrow: {
     position: "absolute",

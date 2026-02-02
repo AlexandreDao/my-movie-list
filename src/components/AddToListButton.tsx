@@ -28,6 +28,9 @@ const AddToListButton: FC<AddToListButtonProps> = ({
 }) => {
   const { mutate: AddToListMutation, isPending } = useAddToMainList();
   const [toAdd, setToAdd] = useState(!isAdded);
+  const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
+  const remIcon =
+    type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
 
   const onPress = () => {
     AddToListMutation(
@@ -50,6 +53,14 @@ const AddToListButton: FC<AddToListButtonProps> = ({
     );
   };
 
+  if (accountId === "") {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>{"Button is disabled"}</Text>
+      </View>
+    );
+  }
+
   return (
     <Pressable
       style={({ pressed }) => (pressed ? styles.containerHi : styles.container)}
@@ -60,15 +71,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
       ) : (
         <View style={styles.insideContainer}>
           <MaterialCommunityIcons
-            name={
-              toAdd
-                ? type === "watchlist"
-                  ? "eye-plus-outline"
-                  : "star-outline"
-                : type === "watchlist"
-                  ? "eye-remove-outline"
-                  : "star-off-outline"
-            }
+            name={toAdd ? addIcon : remIcon}
             size={30}
             color="white"
           />
@@ -114,6 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
+    alignSelf: "center",
   },
 });
 

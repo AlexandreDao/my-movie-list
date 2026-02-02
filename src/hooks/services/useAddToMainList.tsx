@@ -18,18 +18,11 @@ const useAddToMainList = () => {
     movieId,
     add,
   }: PostListQuery) => {
-    const body =
-      list === "watchlist"
-        ? {
-            media_type: "movie",
-            media_id: movieId,
-            watchlist: add,
-          }
-        : {
-            media_type: "movie",
-            media_id: movieId,
-            favorite: add,
-          };
+    const body = {
+      media_type: "movie",
+      media_id: movieId,
+      ...(list === "watchlist" ? { watchlist: add } : { favorite: add }),
+    };
     const { data } = await tmdbSingleton.post<PostListResponse>(
       `/account/${accountId}/${list}`,
       body,

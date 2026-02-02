@@ -21,13 +21,13 @@ export const userSlice = createSlice({
     signOut: (state) => {
       state.username = "";
     },
-    getUserId: (state, action: PayloadAction<GetIdPayload>) => {
+    setUserId: (state, action: PayloadAction<GetIdPayload>) => {
       state.accountId = action.payload.accountId;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { signIn, signOut, getUserId } = userSlice.actions;
+export const { signIn, signOut, setUserId } = userSlice.actions;
 
 export default userSlice.reducer;

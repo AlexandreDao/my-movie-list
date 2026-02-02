@@ -5,10 +5,11 @@ import { CustomTabButton } from "@/components/CustomTabButton";
 import CustomTabIndicator from "@/components/CustomTabIndicator";
 import { useAppDispatch, useAppSelector, useGetAccountDetails } from "@/hooks";
 import { NavigationProvider } from "@/utils/contexts/NavigationContext";
-import { getUserId } from "@/utils/store/reducers/userReducer";
+import { setUserId } from "@/utils/store/reducers/userReducer";
 import { isAxiosError } from "axios";
 import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import { FC, useEffect } from "react";
+import { Alert } from "react-native";
 
 export const TabLayout: FC = () => {
   const dispatch = useAppDispatch();
@@ -21,12 +22,16 @@ export const TabLayout: FC = () => {
 
   useEffect(() => {
     if (accountId === "" && accountDetails && !isError) {
-      dispatch(getUserId({ accountId: accountDetails.id.toString() }));
+      dispatch(setUserId({ accountId: accountDetails.id.toString() }));
     }
     if (isError) {
-      console.log("Error happened while fetching Account Details");
       if (isAxiosError(error)) {
-        console.log(error.response?.data?.status_message);
+        Alert.alert(
+          "Account details fetch error",
+          error.response?.data?.status_message || "Unknown error",
+        );
+      } else {
+        Alert.alert("Account details fetch error");
       }
     }
   }, [accountDetails, accountId, isError, error, dispatch]);
