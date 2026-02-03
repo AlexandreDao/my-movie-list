@@ -6,11 +6,17 @@ import { FlatList, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 type MovieListProps = {
   data?: MovieDataEntryMapped[];
+  fetchNextPage?: () => void;
   listStyle?: StyleProp<ViewStyle>;
   contentStyle?: StyleProp<ViewStyle>;
 };
 
-const MovieList: FC<MovieListProps> = ({ data, listStyle, contentStyle }) => {
+const MovieList: FC<MovieListProps> = ({
+  data,
+  fetchNextPage,
+  listStyle,
+  contentStyle,
+}) => {
   const router = useRouter();
 
   const openSheet = (movieEntry: MovieDataEntryMapped) => {
@@ -20,9 +26,12 @@ const MovieList: FC<MovieListProps> = ({ data, listStyle, contentStyle }) => {
     });
   };
 
+  //TO DO: Floating button that gets you back to the top of the list after a bit of scrolling
+  //TO DO: pull down to refresh
+
   return (
     <FlatList
-      style={styles.listStyle ?? listStyle}
+      style={listStyle ?? styles.listStyle}
       contentContainerStyle={contentStyle}
       numColumns={2}
       columnWrapperStyle={styles.columnWrapperStyle}
@@ -31,6 +40,8 @@ const MovieList: FC<MovieListProps> = ({ data, listStyle, contentStyle }) => {
       renderItem={({ item }) => (
         <MovieDisplay data={item} onPress={() => openSheet(item)} />
       )}
+      onEndReached={fetchNextPage}
+      onEndReachedThreshold={1.5}
       keyExtractor={(entry) => entry.id.toString()}
     />
   );

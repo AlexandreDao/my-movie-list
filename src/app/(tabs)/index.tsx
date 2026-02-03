@@ -12,6 +12,9 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 const Home: FC = () => {
   const {
     data: moviesData,
+    fetchNextPage: fetchNextPopPage,
+    hasNextPage: hasNextPopPage,
+    isFetchingNextPage: isFetchingPop,
     error: getPopError,
     isError: isGetPopError,
   } = useGetPopMovies();
@@ -24,6 +27,14 @@ const Home: FC = () => {
   } = useSearchMovies(query);
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
+
+  const fetchNextPage = () => {
+    if (query) {
+      return;
+    } else if (hasNextPopPage && !isFetchingPop) {
+      fetchNextPopPage();
+    }
+  };
 
   useEffect(() => {
     if (isGetPopError || isSearchError) {
@@ -47,6 +58,7 @@ const Home: FC = () => {
     <View style={styles.mainContainer}>
       <MovieList
         data={query ? moviesToDisplay : moviesData}
+        fetchNextPage={fetchNextPage}
         contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
       />
       {searchInput && moviesToDisplay?.length === 0 && (

@@ -61,9 +61,14 @@ const AddToListButton: FC<AddToListButtonProps> = ({
     );
   }
 
+  //TO DO: don't display a view, just disable the button and make it gray
+
   return (
     <Pressable
-      style={({ pressed }) => (pressed ? styles.containerHi : styles.container)}
+      style={({ pressed }) => [
+        styles.container,
+        pressed ? styles.colorHi : styles.color,
+      ]}
       onPress={onPress}
     >
       {isPending ? (
@@ -92,15 +97,13 @@ const styles = StyleSheet.create({
     width: 180,
     height: 60,
     borderRadius: 10,
-    backgroundColor: "#1119B4",
     justifyContent: "center",
   },
-  containerHi: {
-    width: 170,
-    height: 60,
-    borderRadius: 10,
+  color: {
+    backgroundColor: "#1119B4",
+  },
+  colorHi: {
     backgroundColor: "#4a4fb3",
-    justifyContent: "center",
   },
   insideContainer: {
     width: "100%",
