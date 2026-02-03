@@ -4,18 +4,24 @@ import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { useLocalSearchParams } from "expo-router";
-import React, { FC, useEffect, useRef } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Map: FC = () => {
-  const initRegion = useRef<Region | null>(null);
+  const [initRegion, setInitRegion] = useState<Region | null>(null);
   const mapRef = useRef<MapView>(null);
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const safeAreaInset = useSafeAreaInsets();
   const { title } = useLocalSearchParams<MapParam>();
-  const { data } = useSearchScreening(title, initRegion.current);
+  const { data, isError, error } = useSearchScreening(title, initRegion);
+
+  useEffect(() => {
+    if (isError) {
+      Alert.alert("Error finding screening around you");
+    }
+  }, [isError, error]);
 
   useEffect(() => {
     async function getCurrentLocation() {
@@ -25,13 +31,14 @@ const Map: FC = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      initRegion.current = {
+      const region = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       };
-      mapRef.current?.animateToRegion(initRegion.current!, 1200);
+      setInitRegion(region);
+      mapRef.current?.animateToRegion(region, 1200);
     }
 
     getCurrentLocation();
@@ -70,8 +77,8 @@ const Map: FC = () => {
           styles.location,
         ]}
         onPress={() => {
-          if (initRegion.current) {
-            mapRef.current?.animateToRegion(initRegion.current);
+          if (initRegion) {
+            mapRef.current?.animateToRegion(initRegion);
           }
         }}
       >

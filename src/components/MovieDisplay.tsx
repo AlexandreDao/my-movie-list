@@ -24,7 +24,8 @@ const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
       {({ pressed }) => (
         <View style={styles.container}>
           <Image
-            src={posterPath}
+            source={{ cache: "force-cache", uri: posterPath }}
+            fadeDuration={0}
             height={235}
             width={165}
             resizeMode={"contain"}
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
+    gap: 4,
   },
   text: {
     color: "white",

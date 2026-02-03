@@ -1,4 +1,5 @@
 import AddToListButton from "@/components/AddToListButton";
+import Button from "@/components/Button";
 import CircleGrade from "@/components/CircleGrade";
 import CollapsableOverview from "@/components/CollapsableOverview";
 import DownArrowButton from "@/components/DownArrowButton";
@@ -127,6 +128,18 @@ const MovieDetailsModal: FC = () => {
               />
             </View>
           </View>
+          <Button
+            style={styles.screeningBtn}
+            text="Screening around you"
+            icon="map-marker-outline"
+            onPress={() =>
+              router.push({
+                pathname: "/map",
+                params: { title: movieDetails?.title },
+              })
+            }
+            disabled={!movieDetails?.title}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -184,6 +197,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 120,
+  },
+  screeningBtn: {
+    width: "100%",
+    alignSelf: "center",
+    marginTop: 20,
   },
 });
 
