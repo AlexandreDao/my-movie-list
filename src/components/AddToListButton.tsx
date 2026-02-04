@@ -31,6 +31,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
     type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
+  const isDisabled = accountId === "";
 
   const onPress = () => {
     AddToListMutation(
@@ -53,23 +54,14 @@ const AddToListButton: FC<AddToListButtonProps> = ({
     );
   };
 
-  if (accountId === "") {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>{"Button is disabled"}</Text>
-      </View>
-    );
-  }
-
-  //TO DO: don't display a view, just disable the button and make it gray
-
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.container,
-        pressed ? styles.colorHi : styles.color,
-      ]}
+      style={({ pressed }) => {
+        if (isDisabled) return [styles.container, styles.colorDisable];
+        return [styles.container, pressed ? styles.colorHi : styles.color];
+      }}
       onPress={onPress}
+      disabled={isDisabled}
     >
       {isPending ? (
         <ActivityIndicator color={"#ffffffc0"} />
@@ -104,6 +96,9 @@ const styles = StyleSheet.create({
   },
   colorHi: {
     backgroundColor: "#4a4fb3",
+  },
+  colorDisable: {
+    backgroundColor: "#757575",
   },
   insideContainer: {
     width: "100%",

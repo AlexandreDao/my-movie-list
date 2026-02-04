@@ -17,20 +17,29 @@ const Home: FC = () => {
     isFetchingNextPage: isFetchingPop,
     error: getPopError,
     isError: isGetPopError,
+    refetch: refetchPop,
+    isPending: isPendingPop,
   } = useGetPopMovies();
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
   const {
     data: moviesToDisplay,
+    fetchNextPage: fetchNextSearchPage,
+    hasNextPage: hasNextSearchPage,
+    isFetchingNextPage: isFetchingSearch,
     error: searchError,
     isError: isSearchError,
+    refetch: refetchSearch,
+    isPending: isPendingSearch,
   } = useSearchMovies(query);
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
 
   const fetchNextPage = () => {
     if (query) {
-      return;
+      if (hasNextSearchPage && !isFetchingSearch) {
+        fetchNextSearchPage();
+      }
     } else if (hasNextPopPage && !isFetchingPop) {
       fetchNextPopPage();
     }
@@ -58,6 +67,8 @@ const Home: FC = () => {
     <View style={styles.mainContainer}>
       <MovieList
         data={query ? moviesToDisplay : moviesData}
+        refresh={query ? refetchSearch : refetchPop}
+        refreshing={query ? isPendingSearch : isPendingPop}
         fetchNextPage={fetchNextPage}
         contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
       />
@@ -100,6 +111,7 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     position: "absolute",
+    marginBottom: 100,
     color: "white",
   },
 });
