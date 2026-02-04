@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC } from "react";
 import { Pressable, StyleSheet, ViewStyle } from "react-native";
@@ -8,14 +9,26 @@ type DownArrowButtonProps = {
 };
 
 const DownArrowButton: FC<DownArrowButtonProps> = ({ onPress, style }) => {
+  const colors = useAppSelector((state) => state.theme.colors);
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) =>
-        pressed ? [styles.containerHi, style] : [styles.container, style]
+        pressed
+          ? [
+              styles.containerHi,
+              style,
+              { backgroundColor: colors.buttonTertiaryHighlight },
+            ]
+          : [styles.container, style]
       }
     >
-      <MaterialIcons name="keyboard-arrow-down" size={35} color={"white"} />
+      <MaterialIcons
+        name="keyboard-arrow-down"
+        size={35}
+        color={colors.textPrimary}
+      />
     </Pressable>
   );
 };
@@ -24,7 +37,6 @@ const styles = StyleSheet.create({
   container: {
     width: 45,
     height: 45,
-    backgroundColor: "#282828",
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -32,7 +44,6 @@ const styles = StyleSheet.create({
   containerHi: {
     width: 45,
     height: 45,
-    backgroundColor: "#5d5a5a",
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",

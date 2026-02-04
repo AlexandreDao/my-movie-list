@@ -1,6 +1,7 @@
+import Button from "@/components/Button";
 import Hyperlink from "@/components/Hyperlink";
-import PasswordInput from "@/components/PasswordInput";
-import { useAppDispatch, useSignIn } from "@/hooks";
+import Input from "@/components/Input";
+import { useAppDispatch, useAppSelector, useSignIn } from "@/hooks";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
@@ -8,7 +9,6 @@ import { isAxiosError } from "axios";
 import { FC, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  ActivityIndicator,
   Alert,
   Keyboard,
   Platform,
@@ -28,6 +28,7 @@ const SignIn: FC = () => {
   const dispatch = useAppDispatch();
   const { mutate: signInMutation, isPending } = useSignIn();
   const passwordInputRef = useRef<TextInput>(null);
+  const colors = useAppSelector((state) => state.theme.colors);
 
   const onSubmit = (data: Credentials) => {
     signInMutation(
@@ -52,7 +53,12 @@ const SignIn: FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: colors.backgroundSecondary },
+      ]}
+    >
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -63,14 +69,15 @@ const SignIn: FC = () => {
           onPress={Keyboard.dismiss}
         >
           <View style={styles.formContainer}>
-            <Text style={styles.title}>Log in</Text>
+            <Text style={[styles.title, { color: colors.textPrimary }]}>
+              Log in
+            </Text>
             <Controller
               control={control}
               name="username"
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={styles.input}
+                <Input
                   placeholder="Username"
                   value={value}
                   onChangeText={onChange}
@@ -85,12 +92,14 @@ const SignIn: FC = () => {
               name="password"
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
-                <PasswordInput
+                <Input
+                  placeholder="Password"
                   value={value}
                   onChangeText={onChange}
                   ref={passwordInputRef}
                   onSubmitEditing={handleSubmit(onSubmit)}
                   returnKeyType="send"
+                  isPassword
                 />
               )}
             />
@@ -98,17 +107,13 @@ const SignIn: FC = () => {
               url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}reset-password`}
               displayedText="Reset password"
             />
-            <Pressable
-              style={styles.button}
+            <Button
               onPress={handleSubmit(onSubmit)}
               disabled={isPending}
-            >
-              {isPending ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.buttonText}>Log in</Text>
-              )}
-            </Pressable>
+              text="Log in"
+              style={styles.button}
+              isLoading={isPending}
+            />
             <Hyperlink
               url={`${process.env.EXPO_PUBLIC_TMDB_WEB_URL}signup`}
               displayedText="Join us"
@@ -124,7 +129,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
@@ -139,21 +143,17 @@ const styles = StyleSheet.create({
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: "#ddd",
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 12,
   },
   button: {
     height: 48,
-    backgroundColor: "#2563eb",
     borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100%",
     marginVertical: 12,
   },
   buttonText: {
-    color: "#fff",
     fontWeight: "600",
   },
   hyperlink: {

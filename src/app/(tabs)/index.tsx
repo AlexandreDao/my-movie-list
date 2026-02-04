@@ -2,6 +2,7 @@ import FloatingSearchBar from "@/components/FloatingSearchBar";
 import MovieList from "@/components/MovieList";
 import MovieSkeletonLoader from "@/components/MovieSkeletonLoader";
 import {
+  useAppSelector,
   useBottomTabBarTotalHeight,
   useGetPopMovies,
   useSearchMovies,
@@ -29,6 +30,7 @@ const Home: FC = () => {
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const [canDisplayMovies, setCanDisplayMovies] = useState(false);
   const timeoutRef = React.useRef<number | null>(null);
+  const colors = useAppSelector((state) => state.theme.colors);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
@@ -60,7 +62,7 @@ const Home: FC = () => {
   }, [getPopError, searchError, isGetPopError, isSearchError]);
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
       {isLoading || !canDisplayMovies ? (
         <MovieSkeletonLoader />
       ) : (
@@ -73,7 +75,7 @@ const Home: FC = () => {
             contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
           />
           {searchInput && moviesToDisplay?.length === 0 && (
-            <Text style={styles.emptyListText}>
+            <Text style={[styles.emptyListText, { color: colors.textPrimary }]}>
               {"No movies correspond to this search"}
             </Text>
           )}
@@ -100,7 +102,6 @@ const Home: FC = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: "#282828",
   },
   mainContainer: {
     flex: 1,
@@ -111,12 +112,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginRight: "5%",
   },
-  text: {
-    color: "white",
-  },
   emptyListText: {
     position: "absolute",
-    color: "white",
   },
 });
 

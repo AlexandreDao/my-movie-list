@@ -1,3 +1,4 @@
+import { useAppSelector, withOpacity } from "@/hooks";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { FC } from "react";
 import {
@@ -18,6 +19,7 @@ type MovieDisplayProps = {
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
   const posterPath = `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_POSTER_SIZE}${data.posterPath}`;
+  const colors = useAppSelector((state) => state.theme.colors);
 
   return (
     <Pressable onPress={onPress} style={styles.mainContainer}>
@@ -30,8 +32,15 @@ const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
             width={165}
             resizeMode={"contain"}
           />
-          <Text style={styles.text}>{data.title}</Text>
-          {pressed && <View style={styles.overlay} />}
+          <Text style={{ color: colors.textPrimary }}>{data.title}</Text>
+          {pressed && (
+            <View
+              style={[
+                styles.overlay,
+                { backgroundColor: withOpacity(colors.backgroundPrimary, 0.9) },
+              ]}
+            />
+          )}
         </View>
       )}
     </Pressable>
@@ -45,14 +54,10 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
-    backgroundColor: "#f6f6f63a",
   },
   container: {
     alignItems: "center",
     gap: 4,
-  },
-  text: {
-    color: "white",
   },
 });
 

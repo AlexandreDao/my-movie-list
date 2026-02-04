@@ -1,4 +1,4 @@
-import { useAddToMainList } from "@/hooks";
+import { useAddToMainList, useAppSelector } from "@/hooks";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { isAxiosError } from "axios";
 import { FC, useState } from "react";
@@ -31,6 +31,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
     type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
+  const colors = useAppSelector((state) => state.theme.colors);
 
   const onPress = () => {
     AddToListMutation(
@@ -55,7 +56,9 @@ const AddToListButton: FC<AddToListButtonProps> = ({
 
   if (accountId === "") {
     return (
-      <View style={styles.container}>
+      <View
+        style={[styles.container, { backgroundColor: colors.buttonPrimary }]}
+      >
         <Text style={styles.text}>{"Button is disabled"}</Text>
       </View>
     );
@@ -63,21 +66,38 @@ const AddToListButton: FC<AddToListButtonProps> = ({
 
   return (
     <Pressable
-      style={({ pressed }) => (pressed ? styles.containerHi : styles.container)}
+      style={({ pressed }) =>
+        pressed
+          ? [
+              styles.containerHi,
+              { backgroundColor: colors.buttonPrimaryHighlight },
+            ]
+          : [styles.container, { backgroundColor: colors.buttonPrimary }]
+      }
       onPress={onPress}
     >
       {isPending ? (
-        <ActivityIndicator color={"#ffffffc0"} />
+        <ActivityIndicator color={colors.loader} />
       ) : (
         <View style={styles.insideContainer}>
           <MaterialCommunityIcons
             name={toAdd ? addIcon : remIcon}
             size={30}
-            color="white"
+            color={colors.textPrimary}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>{toAdd ? "Add to" : "Remove from"}</Text>
-            <Text style={[styles.text, { textTransform: "capitalize" }]}>
+            <Text style={[styles.text, { color: colors.buttonPrimaryText }]}>
+              {toAdd ? "Add to" : "Remove from"}
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                {
+                  textTransform: "capitalize",
+                  color: colors.buttonPrimaryText,
+                },
+              ]}
+            >
               {type}
             </Text>
           </View>
@@ -92,14 +112,12 @@ const styles = StyleSheet.create({
     width: 180,
     height: 60,
     borderRadius: 10,
-    backgroundColor: "#1119B4",
     justifyContent: "center",
   },
   containerHi: {
     width: 170,
     height: 60,
     borderRadius: 10,
-    backgroundColor: "#4a4fb3",
     justifyContent: "center",
   },
   insideContainer: {
@@ -116,7 +134,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
     alignSelf: "center",
   },
 });

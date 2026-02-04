@@ -7,7 +7,7 @@ import Animated, { FadeOut } from "react-native-reanimated";
 const MAX_ROWS = 3;
 const MAX_COLS = 2;
 
-const POSTER_WIDTH = 160;
+const POSTER_WIDTH = 156;
 const POSTER_HEIGHT = 235;
 
 const TEXT_WIDTH = 124;

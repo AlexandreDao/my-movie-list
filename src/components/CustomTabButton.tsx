@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/hooks";
 import {
   NavigationContext,
   Position,
@@ -28,6 +29,7 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
   const { setNavigationState } = useContext(NavigationContext);
   const scale = useSharedValue(1);
   const layoutRef = useRef<Position>(null);
+  const colors = useAppSelector((state) => state.theme.colors);
 
   const updatePosition = () => {
     if (isFocused && layoutRef.current) {
@@ -51,7 +53,7 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
   }, [isFocused]);
 
   const textColorStyle = {
-    color: isFocused ? "white" : "grey",
+    color: isFocused ? colors.textPrimary : colors.focusedTabBar,
   };
 
   const animatedScaleStyle = useAnimatedStyle(() => {
@@ -94,7 +96,7 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
         return [
           styles.button,
           state.pressed && {
-            backgroundColor: "lightgrey",
+            backgroundColor: colors.pressedTabBar,
           },
         ];
       }}
@@ -123,9 +125,6 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     paddingVertical: 4,
     marginLeft: -8,
-  },
-  focusedButton: {
-    backgroundColor: "grey",
   },
   text: {
     fontSize: 10,

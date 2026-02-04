@@ -1,4 +1,8 @@
-import { useBottomTabBarHeight, useNavigationFocusPosition } from "@/hooks";
+import {
+  useAppSelector,
+  useBottomTabBarHeight,
+  useNavigationFocusPosition,
+} from "@/hooks";
 import { FC, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
@@ -14,6 +18,7 @@ const CustomTabIndicator: FC = () => {
   const bottomTabBarHeight = useBottomTabBarHeight();
   const prevPosition = useRef({ x: 2, y: 2 });
   const translateX = useSharedValue(0);
+  const colors = useAppSelector((state) => state.theme.colors);
 
   useEffect(() => {
     if (prevPosition.current.x !== focusPosition.x) {
@@ -41,6 +46,7 @@ const CustomTabIndicator: FC = () => {
       style={[
         styles.view,
         {
+          backgroundColor: colors.focusedTabBar,
           height: bottomTabBarHeight - 4,
         },
         animatedStyle,
@@ -53,7 +59,6 @@ const styles = StyleSheet.create({
   view: {
     position: "absolute",
     width: 120,
-    backgroundColor: "grey",
     left: 2,
     top: 2,
     borderRadius: 32,

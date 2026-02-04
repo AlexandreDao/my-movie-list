@@ -1,5 +1,9 @@
 import BackButton from "@/components/BackButton";
-import { useBottomTabBarTotalHeight, useSearchScreening } from "@/hooks";
+import {
+  useAppSelector,
+  useBottomTabBarTotalHeight,
+  useSearchScreening,
+} from "@/hooks";
 import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
@@ -16,6 +20,7 @@ const Map: FC = () => {
   const safeAreaInset = useSafeAreaInsets();
   const { title } = useLocalSearchParams<MapParam>();
   const { data, isError, error } = useSearchScreening(title, initRegion);
+  const colors = useAppSelector((state) => state.theme.colors);
 
   useEffect(() => {
     if (isError) {
@@ -57,7 +62,11 @@ const Map: FC = () => {
       >
         {data?.map((theater) => (
           <Marker key={theater.id} coordinate={theater} title={theater.name}>
-            <MaterialIcons name="local-movies" size={32} color="red" />
+            <MaterialIcons
+              name="local-movies"
+              size={32}
+              color={colors.movieMarker}
+            />
           </Marker>
         ))}
       </MapView>
@@ -75,6 +84,7 @@ const Map: FC = () => {
             bottom: bottomTabBarHeight + 12,
           },
           styles.location,
+          { backgroundColor: colors.invariantWhite },
         ]}
         onPress={() => {
           if (initRegion) {
@@ -82,7 +92,7 @@ const Map: FC = () => {
           }
         }}
       >
-        <MaterialIcons name="my-location" size={18} color="#4285F4" />
+        <MaterialIcons name="my-location" size={18} color={colors.mapMarker} />
       </Pressable>
     </View>
   );

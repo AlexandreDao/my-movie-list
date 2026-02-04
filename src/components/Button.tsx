@@ -1,7 +1,9 @@
+import { useAppSelector } from "@/hooks";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 import React, { FC } from "react";
 import {
+  ActivityIndicator,
   OpaqueColorValue,
   Pressable,
   StyleProp,
@@ -21,34 +23,60 @@ type ButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   pressedStyle?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  isLoading?: boolean;
 };
 
 const Button: FC<ButtonProps> = ({
   icon,
   iconSize = 30,
   onPress,
-  color = "white",
+  color,
   text = "Click me",
   style,
   textStyle,
   pressedStyle,
   disabled,
+  isLoading,
 }) => {
+  const colors = useAppSelector((state) => state.theme.colors);
+  const textColor = color ?? colors.buttonPrimaryText;
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => {
         if (pressed) {
-          return [styles.button, styles.pressedButton, style, pressedStyle];
+          return [
+            styles.button,
+            { backgroundColor: colors.buttonPrimaryHighlight },
+            style,
+            pressedStyle,
+          ];
         }
-        return [styles.button, style];
+        return [
+          styles.button,
+          { backgroundColor: colors.buttonPrimary },
+          style,
+        ];
       }}
       disabled={disabled}
     >
-      {icon && (
-        <MaterialCommunityIcons name={icon} size={iconSize} color={color} />
+      {isLoading ? (
+        <ActivityIndicator color={colors.loader} />
+      ) : (
+        <>
+          {icon && (
+            <MaterialCommunityIcons
+              name={icon}
+              size={iconSize}
+              color={textColor}
+            />
+          )}
+          <Text style={[styles.text, { color: textColor }, textStyle]}>
+            {text}
+          </Text>
+        </>
       )}
-      <Text style={[styles.text, { color: color }, textStyle]}>{text}</Text>
     </Pressable>
   );
 };
@@ -58,15 +86,11 @@ const styles = StyleSheet.create({
     width: 180,
     height: 60,
     borderRadius: 10,
-    backgroundColor: "#1119B4",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     columnGap: 20,
     paddingHorizontal: 12,
-  },
-  pressedButton: {
-    backgroundColor: "#4a4fb3",
   },
   text: {
     fontSize: 16,

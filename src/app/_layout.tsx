@@ -26,6 +26,7 @@ const queryClient = new QueryClient({
 const StackRootLayout = () => {
   const username = useAppSelector((state) => state.user.username);
   const isLoggedIn = !!username;
+  const colors = useAppSelector((state) => state.theme.colors);
 
   return (
     <GestureHandlerRootView>
@@ -48,7 +49,7 @@ const StackRootLayout = () => {
               sheetInitialDetentIndex: 0,
               sheetCornerRadius: 24,
               contentStyle: {
-                backgroundColor: "#282828",
+                backgroundColor: colors.backgroundPrimary,
               },
             }}
           />
