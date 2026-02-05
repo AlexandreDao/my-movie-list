@@ -100,9 +100,11 @@ const lightTheme = {
   hyperlink: palette.blue["400"],
   inputBackground: palette.black["950"],
   inputBorder: palette.black["950"],
+  skeletonLoader: palette.black["800"],
+  skeletonShimmer: palette.black["700"],
 };
 
-type Theme = typeof lightTheme;
+export type Theme = typeof lightTheme;
 
 const darkTheme: Theme = {
   backgroundPrimary: palette.black["900"],
@@ -130,6 +132,8 @@ const darkTheme: Theme = {
   hyperlink: palette.blue["400"],
   inputBackground: palette.black["900"],
   inputBorder: palette.black["950"],
+  skeletonLoader: palette.black["700"],
+  skeletonShimmer: palette.black["500"],
 };
 
 type ThemeState = {

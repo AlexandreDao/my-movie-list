@@ -1,4 +1,5 @@
 import SkeletonLoader from "@/components/SkeletonLoader";
+import { useTheme } from "@/hooks";
 import { Canvas } from "@shopify/react-native-skia";
 import React, { FC, Fragment } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
@@ -25,6 +26,7 @@ const MovieSkeletonLoader: FC = () => {
   const { width: windowsWidth } = useWindowDimensions();
   const posterPaddingHorizontal =
     (windowsWidth - POSTER_WIDTH * MAX_COLS) / (MAX_COLS + 1);
+  const { colors } = useTheme();
 
   return (
     <Animated.View exiting={FadeOut.duration(400)} style={styles.container}>
@@ -33,6 +35,7 @@ const MovieSkeletonLoader: FC = () => {
           COLUMNS.map((column) => (
             <Fragment key={`${row}-${column}`}>
               <SkeletonLoader
+                colors={colors}
                 x={
                   column * POSTER_WIDTH + (column + 1) * posterPaddingHorizontal
                 }
@@ -47,6 +50,7 @@ const MovieSkeletonLoader: FC = () => {
                 duration={1600}
               />
               <SkeletonLoader
+                colors={colors}
                 x={
                   column * POSTER_WIDTH +
                   (column + 1) * posterPaddingHorizontal +

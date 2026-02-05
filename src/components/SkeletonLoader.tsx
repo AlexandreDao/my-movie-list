@@ -1,3 +1,4 @@
+import { Theme } from "@/utils/store/reducers/themeReducer";
 import { LinearGradient, Rect, vec } from "@shopify/react-native-skia";
 import React, { FC, useEffect } from "react";
 import {
@@ -13,6 +14,7 @@ type SkeletonLoaderProps = {
   width?: number;
   height?: number;
   duration?: number;
+  colors: Theme;
 };
 
 const SkeletonLoader: FC<SkeletonLoaderProps> = ({
@@ -21,6 +23,7 @@ const SkeletonLoader: FC<SkeletonLoaderProps> = ({
   width = 100,
   height = 100,
   duration = 1000,
+  colors,
 }) => {
   const first = useSharedValue(-0.2);
   const second = useSharedValue(-0.1);
@@ -39,7 +42,11 @@ const SkeletonLoader: FC<SkeletonLoaderProps> = ({
   return (
     <Rect x={x} y={y} width={width} height={height}>
       <LinearGradient
-        colors={["grey", "lightgrey", "grey"]}
+        colors={[
+          colors.skeletonLoader,
+          colors.skeletonShimmer,
+          colors.skeletonLoader,
+        ]}
         start={vec(x, y)}
         end={vec(x + width, y + height)}
         positions={animatedProps}

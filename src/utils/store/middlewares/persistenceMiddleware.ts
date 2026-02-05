@@ -1,11 +1,13 @@
 // src/utils/store/persistenceMiddleware.ts
 import { RootState } from "@/utils/store";
+import { setTheme } from "@/utils/store/reducers/themeReducer";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Middleware } from "@reduxjs/toolkit";
 
 export enum PersistSlice {
   User = "user",
+  Theme = "theme",
 }
 
 export const PERSIST_SLICES: PersistSlice[] = Object.values(PersistSlice);
@@ -18,6 +20,7 @@ let isHydrating = true;
 // Add new entries when you add reducers that need hydration
 const HYDRATE_ACTIONS: Partial<Record<PersistSlice, (payload: any) => any>> = {
   [PersistSlice.User]: signIn,
+  [PersistSlice.Theme]: setTheme,
 };
 
 export const persistenceMiddleware: Middleware =
