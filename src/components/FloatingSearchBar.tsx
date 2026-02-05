@@ -39,7 +39,6 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const { width: screenWidth } = useWindowDimensions();
   const fullBarWidth = screenWidth * 0.9;
   const buttonWidth = 55;
-  //const buttonWidth = screenWidth * 0.15;
   const headerHeight = useHeaderHeight();
 
   const forceFocus = () => {
