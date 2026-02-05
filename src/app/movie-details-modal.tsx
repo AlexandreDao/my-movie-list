@@ -111,7 +111,12 @@ const MovieDetailsModal: FC = () => {
           <Text style={styles.text}>{movieDetails?.releaseDate}</Text>
           <CollapsableOverview text={movieDetails?.overview} />
           <View style={styles.bottomDetails}>
-            <CircleGrade grade={movieDetails?.voteAverage} />
+            <CircleGrade
+              grade={movieDetails?.voteAverage}
+              radius={75}
+              strokeWidth={20}
+              color="#9c1b94"
+            />
             <View style={styles.buttonContainer}>
               <AddToListButton
                 movieId={movieDetails?.id}
@@ -162,7 +167,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonContainer: {
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   title: {
     color: "white",
