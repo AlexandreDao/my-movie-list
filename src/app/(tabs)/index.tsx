@@ -15,16 +15,26 @@ import Animated, { FadeIn } from "react-native-reanimated";
 const Home: FC = () => {
   const {
     data: moviesData,
+    fetchNextPage: fetchNextPopPage,
+    hasNextPage: hasNextPopPage,
+    isFetchingNextPage: isFetchingPop,
     error: getPopError,
     isError: isGetPopError,
+    refetch: refetchPop,
+    isPending: isPendingPop,
     isLoading,
   } = useGetPopMovies();
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
   const {
     data: moviesToDisplay,
+    fetchNextPage: fetchNextSearchPage,
+    hasNextPage: hasNextSearchPage,
+    isFetchingNextPage: isFetchingSearch,
     error: searchError,
     isError: isSearchError,
+    refetch: refetchSearch,
+    isPending: isPendingSearch,
   } = useSearchMovies(query);
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
@@ -42,6 +52,16 @@ const Home: FC = () => {
       }
     };
   }, []);
+
+  const fetchNextPage = () => {
+    if (query) {
+      if (hasNextSearchPage && !isFetchingSearch) {
+        fetchNextSearchPage();
+      }
+    } else if (hasNextPopPage && !isFetchingPop) {
+      fetchNextPopPage();
+    }
+  };
 
   useEffect(() => {
     if (isGetPopError || isSearchError) {
@@ -72,6 +92,9 @@ const Home: FC = () => {
         >
           <MovieList
             data={query ? moviesToDisplay : moviesData}
+            refresh={query ? refetchSearch : refetchPop}
+            refreshing={query ? isPendingSearch : isPendingPop}
+            fetchNextPage={fetchNextPage}
             contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
           />
           {searchInput && moviesToDisplay?.length === 0 && (
@@ -79,22 +102,22 @@ const Home: FC = () => {
               {"No movies correspond to this search"}
             </Text>
           )}
-          <FloatingSearchBar
-            containerStyle={[
-              styles.searchBar,
-              {
-                bottom: bottomTabBarHeight + 12,
-              },
-            ]}
-            searchString={searchInput}
-            onSubmit={() => setQuery(searchInput)}
-            onChangeText={(newText) => {
-              if (newText.length === 0) setQuery("");
-              setSearchInput(newText);
-            }}
-          />
         </Animated.View>
       )}
+      <FloatingSearchBar
+        containerStyle={[
+          styles.searchBar,
+          {
+            bottom: bottomTabBarHeight + 12,
+          },
+        ]}
+        searchString={searchInput}
+        onSubmit={() => setQuery(searchInput)}
+        onChangeText={(newText) => {
+          if (newText.length === 0) setQuery("");
+          setSearchInput(newText);
+        }}
+      />
     </View>
   );
 };
@@ -114,6 +137,7 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     position: "absolute",
+    marginBottom: 100,
   },
 });
 
