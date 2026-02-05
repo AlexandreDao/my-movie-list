@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks";
 import { FC, useState } from "react";
 import {
   Pressable,
@@ -29,21 +30,28 @@ const useIsTruncated = (maxLines: number) => {
 const CollapsableOverview: FC<CollapsableOverviewProps> = ({ text, style }) => {
   const [isOverviewFull, setIsOverviewFull] = useState(false);
   const { isTruncated, onTextLayout } = useIsTruncated(4);
+  const { colors } = useTheme();
 
   return (
     <View style={style}>
       <Text
-        style={[styles.overview, { position: "absolute", opacity: 0 }]}
+        style={[
+          styles.overview,
+          { color: colors.textPrimary, position: "absolute", opacity: 0 },
+        ]}
         onTextLayout={onTextLayout}
       >
         {text}
       </Text>
-      <Text numberOfLines={isOverviewFull ? 0 : 4} style={styles.overview}>
+      <Text
+        numberOfLines={isOverviewFull ? 0 : 4}
+        style={[styles.overview, { color: colors.textPrimary }]}
+      >
         {text}
       </Text>
       {isTruncated && (
         <Pressable onPress={() => setIsOverviewFull(!isOverviewFull)}>
-          <Text style={styles.showText}>
+          <Text style={[styles.showText, { color: colors.hyperlink }]}>
             {isOverviewFull ? "Show less" : "Show more"}
           </Text>
         </Pressable>
@@ -54,13 +62,11 @@ const CollapsableOverview: FC<CollapsableOverviewProps> = ({ text, style }) => {
 
 const styles = StyleSheet.create({
   overview: {
-    color: "white",
     lineHeight: 20,
     marginTop: 10,
     fontSize: 16,
   },
   showText: {
-    color: "#646ae0",
     textDecorationLine: "underline",
     fontSize: 20,
   },

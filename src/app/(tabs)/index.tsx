@@ -1,13 +1,16 @@
 import FloatingSearchBar from "@/components/FloatingSearchBar";
 import MovieList from "@/components/MovieList";
+import MovieSkeletonLoader from "@/components/MovieSkeletonLoader";
 import {
   useBottomTabBarTotalHeight,
   useGetPopMovies,
   useSearchMovies,
+  useTheme,
 } from "@/hooks";
 import { isAxiosError } from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 const Home: FC = () => {
   const {
@@ -19,6 +22,7 @@ const Home: FC = () => {
     isError: isGetPopError,
     refetch: refetchPop,
     isPending: isPendingPop,
+    isLoading,
   } = useGetPopMovies();
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
@@ -34,6 +38,20 @@ const Home: FC = () => {
   } = useSearchMovies(query);
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
+  const [canDisplayMovies, setCanDisplayMovies] = useState(false);
+  const timeoutRef = React.useRef<number | null>(null);
+  const { colors } = useTheme();
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setCanDisplayMovies(true);
+    }, 1200);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const fetchNextPage = () => {
     if (query) {
@@ -64,18 +82,27 @@ const Home: FC = () => {
   }, [getPopError, searchError, isGetPopError, isSearchError]);
 
   return (
-    <View style={styles.mainContainer}>
-      <MovieList
-        data={query ? moviesToDisplay : moviesData}
-        refresh={query ? refetchSearch : refetchPop}
-        refreshing={query ? isPendingSearch : isPendingPop}
-        fetchNextPage={fetchNextPage}
-        contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
-      />
-      {searchInput && moviesToDisplay?.length === 0 && (
-        <Text style={styles.emptyListText}>
-          {"No movies correspond to this search"}
-        </Text>
+    <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
+      {isLoading || !canDisplayMovies ? (
+        <MovieSkeletonLoader />
+      ) : (
+        <Animated.View
+          style={styles.mainContainer}
+          entering={FadeIn.duration(400)}
+        >
+          <MovieList
+            data={query ? moviesToDisplay : moviesData}
+            refresh={query ? refetchSearch : refetchPop}
+            refreshing={query ? isPendingSearch : isPendingPop}
+            fetchNextPage={fetchNextPage}
+            contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
+          />
+          {searchInput && moviesToDisplay?.length === 0 && (
+            <Text style={[styles.emptyListText, { color: colors.textPrimary }]}>
+              {"No movies correspond to this search"}
+            </Text>
+          )}
+        </Animated.View>
       )}
       <FloatingSearchBar
         containerStyle={[
@@ -96,9 +123,11 @@ const Home: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   mainContainer: {
     flex: 1,
-    backgroundColor: "#282828",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -106,13 +135,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginRight: "5%",
   },
-  text: {
-    color: "white",
-  },
   emptyListText: {
     position: "absolute",
     marginBottom: 100,
-    color: "white",
   },
 });
 

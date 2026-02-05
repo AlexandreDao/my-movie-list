@@ -1,4 +1,4 @@
-import { useAppDispatch, useHeaderTitle, useSignOut } from "@/hooks";
+import { useAppDispatch, useHeaderTitle, useSignOut, useTheme } from "@/hooks";
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const LogoutButton: FC = () => {
   const { mutate } = useSignOut();
   const dispatch = useAppDispatch();
+  const { colors } = useTheme();
 
   return (
     <Pressable
@@ -32,7 +33,11 @@ const LogoutButton: FC = () => {
         });
       }}
     >
-      <MaterialCommunityIcons name="exit-to-app" size={18} color="white" />
+      <MaterialCommunityIcons
+        name="exit-to-app"
+        size={18}
+        color={colors.textPrimary}
+      />
     </Pressable>
   );
 };
@@ -41,10 +46,11 @@ const CustomHeader: FC = () => {
   const title = useHeaderTitle();
   const isInitialized = useRef(false);
   const { setNavigationState } = useContext(NavigationContext);
+  const { colors } = useTheme();
 
   return (
     <SafeAreaView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.tabBar }]}
       edges={["top"]}
       onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
@@ -57,7 +63,7 @@ const CustomHeader: FC = () => {
         }
       }}
     >
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
       <LogoutButton />
     </SafeAreaView>
   );
@@ -68,12 +74,10 @@ const styles = StyleSheet.create({
     height: 72,
     justifyContent: "space-between",
     paddingHorizontal: 24,
-    backgroundColor: "black",
     flexDirection: "row",
     alignItems: "center",
   },
   title: {
-    color: "white",
     fontSize: 20,
     fontWeight: "500",
   },

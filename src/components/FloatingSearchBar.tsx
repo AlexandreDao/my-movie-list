@@ -1,4 +1,4 @@
-import { useHeaderHeight } from "@/hooks";
+import { useHeaderHeight, useTheme } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC, useRef, useState } from "react";
 import {
@@ -40,6 +40,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const fullBarWidth = screenWidth * 0.9;
   const buttonWidth = 55;
   const headerHeight = useHeaderHeight();
+  const { colors } = useTheme();
 
   const forceFocus = () => {
     inputRef.current?.focus();
@@ -68,13 +69,22 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   return (
     <AnimatedKeyboardStickyView
       offset={{ opened: headerHeight }}
-      style={[styles.searchBar, containerStyle, animatedWidth]}
+      style={[
+        styles.searchBar,
+        { backgroundColor: colors.buttonSecondary },
+        containerStyle,
+        animatedWidth,
+      ]}
     >
       <Pressable
         onPress={() => setIsCollapsed(!isCollapsed)}
         style={[styles.buttonStyle, { width: buttonWidth }]}
       >
-        <MaterialIcons name="search" size={35} />
+        <MaterialIcons
+          name="search"
+          size={35}
+          color={colors.buttonSecondaryText}
+        />
       </Pressable>
       {isCollapsed ? null : (
         <TextInput
@@ -98,7 +108,6 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
 const styles = StyleSheet.create({
   searchBar: {
     borderRadius: 8,
-    backgroundColor: "white",
     height: 50,
     alignSelf: "flex-end",
     flexDirection: "row-reverse",

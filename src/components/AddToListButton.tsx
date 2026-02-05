@@ -1,4 +1,4 @@
-import { useAddToMainList } from "@/hooks";
+import { useAddToMainList, useTheme } from "@/hooks";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { isAxiosError } from "axios";
 import { FC, useState } from "react";
@@ -31,6 +31,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
     type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
+  const { colors } = useTheme();
   const isDisabled = accountId === "";
 
   const onPress = () => {
@@ -57,24 +58,43 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   return (
     <Pressable
       style={({ pressed }) => {
-        if (isDisabled) return [styles.container, styles.colorDisable];
-        return [styles.container, pressed ? styles.colorHi : styles.color];
+        if (isDisabled)
+          return [
+            styles.container,
+            { backgroundColor: colors.buttonPrimaryDisabled },
+          ];
+        return [
+          styles.container,
+          pressed
+            ? { backgroundColor: colors.buttonPrimaryHighlight }
+            : { backgroundColor: colors.buttonPrimary },
+        ];
       }}
       onPress={onPress}
       disabled={isDisabled}
     >
       {isPending ? (
-        <ActivityIndicator color={"#ffffffc0"} />
+        <ActivityIndicator color={colors.loader} />
       ) : (
         <View style={styles.insideContainer}>
           <MaterialCommunityIcons
             name={toAdd ? addIcon : remIcon}
             size={30}
-            color="white"
+            color={colors.textPrimary}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>{toAdd ? "Add to" : "Remove from"}</Text>
-            <Text style={[styles.text, { textTransform: "capitalize" }]}>
+            <Text style={[styles.text, { color: colors.buttonPrimaryText }]}>
+              {toAdd ? "Add to" : "Remove from"}
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                {
+                  textTransform: "capitalize",
+                  color: colors.buttonPrimaryText,
+                },
+              ]}
+            >
               {type}
             </Text>
           </View>
@@ -91,15 +111,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
   },
-  color: {
-    backgroundColor: "#1119B4",
-  },
-  colorHi: {
-    backgroundColor: "#4a4fb3",
-  },
-  colorDisable: {
-    backgroundColor: "#757575",
-  },
   insideContainer: {
     width: "100%",
     alignItems: "center",
@@ -114,7 +125,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
     alignSelf: "center",
   },
 });

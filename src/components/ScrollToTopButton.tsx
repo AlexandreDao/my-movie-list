@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC } from "react";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
@@ -14,6 +15,8 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
   isVisible,
   style,
 }) => {
+  const { colors } = useTheme();
+
   return (
     isVisible && (
       <Animated.View
@@ -24,13 +27,21 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
         <Pressable
           style={({ pressed }) => [
             styles.button,
-            pressed ? styles.colorHi : styles.color,
+            pressed
+              ? { backgroundColor: colors.buttonTertiaryHighlight }
+              : { backgroundColor: colors.buttonTertiary },
           ]}
           disabled={!isVisible}
           onPress={onPress}
         >
-          <MaterialIcons name={"arrow-upward"} size={30} color="black" />
-          <Text style={styles.text}>{"Go back to the Top"}</Text>
+          <MaterialIcons
+            name={"arrow-upward"}
+            size={30}
+            color={colors.buttonTertiaryText}
+          />
+          <Text style={[styles.text, { color: colors.buttonTertiaryText }]}>
+            {"Go back to the Top"}
+          </Text>
         </Pressable>
       </Animated.View>
     )
@@ -45,15 +56,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  color: {
-    backgroundColor: "white",
-  },
-  colorHi: {
-    backgroundColor: "#ffffffd4",
-  },
   text: {
     fontSize: 14,
-    color: "black",
     alignSelf: "center",
   },
 });

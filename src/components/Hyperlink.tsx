@@ -1,5 +1,6 @@
+import { useTheme } from "@/hooks";
 import React, { FC } from "react";
-import { Linking, StyleSheet, Pressable, Text } from "react-native";
+import { Linking, Pressable, StyleSheet, Text } from "react-native";
 
 type HyperlinkProps = {
   url: string;
@@ -7,14 +8,17 @@ type HyperlinkProps = {
 };
 
 const Hyperlink: FC<HyperlinkProps> = ({ url, displayedText }) => {
+  const { colors } = useTheme();
+
   return (
     <Pressable
       hitSlop={10}
       pressRetentionOffset={20}
       onPress={() => Linking.openURL(url)}
-      android_ripple={{ color: "rgba(255, 255, 255, 0.6)" }}
     >
-      <Text style={styles.hyperlink}>{displayedText}</Text>
+      <Text style={[styles.hyperlink, { color: colors.hyperlink }]}>
+        {displayedText}
+      </Text>
     </Pressable>
   );
 };

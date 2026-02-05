@@ -1,5 +1,5 @@
 import { AsyncSkia } from "@/components/AsyncSkia";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector, useTheme } from "@/hooks";
 import { reactQueryPersistor } from "@/utils/storages/reactQueryPersistor";
 import { store } from "@/utils/store";
 import { hydrateState } from "@/utils/store/middlewares/persistenceMiddleware";
@@ -26,20 +26,14 @@ const queryClient = new QueryClient({
 const StackRootLayout = () => {
   const username = useAppSelector((state) => state.user.username);
   const isLoggedIn = !!username;
+  const { colors } = useTheme();
 
   return (
     <GestureHandlerRootView>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Protected guard={isLoggedIn}>
           <Stack.Screen name="(tabs)" />
-        </Stack.Protected>
-        <Stack.Protected guard={isLoggedIn}>
           <Stack.Screen name="map" />
-        </Stack.Protected>
-        <Stack.Protected guard={!isLoggedIn}>
-          <Stack.Screen name="index" />
-        </Stack.Protected>
-        <Stack.Protected guard={isLoggedIn}>
           <Stack.Screen
             name="movie-details-modal"
             options={{
@@ -48,10 +42,13 @@ const StackRootLayout = () => {
               sheetInitialDetentIndex: 0,
               sheetCornerRadius: 24,
               contentStyle: {
-                backgroundColor: "#282828",
+                backgroundColor: colors.backgroundPrimary,
               },
             }}
           />
+        </Stack.Protected>
+        <Stack.Protected guard={!isLoggedIn}>
+          <Stack.Screen name="index" />
         </Stack.Protected>
       </Stack>
     </GestureHandlerRootView>

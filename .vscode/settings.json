@@ -8,12 +8,13 @@
     "source.sortMembers": "explicit"
   },
   "cSpell.words": [
-    "gorhom",
     "canvaskit",
+    "gorhom",
+    "Persistor",
     "skia",
+    "springify",
     "tmdb",
     "Watchlist",
-    "worklets",
-    "Persistor"
+    "worklets"
   ]
 }

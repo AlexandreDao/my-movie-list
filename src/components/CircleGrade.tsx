@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks";
 import { FC, useEffect } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
@@ -33,6 +34,7 @@ const CircleGrade: FC<CircleGradeProps> = ({
   const theta = useSharedValue(2 * Math.PI);
   const animateTo = useDerivedValue(() => 2 * Math.PI * invertedCompletion);
   const textOpacity = useSharedValue(0);
+  const { colors } = useTheme();
 
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset: theta.value * innerRadius,
@@ -53,6 +55,7 @@ const CircleGrade: FC<CircleGradeProps> = ({
     <View
       style={[
         styles.mainContainer,
+        { backgroundColor: colors.grade },
         style,
         { width: radius * 2, height: radius * 2 },
       ]}
@@ -71,7 +74,9 @@ const CircleGrade: FC<CircleGradeProps> = ({
           strokeWidth={strokeWidth}
         />
       </Svg>
-      <Animated.Text style={[styles.text, gradeTextStyle]}>
+      <Animated.Text
+        style={[styles.text, { color: colors.textPrimary }, gradeTextStyle]}
+      >
         {grade?.toFixed(1)}
       </Animated.Text>
     </View>
@@ -85,7 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    color: "white",
     fontWeight: "bold",
     fontSize: 40,
   },

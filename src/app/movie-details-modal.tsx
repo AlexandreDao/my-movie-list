@@ -1,4 +1,5 @@
 import AddToListButton from "@/components/AddToListButton";
+import Button from "@/components/Button";
 import CircleGrade from "@/components/CircleGrade";
 import CollapsableOverview from "@/components/CollapsableOverview";
 import DownArrowButton from "@/components/DownArrowButton";
@@ -7,6 +8,8 @@ import {
   useAppSelector,
   useGetAccountDetails,
   useGetMovieDetails,
+  useTheme,
+  withOpacity,
 } from "@/hooks";
 import { setUserId } from "@/utils/store/reducers/userReducer";
 import { isAxiosError } from "axios";
@@ -42,7 +45,7 @@ const MovieDetailsModal: FC = () => {
   const backdropPath = movieDetails
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${movieDetails?.backdropPath}`
     : "";
-
+  const { colors } = useTheme();
   //TO DO change the date to a prettier format
 
   useEffect(() => {
@@ -78,14 +81,19 @@ const MovieDetailsModal: FC = () => {
   if (isPending || isDetailsError) {
     return (
       <SafeAreaView style={styles.modal}>
-        <ActivityIndicator color={"#ffffffaa"} size={100} />
+        <ActivityIndicator color={colors.loader} size={100} />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.modal}>
-      <View style={styles.mainContainer}>
+      <View
+        style={[
+          styles.mainContainer,
+          { backgroundColor: colors.backgroundPrimary },
+        ]}
+      >
         <View style={styles.topContainer}>
           <Image
             src={backdropPath}
@@ -100,15 +108,23 @@ const MovieDetailsModal: FC = () => {
             style={styles.downArrow}
           />
           <LinearGradient
-            colors={["transparent", "#282828"]}
+            colors={[
+              withOpacity(colors.backgroundPrimary, 0),
+              colors.backgroundPrimary,
+            ]}
             style={styles.transparentGradient}
           />
         </View>
         <View style={styles.detailsContainer}>
-          <Text numberOfLines={2} style={styles.title}>
+          <Text
+            numberOfLines={2}
+            style={[styles.title, { color: colors.textPrimary }]}
+          >
             {movieDetails?.title}
           </Text>
-          <Text style={styles.text}>{movieDetails?.releaseDate}</Text>
+          <Text style={[styles.text, { color: colors.textPrimary }]}>
+            {movieDetails?.releaseDate}
+          </Text>
           <CollapsableOverview text={movieDetails?.overview} />
           <View style={styles.bottomDetails}>
             <CircleGrade
@@ -132,6 +148,18 @@ const MovieDetailsModal: FC = () => {
               />
             </View>
           </View>
+          <Button
+            style={styles.screeningBtn}
+            text="Screening around you"
+            icon="map-marker-outline"
+            onPress={() =>
+              router.push({
+                pathname: "/map",
+                params: { title: movieDetails?.title },
+              })
+            }
+            disabled={!movieDetails?.title}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -149,13 +177,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     paddingBottom: 20,
-    backgroundColor: "#282828",
   },
   topContainer: {
     flexDirection: "row",
-  },
-  sheetBackGround: {
-    backgroundColor: "#282828",
   },
   detailsContainer: {
     width: "88%",
@@ -170,13 +194,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   title: {
-    color: "white",
     fontWeight: "bold",
     fontSize: 30,
   },
-  text: {
-    color: "white",
-  },
+  text: {},
   downArrow: {
     position: "absolute",
     alignSelf: "flex-end",
@@ -189,6 +210,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 120,
+  },
+  screeningBtn: {
+    width: "100%",
+    alignSelf: "center",
+    marginTop: 20,
   },
 });
 

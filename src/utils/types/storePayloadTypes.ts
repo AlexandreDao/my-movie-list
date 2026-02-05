@@ -5,3 +5,7 @@ export type SignInPayload = {
 export type GetIdPayload = {
   accountId: string;
 };
+
+export type SetThemePayload = {
+  isDarkMode: boolean;
+};

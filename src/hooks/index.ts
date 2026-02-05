@@ -12,3 +12,5 @@ export { default as useSignOut } from "@/hooks/services/useSignOut";
 export { default as useValidateToken } from "@/hooks/services/useValidateToken";
 export { default as useAppDispatch } from "@/hooks/store/useAppDispatch";
 export { default as useAppSelector } from "@/hooks/store/useAppSelector";
+export { default as useTheme } from "@/hooks/theme/useTheme";
+export { default as withOpacity } from "@/hooks/theme/withOpacity";
