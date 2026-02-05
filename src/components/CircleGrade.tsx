@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect } from "react";
+import { FC, useEffect } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
   useAnimatedProps,
@@ -42,7 +42,7 @@ const CircleGrade: FC<CircleGradeProps> = ({
     opacity: textOpacity.value,
   }));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     theta.value = withTiming(animateTo.value, { duration: duration ?? 1500 });
     textOpacity.value = withTiming(1, {
       duration: duration ? duration * 2 : 3000,
