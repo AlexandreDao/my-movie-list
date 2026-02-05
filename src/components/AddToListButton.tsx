@@ -31,6 +31,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
     type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
+  const isDisabled = accountId === "";
 
   const onPress = () => {
     AddToListMutation(
@@ -53,18 +54,14 @@ const AddToListButton: FC<AddToListButtonProps> = ({
     );
   };
 
-  if (accountId === "") {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>{"Button is disabled"}</Text>
-      </View>
-    );
-  }
-
   return (
     <Pressable
-      style={({ pressed }) => (pressed ? styles.containerHi : styles.container)}
+      style={({ pressed }) => {
+        if (isDisabled) return [styles.container, styles.colorDisable];
+        return [styles.container, pressed ? styles.colorHi : styles.color];
+      }}
       onPress={onPress}
+      disabled={isDisabled}
     >
       {isPending ? (
         <ActivityIndicator color={"#ffffffc0"} />
@@ -92,15 +89,16 @@ const styles = StyleSheet.create({
     width: 180,
     height: 60,
     borderRadius: 10,
-    backgroundColor: "#1119B4",
     justifyContent: "center",
   },
-  containerHi: {
-    width: 170,
-    height: 60,
-    borderRadius: 10,
+  color: {
+    backgroundColor: "#1119B4",
+  },
+  colorHi: {
     backgroundColor: "#4a4fb3",
-    justifyContent: "center",
+  },
+  colorDisable: {
+    backgroundColor: "#757575",
   },
   insideContainer: {
     width: "100%",
