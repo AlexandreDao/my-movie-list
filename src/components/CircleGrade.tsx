@@ -1,24 +1,85 @@
-import { FC } from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { FC, useEffect } from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import Animated, {
+  useAnimatedProps,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import Svg, { Circle } from "react-native-svg";
 
 type CircleGradeProps = {
   grade: number | undefined;
+  strokeWidth: number;
+  color: string;
+  radius: number;
+  duration?: number;
   style?: ViewStyle;
 };
 
-const CircleGrade: FC<CircleGradeProps> = ({ grade, style }) => {
+const CircleGrade: FC<CircleGradeProps> = ({
+  grade,
+  radius,
+  strokeWidth,
+  color,
+  duration,
+  style,
+}) => {
+  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+  const innerRadius = radius - strokeWidth / 2;
+  const circumference = 2 * Math.PI * innerRadius;
+  const invertedCompletion = (100 - (grade ? grade * 10 : 0)) / 100;
+  const theta = useSharedValue(2 * Math.PI);
+  const animateTo = useDerivedValue(() => 2 * Math.PI * invertedCompletion);
+  const textOpacity = useSharedValue(0);
+
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDashoffset: theta.value * innerRadius,
+  }));
+
+  const gradeTextStyle = useAnimatedStyle(() => ({
+    opacity: textOpacity.value,
+  }));
+
+  useEffect(() => {
+    theta.value = withTiming(animateTo.value, { duration: duration ?? 1500 });
+    textOpacity.value = withTiming(1, {
+      duration: duration ? duration * 2 : 3000,
+    });
+  }, [textOpacity, theta, animateTo, duration]);
+
   return (
-    <View style={[styles.mainContainer, style]}>
-      <Text style={styles.text}>{grade?.toFixed(1)}</Text>
+    <View
+      style={[
+        styles.mainContainer,
+        style,
+        { width: radius * 2, height: radius * 2 },
+      ]}
+    >
+      <Svg
+        style={[StyleSheet.absoluteFill, { transform: [{ rotate: "-90deg" }] }]}
+      >
+        <AnimatedCircle
+          cx={radius}
+          cy={radius}
+          animatedProps={animatedProps}
+          r={innerRadius}
+          fill={"transparent"}
+          stroke={color}
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeWidth={strokeWidth}
+        />
+      </Svg>
+      <Animated.Text style={[styles.text, gradeTextStyle]}>
+        {grade?.toFixed(1)}
+      </Animated.Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    width: 140,
-    height: 145,
-    backgroundColor: "#9c1b94",
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
