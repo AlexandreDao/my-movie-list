@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import { FC, PropsWithChildren, useContext, useRef } from "react";
 import { StyleSheet, View } from "react-native";
@@ -7,7 +7,7 @@ const CustomBottomTabBar: FC<PropsWithChildren> = ({ children }) => {
   const ref = useRef<View>(null);
   const { setNavigationState } = useContext(NavigationContext);
   const isInitialized = useRef(false);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <View

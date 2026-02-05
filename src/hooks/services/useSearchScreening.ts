@@ -17,7 +17,7 @@ const queryFn = async (query: string, position: LatLng) => {
   );
   const searchRes = await res.json();
 
-  return searchRes[0].theaters;
+  return searchRes[0]?.theaters ?? [];
 };
 
 const useSearchScreening = (query: string, position: LatLng | null) => {

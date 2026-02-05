@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import React, { FC } from "react";
 import { Linking, Pressable, StyleSheet, Text } from "react-native";
 
@@ -8,7 +8,8 @@ type HyperlinkProps = {
 };
 
 const Hyperlink: FC<HyperlinkProps> = ({ url, displayedText }) => {
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
+
   return (
     <Pressable
       hitSlop={10}

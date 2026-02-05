@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import { FC } from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 
@@ -8,7 +8,7 @@ type CircleGradeProps = {
 };
 
 const CircleGrade: FC<CircleGradeProps> = ({ grade, style }) => {
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <View

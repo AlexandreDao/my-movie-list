@@ -1,4 +1,4 @@
-import { useAppSelector, withOpacity } from "@/hooks";
+import { useTheme, withOpacity } from "@/hooks";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { FC } from "react";
 import {
@@ -19,7 +19,7 @@ type MovieDisplayProps = {
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
   const posterPath = `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_POSTER_SIZE}${data.posterPath}`;
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <Pressable onPress={onPress} style={styles.mainContainer}>

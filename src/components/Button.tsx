@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 import React, { FC } from "react";
@@ -38,7 +38,7 @@ const Button: FC<ButtonProps> = ({
   disabled,
   isLoading,
 }) => {
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
   const textColor = color ?? colors.buttonPrimaryText;
 
   return (

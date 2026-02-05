@@ -1,9 +1,4 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-  useHeaderTitle,
-  useSignOut,
-} from "@/hooks";
+import { useAppDispatch, useHeaderTitle, useSignOut, useTheme } from "@/hooks";
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
@@ -16,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const LogoutButton: FC = () => {
   const { mutate } = useSignOut();
   const dispatch = useAppDispatch();
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <Pressable
@@ -51,7 +46,7 @@ const CustomHeader: FC = () => {
   const title = useHeaderTitle();
   const isInitialized = useRef(false);
   const { setNavigationState } = useContext(NavigationContext);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <SafeAreaView

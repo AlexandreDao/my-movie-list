@@ -1,8 +1,9 @@
 import BackButton from "@/components/BackButton";
 import {
-  useAppSelector,
   useBottomTabBarTotalHeight,
   useSearchScreening,
+  useTheme,
+  withOpacity,
 } from "@/hooks";
 import { MapParam } from "@/utils/types/routeType";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,8 +11,10 @@ import * as Location from "expo-location";
 import { useLocalSearchParams } from "expo-router";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
+import MapView, { Circle, LatLng, Marker, Region } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const darkMapStyle = require("@/assets/darkMapStyle.json");
 
 const Map: FC = () => {
   const [initRegion, setInitRegion] = useState<Region | null>(null);
@@ -20,11 +23,13 @@ const Map: FC = () => {
   const safeAreaInset = useSafeAreaInsets();
   const { title } = useLocalSearchParams<MapParam>();
   const { data, isError, error } = useSearchScreening(title, initRegion);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors, isDarkMode } = useTheme();
+  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
 
   useEffect(() => {
     if (isError) {
       Alert.alert("Error finding screening around you");
+      console.warn(error);
     }
   }, [isError, error]);
 
@@ -43,6 +48,10 @@ const Map: FC = () => {
         longitudeDelta: 0.0421,
       };
       setInitRegion(region);
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
       mapRef.current?.animateToRegion(region, 1200);
     }
 
@@ -52,10 +61,10 @@ const Map: FC = () => {
   return (
     <View style={styles.container}>
       <MapView
+        customMapStyle={isDarkMode ? darkMapStyle : []}
         ref={mapRef}
         style={StyleSheet.absoluteFillObject}
         provider="google"
-        showsUserLocation
         showsMyLocationButton={false}
         showsCompass={false}
         toolbarEnabled
@@ -69,6 +78,32 @@ const Map: FC = () => {
             />
           </Marker>
         ))}
+        {userLocation && (
+          <>
+            <Marker
+              coordinate={userLocation}
+              anchor={{ x: 0.35, y: 0.35 }}
+              flat
+            >
+              <View
+                style={{
+                  width: 18,
+                  height: 18,
+                  borderRadius: 9,
+                  backgroundColor: colors.mapMarker,
+                  borderWidth: 2,
+                  borderColor: colors.invariantWhite,
+                }}
+              />
+            </Marker>
+            <Circle
+              center={userLocation}
+              radius={20}
+              fillColor={withOpacity(colors.mapMarker, 0.2)}
+              strokeColor={withOpacity(colors.mapMarker, 0.7)}
+            />
+          </>
+        )}
       </MapView>
       <BackButton
         style={[
@@ -84,7 +119,7 @@ const Map: FC = () => {
             bottom: bottomTabBarHeight + 12,
           },
           styles.location,
-          { backgroundColor: colors.invariantWhite },
+          { backgroundColor: colors.mapButton },
         ]}
         onPress={() => {
           if (initRegion) {
@@ -92,7 +127,27 @@ const Map: FC = () => {
           }
         }}
       >
-        <MaterialIcons name="my-location" size={18} color={colors.mapMarker} />
+        <View
+          style={{
+            width: 36,
+            height: 36,
+            backgroundColor: withOpacity(colors.mapMarker, 0.2),
+            borderRadius: 18,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 9,
+              backgroundColor: colors.mapMarker,
+              borderWidth: 2,
+              borderColor: colors.invariantWhite,
+            }}
+          />
+        </View>
       </Pressable>
     </View>
   );
@@ -114,7 +169,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignSelf: "flex-end",
     marginRight: "5%",
-    backgroundColor: "white",
     borderRadius: 8,
     height: 50,
     width: "15%",

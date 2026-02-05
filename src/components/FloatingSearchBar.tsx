@@ -1,4 +1,4 @@
-import { useAppSelector, useHeaderHeight } from "@/hooks";
+import { useHeaderHeight, useTheme } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC, useRef, useState } from "react";
 import {
@@ -41,7 +41,7 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   const buttonWidth = 55;
   //const buttonWidth = screenWidth * 0.15;
   const headerHeight = useHeaderHeight();
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   const forceFocus = () => {
     inputRef.current?.focus();

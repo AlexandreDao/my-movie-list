@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC } from "react";
 import { Pressable, StyleSheet, ViewStyle } from "react-native";
@@ -9,7 +9,7 @@ type DownArrowButtonProps = {
 };
 
 const DownArrowButton: FC<DownArrowButtonProps> = ({ onPress, style }) => {
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <Pressable

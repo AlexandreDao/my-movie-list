@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Hyperlink from "@/components/Hyperlink";
 import Input from "@/components/Input";
-import { useAppDispatch, useAppSelector, useSignIn } from "@/hooks";
+import { useAppDispatch, useSignIn, useTheme } from "@/hooks";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signIn } from "@/utils/store/reducers/userReducer";
 import { Credentials } from "@/utils/types/formType";
@@ -28,7 +28,7 @@ const SignIn: FC = () => {
   const dispatch = useAppDispatch();
   const { mutate: signInMutation, isPending } = useSignIn();
   const passwordInputRef = useRef<TextInput>(null);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   const onSubmit = (data: Credentials) => {
     signInMutation(

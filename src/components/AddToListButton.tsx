@@ -1,4 +1,4 @@
-import { useAddToMainList, useAppSelector } from "@/hooks";
+import { useAddToMainList, useTheme } from "@/hooks";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { isAxiosError } from "axios";
 import { FC, useState } from "react";
@@ -31,7 +31,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
     type === "watchlist" ? "eye-remove-outline" : "star-off-outline";
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   const onPress = () => {
     AddToListMutation(

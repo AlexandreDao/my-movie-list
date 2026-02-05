@@ -2,10 +2,10 @@ import FloatingSearchBar from "@/components/FloatingSearchBar";
 import MovieList from "@/components/MovieList";
 import MovieSkeletonLoader from "@/components/MovieSkeletonLoader";
 import {
-  useAppSelector,
   useBottomTabBarTotalHeight,
   useGetPopMovies,
   useSearchMovies,
+  useTheme,
 } from "@/hooks";
 import { isAxiosError } from "axios";
 import React, { FC, useEffect, useState } from "react";
@@ -30,7 +30,7 @@ const Home: FC = () => {
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const [canDisplayMovies, setCanDisplayMovies] = useState(false);
   const timeoutRef = React.useRef<number | null>(null);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {

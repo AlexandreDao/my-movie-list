@@ -8,6 +8,7 @@ import {
   useAppSelector,
   useGetAccountDetails,
   useGetMovieDetails,
+  useTheme,
   withOpacity,
 } from "@/hooks";
 import { setUserId } from "@/utils/store/reducers/userReducer";
@@ -44,7 +45,7 @@ const MovieDetailsModal: FC = () => {
   const backdropPath = movieDetails
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${movieDetails?.backdropPath}`
     : "";
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
   //TO DO change the date to a prettier format
 
   useEffect(() => {

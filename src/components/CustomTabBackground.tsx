@@ -1,15 +1,11 @@
-import {
-  useAppSelector,
-  useBottomTabBarTotalHeight,
-  withOpacity,
-} from "@/hooks";
+import { useBottomTabBarTotalHeight, useTheme, withOpacity } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { FC } from "react";
 import { StyleSheet } from "react-native";
 
 const CustomTabBackground: FC = () => {
   const tabBarHeight = useBottomTabBarTotalHeight();
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   return (
     <LinearGradient

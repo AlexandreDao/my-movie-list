@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import {
   NavigationContext,
   Position,
@@ -29,7 +29,7 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
   const { setNavigationState } = useContext(NavigationContext);
   const scale = useSharedValue(1);
   const layoutRef = useRef<Position>(null);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
 
   const updatePosition = () => {
     if (isFocused && layoutRef.current) {

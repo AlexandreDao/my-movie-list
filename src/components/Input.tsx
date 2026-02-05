@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React, { forwardRef } from "react";
 import {
@@ -16,7 +16,7 @@ type InputProps = {
 const Input = forwardRef<TextInput, InputProps>(
   ({ isPassword, ...props }, ref) => {
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
-    const colors = useAppSelector((state) => state.theme.colors);
+    const { colors } = useTheme();
 
     return (
       <View

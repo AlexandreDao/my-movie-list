@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks";
+import { useTheme } from "@/hooks";
 import { FC, useState } from "react";
 import {
   Pressable,
@@ -30,7 +30,8 @@ const useIsTruncated = (maxLines: number) => {
 const CollapsableOverview: FC<CollapsableOverviewProps> = ({ text, style }) => {
   const [isOverviewFull, setIsOverviewFull] = useState(false);
   const { isTruncated, onTextLayout } = useIsTruncated(4);
-  const colors = useAppSelector((state) => state.theme.colors);
+  const { colors } = useTheme();
+
   return (
     <View style={style}>
       <Text
