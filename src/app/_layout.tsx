@@ -3,7 +3,11 @@ import { useAppSelector, useTheme } from "@/hooks";
 import { reactQueryPersistor } from "@/utils/storages/reactQueryPersistor";
 import { store } from "@/utils/store";
 import { hydrateState } from "@/utils/store/middlewares/persistenceMiddleware";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import * as Font from "expo-font";
@@ -46,6 +50,18 @@ const StackRootLayout = () => {
               },
             }}
           />
+          <Stack.Screen
+            name="settings"
+            options={{
+              presentation: "formSheet",
+              sheetAllowedDetents: "fitToContents",
+              sheetInitialDetentIndex: 0,
+              sheetCornerRadius: 24,
+              contentStyle: {
+                backgroundColor: colors.backgroundPrimary,
+              },
+            }}
+          />
         </Stack.Protected>
         <Stack.Protected guard={!isLoggedIn}>
           <Stack.Screen name="index" />
@@ -67,6 +83,7 @@ const RootLayout = () => {
           await Font.loadAsync({
             ...MaterialIcons.font,
             ...MaterialCommunityIcons.font,
+            ...Ionicons.font,
           });
         }
         await hydrateState(store);

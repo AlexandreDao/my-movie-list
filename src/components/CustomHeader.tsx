@@ -1,9 +1,11 @@
+import IconButton from "@/components/IconButton";
 import { useAppDispatch, useHeaderTitle, useSignOut, useTheme } from "@/hooks";
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
+import { useRouter } from "expo-router";
 import { FC, useContext, useRef } from "react";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -47,10 +49,11 @@ const CustomHeader: FC = () => {
   const isInitialized = useRef(false);
   const { setNavigationState } = useContext(NavigationContext);
   const { colors } = useTheme();
+  const router = useRouter();
 
   return (
     <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.tabBar }]}
+      style={[styles.container, { backgroundColor: colors.header }]}
       edges={["top"]}
       onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
@@ -64,7 +67,11 @@ const CustomHeader: FC = () => {
       }}
     >
       <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
-      <LogoutButton />
+      <IconButton
+        name="settings-outline"
+        icon={Ionicons}
+        onPress={() => router.push("/settings")}
+      />
     </SafeAreaView>
   );
 };

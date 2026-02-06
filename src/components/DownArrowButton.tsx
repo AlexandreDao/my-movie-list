@@ -19,7 +19,7 @@ const DownArrowButton: FC<DownArrowButtonProps> = ({ onPress, style }) => {
           ? [
               styles.containerHi,
               style,
-              { backgroundColor: colors.buttonTertiaryHighlight },
+              { backgroundColor: colors.buttonSecondaryHighlight },
             ]
           : [styles.container, style]
       }

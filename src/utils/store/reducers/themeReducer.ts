@@ -73,10 +73,11 @@ const palette = {
   googleMapBlueLight: "#4285F4",
   googleMapBlueDark: "#0c53ff",
 };
-
+// TODO: add bottom sheet to log out and change theme and adjust light theme and do the animation
 const lightTheme = {
   backgroundPrimary: palette.black["900"],
   backgroundSecondary: palette.black["950"],
+  header: palette.black["950"],
   textPrimary: palette.white["100"],
   mapMarker: palette.googleMapBlueLight,
   mapButton: palette.black["800"],
@@ -85,9 +86,10 @@ const lightTheme = {
   buttonPrimaryHighlight: palette.blue["300"],
   buttonPrimaryDisabled: palette.black["200"],
   buttonSecondary: palette.black["300"],
+  buttonSecondaryHighlight: palette.white["500"],
   buttonSecondaryText: palette.white["50"],
-  buttonTertiary: palette.white["50"],
-  buttonTertiaryText: palette.black["950"],
+  buttonTertiary: palette.black["900"],
+  buttonTertiaryText: palette.white["50"],
   buttonTertiaryHighlight: palette.white["500"],
   tabBar: palette.black["950"],
   tabBarGradient: palette.black["700"],
@@ -109,6 +111,7 @@ export type Theme = typeof lightTheme;
 const darkTheme: Theme = {
   backgroundPrimary: palette.black["900"],
   backgroundSecondary: palette.black["950"],
+  header: palette.black["950"],
   textPrimary: palette.white["100"],
   mapMarker: palette.googleMapBlueDark,
   mapButton: palette.black["800"],
@@ -117,10 +120,11 @@ const darkTheme: Theme = {
   buttonPrimaryHighlight: palette.blue["400"],
   buttonPrimaryDisabled: palette.black["200"],
   buttonSecondary: palette.white["50"],
+  buttonSecondaryHighlight: palette.white["500"],
   buttonSecondaryText: palette.black["950"],
-  buttonTertiary: palette.white["50"],
+  buttonTertiary: palette.black["900"],
   buttonTertiaryHighlight: palette.white["500"],
-  buttonTertiaryText: palette.black["950"],
+  buttonTertiaryText: palette.white["50"],
   tabBar: palette.black["950"],
   tabBarGradient: palette.black["700"],
   focusedTabBar: palette.white["700"],

@@ -1,7 +1,6 @@
 import { useTheme } from "@/hooks";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
-import React, { FC } from "react";
+import React, { ComponentType } from "react";
 import {
   ActivityIndicator,
   OpaqueColorValue,
@@ -13,9 +12,12 @@ import {
   ViewStyle,
 } from "react-native";
 
-type ButtonProps = {
-  icon?: IconProps<keyof typeof MaterialCommunityIcons.glyphMap>["name"];
+type IconComponent<Glyphs extends string> = ComponentType<IconProps<Glyphs>>;
+
+type ButtonProps<Glyphs extends string> = {
+  icon?: IconComponent<Glyphs>;
   iconSize?: number;
+  iconName?: Glyphs;
   onPress?: () => void;
   color?: string | OpaqueColorValue;
   text?: string;
@@ -24,10 +26,12 @@ type ButtonProps = {
   pressedStyle?: StyleProp<ViewStyle>;
   disabled?: boolean;
   isLoading?: boolean;
+  variant?: "primary" | "secondary" | "tertiary";
 };
 
-const Button: FC<ButtonProps> = ({
-  icon,
+const Button = <Glyphs extends string = string>({
+  icon: Icon,
+  iconName,
   iconSize = 30,
   onPress,
   color,
@@ -37,9 +41,25 @@ const Button: FC<ButtonProps> = ({
   pressedStyle,
   disabled,
   isLoading,
-}) => {
+  variant = "primary",
+}: ButtonProps<Glyphs>) => {
   const { colors } = useTheme();
-  const textColor = color ?? colors.buttonPrimaryText;
+  const backgroundColor = {
+    primary: colors.buttonPrimary,
+    secondary: colors.buttonSecondary,
+    tertiary: colors.buttonTertiary,
+  };
+  const highlightColor = {
+    primary: colors.buttonPrimaryHighlight,
+    secondary: colors.buttonSecondaryHighlight,
+    tertiary: colors.buttonTertiaryHighlight,
+  };
+  const defaultTextColor = {
+    primary: colors.buttonPrimaryText,
+    secondary: colors.buttonSecondaryText,
+    tertiary: colors.buttonTertiaryText,
+  };
+  const textColor = color ?? defaultTextColor[variant];
 
   return (
     <Pressable
@@ -48,14 +68,14 @@ const Button: FC<ButtonProps> = ({
         if (pressed) {
           return [
             styles.button,
-            { backgroundColor: colors.buttonPrimaryHighlight },
+            { backgroundColor: highlightColor[variant] },
             style,
             pressedStyle,
           ];
         }
         return [
           styles.button,
-          { backgroundColor: colors.buttonPrimary },
+          { backgroundColor: backgroundColor[variant] },
           style,
         ];
       }}
@@ -65,12 +85,8 @@ const Button: FC<ButtonProps> = ({
         <ActivityIndicator color={colors.loader} />
       ) : (
         <>
-          {icon && (
-            <MaterialCommunityIcons
-              name={icon}
-              size={iconSize}
-              color={textColor}
-            />
+          {iconName && Icon && (
+            <Icon name={iconName} size={iconSize} color={textColor} />
           )}
           <Text style={[styles.text, { color: textColor }, textStyle]}>
             {text}
