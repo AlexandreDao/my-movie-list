@@ -23,11 +23,7 @@ const IconButton = <Glyphs extends string>({
 
   return (
     <Pressable hitSlop={12} {...props}>
-      <Icon
-        name={name}
-        size={size ?? 18}
-        color={color ?? colors.buttonPrimaryText}
-      />
+      <Icon name={name} size={size ?? 18} color={color ?? colors.textPrimary} />
     </Pressable>
   );
 };

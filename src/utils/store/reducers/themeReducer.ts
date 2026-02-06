@@ -1,6 +1,6 @@
 import { SetThemePayload } from "@/utils/types/storePayloadTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Appearance, Platform } from "react-native";
+import { Appearance, Platform, StatusBar } from "react-native";
 
 const systemColorScheme = Appearance.getColorScheme();
 
@@ -75,35 +75,36 @@ const palette = {
 };
 // TODO: add bottom sheet to log out and change theme and adjust light theme and do the animation
 const lightTheme = {
-  backgroundPrimary: palette.black["900"],
-  backgroundSecondary: palette.black["950"],
-  header: palette.black["950"],
-  textPrimary: palette.white["100"],
-  mapMarker: palette.googleMapBlueLight,
-  mapButton: palette.black["800"],
+  backgroundPrimary: palette.white["100"],
+  backgroundSecondary: palette.white["50"],
+  header: palette.white["50"],
+  textPrimary: palette.black["900"],
+  mapMarker: palette.googleMapBlueDark,
+  mapButton: palette.white["50"],
   buttonPrimary: palette.blue["500"],
   buttonPrimaryText: palette.white["50"],
-  buttonPrimaryHighlight: palette.blue["300"],
+  buttonPrimaryHighlight: palette.blue["400"],
   buttonPrimaryDisabled: palette.black["200"],
-  buttonSecondary: palette.black["300"],
+  buttonSecondary: palette.white["50"],
   buttonSecondaryHighlight: palette.white["500"],
-  buttonSecondaryText: palette.white["50"],
-  buttonTertiary: palette.black["900"],
-  buttonTertiaryText: palette.white["50"],
-  buttonTertiaryHighlight: palette.white["500"],
-  tabBar: palette.black["950"],
-  tabBarGradient: palette.black["700"],
-  focusedTabBar: palette.black["500"],
-  pressedTabBar: palette.black["50"],
-  loader: palette.white["50"],
+  buttonSecondaryText: palette.black["950"],
+  buttonTertiary: palette.white["100"],
+  buttonTertiaryHighlight: palette.white["300"],
+  buttonTertiaryText: palette.black["950"],
+  tabBar: palette.white["50"],
+  tabBarGradient: palette.white["700"],
+  focusedTabBar: palette.white["200"],
+  pressedTabBar: palette.white["300"],
+  idleTextTabBar: palette.white["300"],
+  loader: palette.black["950"],
   movieMarker: palette.red["700"],
   invariantWhite: palette.white["50"],
   grade: palette.violet["900"],
   hyperlink: palette.blue["400"],
-  inputBackground: palette.black["950"],
-  inputBorder: palette.black["950"],
-  skeletonLoader: palette.black["800"],
-  skeletonShimmer: palette.black["700"],
+  inputBackground: palette.white["50"],
+  inputBorder: palette.white["950"],
+  skeletonLoader: palette.white["300"],
+  skeletonShimmer: palette.white["100"],
 };
 
 export type Theme = typeof lightTheme;
@@ -115,7 +116,7 @@ const darkTheme: Theme = {
   textPrimary: palette.white["100"],
   mapMarker: palette.googleMapBlueDark,
   mapButton: palette.black["800"],
-  buttonPrimary: palette.blue["500"],
+  buttonPrimary: palette.blue["800"],
   buttonPrimaryText: palette.white["50"],
   buttonPrimaryHighlight: palette.blue["400"],
   buttonPrimaryDisabled: palette.black["200"],
@@ -129,8 +130,9 @@ const darkTheme: Theme = {
   tabBarGradient: palette.black["700"],
   focusedTabBar: palette.white["700"],
   pressedTabBar: palette.white["300"],
+  idleTextTabBar: palette.white["500"],
   loader: palette.white["50"],
-  movieMarker: palette.red["700"],
+  movieMarker: palette.red["500"],
   invariantWhite: palette.white["50"],
   grade: palette.violet["900"],
   hyperlink: palette.blue["400"],
@@ -159,10 +161,12 @@ export const themeSlice = createSlice({
 
       state.isDarkMode = action.payload.isDarkMode;
       state.colors = action.payload.isDarkMode ? darkTheme : lightTheme;
+
       if (Platform.OS === "web") {
         document.documentElement.style.colorScheme = colorScheme;
       } else {
         Appearance.setColorScheme(colorScheme);
+        StatusBar.setBarStyle(`${colorScheme}-content`, true);
       }
     },
   },

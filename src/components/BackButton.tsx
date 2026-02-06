@@ -14,7 +14,7 @@ const BackButton: FC<PressableProps> = (props) => {
       icon={MaterialIcons}
       name="arrow-back"
       size={24}
-      color={colors.buttonPrimaryText}
+      color={colors.textPrimary}
       onPress={() => {
         if (router.canGoBack()) {
           router.back();

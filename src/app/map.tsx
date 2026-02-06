@@ -86,14 +86,13 @@ const Map: FC = () => {
               flat
             >
               <View
-                style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: 9,
-                  backgroundColor: colors.mapMarker,
-                  borderWidth: 2,
-                  borderColor: colors.invariantWhite,
-                }}
+                style={[
+                  styles.dot,
+                  {
+                    backgroundColor: colors.mapMarker,
+                    borderColor: colors.invariantWhite,
+                  },
+                ]}
               />
             </Marker>
             <Circle
@@ -128,24 +127,21 @@ const Map: FC = () => {
         }}
       >
         <View
-          style={{
-            width: 36,
-            height: 36,
-            backgroundColor: withOpacity(colors.mapMarker, 0.2),
-            borderRadius: 18,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          style={[
+            styles.dotAura,
+            {
+              backgroundColor: withOpacity(colors.mapMarker, 0.2),
+            },
+          ]}
         >
           <View
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 9,
-              backgroundColor: colors.mapMarker,
-              borderWidth: 2,
-              borderColor: colors.invariantWhite,
-            }}
+            style={[
+              styles.dot,
+              {
+                backgroundColor: colors.mapMarker,
+                borderColor: colors.invariantWhite,
+              },
+            ]}
           />
         </View>
       </Pressable>
@@ -174,6 +170,19 @@ const styles = StyleSheet.create({
     width: "15%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  dotAura: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dot: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
   },
 });
 

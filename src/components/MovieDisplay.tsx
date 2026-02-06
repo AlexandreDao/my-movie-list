@@ -1,5 +1,4 @@
 import { useTheme, withOpacity } from "@/hooks";
-import { Theme } from "@/utils/store/reducers/themeReducer";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { FC } from "react";
 import {
@@ -16,7 +15,6 @@ type MovieDisplayProps = {
   data: MovieDataEntryMapped;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
-  colors: Theme;
 };
 
 const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
