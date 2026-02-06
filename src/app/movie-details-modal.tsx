@@ -131,7 +131,7 @@ const MovieDetailsModal: FC = () => {
               grade={movieDetails?.voteAverage}
               radius={75}
               strokeWidth={20}
-              color="#9c1b94"
+              color={colors.grade}
             />
             <View style={styles.buttonContainer}>
               <AddToListButton

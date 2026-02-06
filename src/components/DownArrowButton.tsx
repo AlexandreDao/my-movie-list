@@ -21,13 +21,17 @@ const DownArrowButton: FC<DownArrowButtonProps> = ({ onPress, style }) => {
               style,
               { backgroundColor: colors.buttonTertiaryHighlight },
             ]
-          : [styles.container, style]
+          : [
+              styles.container,
+              style,
+              { backgroundColor: colors.buttonTertiary },
+            ]
       }
     >
       <MaterialIcons
         name="keyboard-arrow-down"
         size={35}
-        color={colors.textPrimary}
+        color={colors.buttonTertiaryText}
       />
     </Pressable>
   );
