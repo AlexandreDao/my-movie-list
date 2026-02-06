@@ -55,10 +55,9 @@ const StackRootLayout = () => {
             options={{
               presentation: "formSheet",
               sheetAllowedDetents: "fitToContents",
-              sheetInitialDetentIndex: 0,
               sheetCornerRadius: 24,
               contentStyle: {
-                backgroundColor: colors.backgroundPrimary,
+                backgroundColor: colors.backgroundSecondary,
               },
             }}
           />

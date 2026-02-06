@@ -1,48 +1,11 @@
 import IconButton from "@/components/IconButton";
-import { useAppDispatch, useHeaderTitle, useSignOut, useTheme } from "@/hooks";
+import { useHeaderTitle, useTheme } from "@/hooks";
 import { NavigationContext } from "@/utils/contexts/NavigationContext";
-import SecureStore from "@/utils/storages/SecureStorage";
-import { signOut } from "@/utils/store/reducers/userReducer";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { isAxiosError } from "axios";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { FC, useContext, useRef } from "react";
-import { Alert, Pressable, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const LogoutButton: FC = () => {
-  const { mutate } = useSignOut();
-  const dispatch = useAppDispatch();
-  const { colors } = useTheme();
-
-  return (
-    <Pressable
-      hitSlop={12}
-      onPress={() => {
-        dispatch(signOut());
-        SecureStore.deleteItemAsync("sessionId");
-        mutate(undefined, {
-          onError: (error) => {
-            if (isAxiosError(error)) {
-              Alert.alert(
-                "Sign Out Error",
-                error.response?.data?.status_message || "Unknown error",
-              );
-            } else {
-              Alert.alert("Sign Out Error", "An unexpected error occurred");
-            }
-          },
-        });
-      }}
-    >
-      <MaterialCommunityIcons
-        name="exit-to-app"
-        size={18}
-        color={colors.textPrimary}
-      />
-    </Pressable>
-  );
-};
 
 const CustomHeader: FC = () => {
   const title = useHeaderTitle();
