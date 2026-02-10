@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   scrollButton: {
     position: "absolute",
-    top: 50,
+    bottom: 200,
     alignSelf: "center",
   },
   columnWrapperStyle: {

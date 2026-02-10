@@ -46,6 +46,7 @@ const MovieDetailsModal: FC = () => {
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${movieDetails?.backdropPath}`
     : "";
   const { colors } = useTheme();
+
   //TO DO change the date to a prettier format
 
   useEffect(() => {
