@@ -23,8 +23,9 @@ const Map: FC = () => {
   const safeAreaInset = useSafeAreaInsets();
   const { title } = useLocalSearchParams<MapParam>();
   const { data, isError, error } = useSearchScreening(title, initRegion);
-  const { colors, isDarkMode } = useTheme();
+  const { colors, colorScheme } = useTheme();
   const [userLocation, setUserLocation] = useState<LatLng | null>(null);
+  const isDarkMode = colorScheme === "dark";
 
   useEffect(() => {
     if (isError) {

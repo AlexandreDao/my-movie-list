@@ -3,6 +3,7 @@ import { IconProps } from "@expo/vector-icons/build/createIconSet";
 import React, { ComponentType } from "react";
 import {
   ActivityIndicator,
+  GestureResponderEvent,
   OpaqueColorValue,
   Pressable,
   StyleProp,
@@ -18,7 +19,8 @@ type ButtonProps<Glyphs extends string> = {
   icon?: IconComponent<Glyphs>;
   iconSize?: number;
   iconName?: Glyphs;
-  onPress?: () => void;
+  onPress?: (event: GestureResponderEvent) => void;
+  onPressOut?: (event: GestureResponderEvent) => void;
   color?: string | OpaqueColorValue;
   text?: string;
   style?: StyleProp<ViewStyle>;
@@ -27,6 +29,7 @@ type ButtonProps<Glyphs extends string> = {
   disabled?: boolean;
   isLoading?: boolean;
   variant?: "primary" | "secondary" | "tertiary";
+  isPressed?: boolean;
 };
 
 const Button = <Glyphs extends string = string>({
@@ -41,7 +44,9 @@ const Button = <Glyphs extends string = string>({
   pressedStyle,
   disabled,
   isLoading,
+  onPressOut,
   variant = "primary",
+  isPressed,
 }: ButtonProps<Glyphs>) => {
   const { colors } = useTheme();
   const backgroundColor = {
@@ -64,8 +69,9 @@ const Button = <Glyphs extends string = string>({
   return (
     <Pressable
       onPress={onPress}
+      onPressOut={onPressOut}
       style={({ pressed }) => {
-        if (pressed) {
+        if (pressed || isPressed) {
           return [
             styles.button,
             { backgroundColor: highlightColor[variant] },

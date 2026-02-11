@@ -1,10 +1,4 @@
-import { SetThemePayload } from "@/utils/types/storePayloadTypes";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Appearance, Platform, StatusBar } from "react-native";
-
-const systemColorScheme = Appearance.getColorScheme();
-
-const palette = {
+export const palette = Object.freeze({
   black: {
     "50": "#f6f6f6",
     "100": "#e7e7e7",
@@ -72,9 +66,9 @@ const palette = {
   },
   googleMapBlueLight: "#4285F4",
   googleMapBlueDark: "#0c53ff",
-};
-// TODO: add bottom sheet to log out and change theme and adjust light theme and do the animation
-const lightTheme = {
+});
+
+export const lightTheme = Object.freeze({
   backgroundPrimary: palette.white["100"],
   backgroundSecondary: palette.white["50"],
   header: palette.white["50"],
@@ -105,11 +99,11 @@ const lightTheme = {
   inputBorder: palette.white["950"],
   skeletonLoader: palette.white["300"],
   skeletonShimmer: palette.white["100"],
-};
+});
 
 export type Theme = typeof lightTheme;
 
-const darkTheme: Theme = {
+export const darkTheme: Theme = Object.freeze({
   backgroundPrimary: palette.black["900"],
   backgroundSecondary: palette.black["950"],
   header: palette.black["950"],
@@ -140,39 +134,4 @@ const darkTheme: Theme = {
   inputBorder: palette.black["950"],
   skeletonLoader: palette.black["700"],
   skeletonShimmer: palette.black["500"],
-};
-
-type ThemeState = {
-  isDarkMode: boolean;
-  colors: Theme;
-};
-
-const INITIAL_STATE: ThemeState = {
-  isDarkMode: systemColorScheme === "dark" ? true : false,
-  colors: systemColorScheme === "dark" ? darkTheme : lightTheme,
-};
-
-export const themeSlice = createSlice({
-  name: "theme",
-  initialState: INITIAL_STATE,
-  reducers: {
-    setTheme: (state, action: PayloadAction<SetThemePayload>) => {
-      const colorScheme = state.isDarkMode ? "dark" : "light";
-
-      state.isDarkMode = action.payload.isDarkMode;
-      state.colors = action.payload.isDarkMode ? darkTheme : lightTheme;
-
-      if (Platform.OS === "web") {
-        document.documentElement.style.colorScheme = colorScheme;
-      } else {
-        Appearance.setColorScheme(colorScheme);
-        StatusBar.setBarStyle(`${colorScheme}-content`, true);
-      }
-    },
-  },
 });
-
-// Action creators are generated for each case reducer function
-export const { setTheme } = themeSlice.actions;
-
-export default themeSlice.reducer;
