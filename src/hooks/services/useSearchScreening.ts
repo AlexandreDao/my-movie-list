@@ -8,6 +8,9 @@ const queryFn = async (query: string, position: LatLng) => {
     `${process.env.EXPO_PUBLIC_SCREENING_API_URL}movies/search?search_text=${query}&page=1&page_size=5`,
   );
   const movies: Movie[] = await data.json();
+  if (!movies[0]) {
+    return [];
+  }
   const movieId = movies[0].id;
   const today = new Date();
   const start = format(startOfDay(today), "yyyy-MM-dd'T'HH:mm:ss'Z'");

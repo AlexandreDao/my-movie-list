@@ -80,7 +80,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
           <MaterialCommunityIcons
             name={toAdd ? addIcon : remIcon}
             size={30}
-            color={colors.textPrimary}
+            color={colors.buttonPrimaryText}
           />
           <View style={styles.textContainer}>
             <Text style={[styles.text, { color: colors.buttonPrimaryText }]}>

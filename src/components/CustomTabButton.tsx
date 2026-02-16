@@ -53,7 +53,7 @@ export const CustomTabButton: FC<CustomTabButtonProps> = ({
   }, [isFocused]);
 
   const textColorStyle = {
-    color: isFocused ? colors.textPrimary : colors.focusedTabBar,
+    color: isFocused ? colors.textPrimary : colors.idleTextTabBar,
   };
 
   const animatedScaleStyle = useAnimatedStyle(() => {

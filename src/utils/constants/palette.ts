@@ -1,10 +1,4 @@
-import { SetThemePayload } from "@/utils/types/storePayloadTypes";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Appearance, Platform } from "react-native";
-
-const systemColorScheme = Appearance.getColorScheme();
-
-const palette = {
+export const palette = Object.freeze({
   black: {
     "50": "#f6f6f6",
     "100": "#e7e7e7",
@@ -72,61 +66,67 @@ const palette = {
   },
   googleMapBlueLight: "#4285F4",
   googleMapBlueDark: "#0c53ff",
-};
+});
 
-const lightTheme = {
-  backgroundPrimary: palette.black["900"],
-  backgroundSecondary: palette.black["950"],
-  textPrimary: palette.white["100"],
-  mapMarker: palette.googleMapBlueLight,
-  mapButton: palette.black["800"],
-  buttonPrimary: palette.blue["500"],
-  buttonPrimaryText: palette.white["50"],
-  buttonPrimaryHighlight: palette.blue["300"],
-  buttonPrimaryDisabled: palette.black["200"],
-  buttonSecondary: palette.black["300"],
-  buttonSecondaryText: palette.white["50"],
-  buttonTertiary: palette.white["50"],
-  buttonTertiaryText: palette.black["950"],
-  buttonTertiaryHighlight: palette.white["500"],
-  tabBar: palette.black["950"],
-  tabBarGradient: palette.black["700"],
-  focusedTabBar: palette.black["500"],
-  pressedTabBar: palette.black["50"],
-  loader: palette.white["50"],
-  movieMarker: palette.red["700"],
-  invariantWhite: palette.white["50"],
-  grade: palette.violet["900"],
-  hyperlink: palette.blue["400"],
-  inputBackground: palette.black["950"],
-  inputBorder: palette.black["950"],
-  skeletonLoader: palette.black["800"],
-  skeletonShimmer: palette.black["700"],
-};
-
-export type Theme = typeof lightTheme;
-
-const darkTheme: Theme = {
-  backgroundPrimary: palette.black["900"],
-  backgroundSecondary: palette.black["950"],
-  textPrimary: palette.white["100"],
+export const lightTheme = Object.freeze({
+  backgroundPrimary: palette.white["100"],
+  backgroundSecondary: palette.white["50"],
+  header: palette.white["50"],
+  textPrimary: palette.black["900"],
   mapMarker: palette.googleMapBlueDark,
-  mapButton: palette.black["800"],
+  mapButton: palette.white["50"],
   buttonPrimary: palette.blue["500"],
   buttonPrimaryText: palette.white["50"],
   buttonPrimaryHighlight: palette.blue["400"],
   buttonPrimaryDisabled: palette.black["200"],
   buttonSecondary: palette.white["50"],
+  buttonSecondaryHighlight: palette.white["500"],
   buttonSecondaryText: palette.black["950"],
-  buttonTertiary: palette.white["50"],
-  buttonTertiaryHighlight: palette.white["500"],
+  buttonTertiary: palette.white["100"],
+  buttonTertiaryHighlight: palette.white["300"],
   buttonTertiaryText: palette.black["950"],
+  tabBar: palette.white["50"],
+  tabBarGradient: palette.white["700"],
+  focusedTabBar: palette.white["200"],
+  pressedTabBar: palette.white["300"],
+  idleTextTabBar: palette.white["300"],
+  loader: palette.black["950"],
+  movieMarker: palette.red["700"],
+  invariantWhite: palette.white["50"],
+  grade: palette.violet["900"],
+  hyperlink: palette.blue["400"],
+  inputBackground: palette.white["50"],
+  inputBorder: palette.white["950"],
+  skeletonLoader: palette.white["300"],
+  skeletonShimmer: palette.white["100"],
+});
+
+export type Theme = typeof lightTheme;
+
+export const darkTheme: Theme = Object.freeze({
+  backgroundPrimary: palette.black["900"],
+  backgroundSecondary: palette.black["950"],
+  header: palette.black["950"],
+  textPrimary: palette.white["100"],
+  mapMarker: palette.googleMapBlueDark,
+  mapButton: palette.black["800"],
+  buttonPrimary: palette.blue["800"],
+  buttonPrimaryText: palette.white["50"],
+  buttonPrimaryHighlight: palette.blue["400"],
+  buttonPrimaryDisabled: palette.black["200"],
+  buttonSecondary: palette.white["50"],
+  buttonSecondaryHighlight: palette.white["500"],
+  buttonSecondaryText: palette.black["950"],
+  buttonTertiary: palette.black["900"],
+  buttonTertiaryHighlight: palette.white["500"],
+  buttonTertiaryText: palette.white["50"],
   tabBar: palette.black["950"],
   tabBarGradient: palette.black["700"],
   focusedTabBar: palette.white["700"],
   pressedTabBar: palette.white["300"],
+  idleTextTabBar: palette.white["500"],
   loader: palette.white["50"],
-  movieMarker: palette.red["700"],
+  movieMarker: palette.red["500"],
   invariantWhite: palette.white["50"],
   grade: palette.violet["900"],
   hyperlink: palette.blue["400"],
@@ -134,37 +134,4 @@ const darkTheme: Theme = {
   inputBorder: palette.black["950"],
   skeletonLoader: palette.black["700"],
   skeletonShimmer: palette.black["500"],
-};
-
-type ThemeState = {
-  isDarkMode: boolean;
-  colors: Theme;
-};
-
-const INITIAL_STATE: ThemeState = {
-  isDarkMode: systemColorScheme === "dark" ? true : false,
-  colors: systemColorScheme === "dark" ? darkTheme : lightTheme,
-};
-
-export const themeSlice = createSlice({
-  name: "theme",
-  initialState: INITIAL_STATE,
-  reducers: {
-    setTheme: (state, action: PayloadAction<SetThemePayload>) => {
-      const colorScheme = state.isDarkMode ? "dark" : "light";
-
-      state.isDarkMode = action.payload.isDarkMode;
-      state.colors = action.payload.isDarkMode ? darkTheme : lightTheme;
-      if (Platform.OS === "web") {
-        document.documentElement.style.colorScheme = colorScheme;
-      } else {
-        Appearance.setColorScheme(colorScheme);
-      }
-    },
-  },
 });
-
-// Action creators are generated for each case reducer function
-export const { setTheme } = themeSlice.actions;
-
-export default themeSlice.reducer;

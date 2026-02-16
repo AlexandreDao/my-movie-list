@@ -12,6 +12,7 @@ import {
   withOpacity,
 } from "@/hooks";
 import { setUserId } from "@/utils/store/reducers/userReducer";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -151,7 +152,8 @@ const MovieDetailsModal: FC = () => {
           <Button
             style={styles.screeningBtn}
             text="Screening around you"
-            icon="map-marker-outline"
+            icon={MaterialCommunityIcons}
+            iconName="map-marker-outline"
             onPress={() =>
               router.push({
                 pathname: "/map",

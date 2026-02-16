@@ -1,4 +1,4 @@
-import { Theme } from "@/utils/store/reducers/themeReducer";
+import { Theme } from "@/utils/constants/palette";
 import { LinearGradient, Rect, vec } from "@shopify/react-native-skia";
 import React, { FC, useEffect } from "react";
 import {
