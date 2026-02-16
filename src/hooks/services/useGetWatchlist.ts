@@ -12,7 +12,7 @@ const queryFn = async (accountId: string, pageNum: number) => {
 
 const useGetWatchlist = (accountId: string) => {
   return useInfiniteQuery({
-    queryKey: ["get-watchlist", accountId],
+    queryKey: ["get-list-watchlist", accountId],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       queryFn(accountId, pageParam),
     initialPageParam: 1,

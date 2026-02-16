@@ -41,6 +41,7 @@ const MyMovie = () => {
               ? {}
               : { backgroundColor: colors.buttonPrimaryDisabled },
           ]}
+          pressedStyle={{ backgroundColor: colors.buttonPrimaryHighlight }}
           onPress={() => setIsFavoritesDisplay(true)}
           text={"Favorites"}
         />
@@ -51,6 +52,7 @@ const MyMovie = () => {
               ? { backgroundColor: colors.buttonPrimaryDisabled }
               : {},
           ]}
+          pressedStyle={{ backgroundColor: colors.buttonPrimaryHighlight }}
           onPress={() => setIsFavoritesDisplay(false)}
           text={"Watchlist"}
         />

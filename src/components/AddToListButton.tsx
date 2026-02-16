@@ -1,5 +1,6 @@
 import { useAddToMainList, useTheme } from "@/hooks";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { FC, useState } from "react";
 import {
@@ -27,6 +28,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
   movieId,
 }) => {
   const { mutate: AddToListMutation, isPending } = useAddToMainList();
+  const queryClient = useQueryClient();
   const [toAdd, setToAdd] = useState(!isAdded);
   const addIcon = type === "watchlist" ? "eye-plus-outline" : "star-outline";
   const remIcon =
@@ -40,6 +42,18 @@ const AddToListButton: FC<AddToListButtonProps> = ({
       {
         onSuccess: () => {
           setToAdd(!toAdd);
+          queryClient.invalidateQueries({
+            queryKey: ["get-list-favorites"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["get-list-watchlist"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["get-movie-details", movieId],
+            refetchType: "all",
+          });
         },
         onError: (error) => {
           if (isAxiosError(error)) {

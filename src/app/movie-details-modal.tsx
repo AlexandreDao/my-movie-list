@@ -139,13 +139,13 @@ const MovieDetailsModal: FC = () => {
                 movieId={movieDetails?.id}
                 accountId={accountId}
                 type="watchlist"
-                isAdded={movieDetails?.accountStates?.watchlist}
+                isAdded={movieDetails?.accountStates.watchlist}
               />
               <AddToListButton
                 movieId={movieDetails?.id}
                 accountId={accountId}
                 type="favorite"
-                isAdded={movieDetails?.accountStates?.favorite}
+                isAdded={movieDetails?.accountStates.favorite}
               />
             </View>
           </View>

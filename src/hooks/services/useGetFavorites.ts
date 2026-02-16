@@ -12,7 +12,7 @@ const queryFn = async (accountId: string, pageNum: number) => {
 
 const useGetFavorites = (accountId: string) => {
   return useInfiniteQuery({
-    queryKey: ["get-favorites", accountId],
+    queryKey: ["get-list-favorites", accountId],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       queryFn(accountId, pageParam),
     initialPageParam: 1,
