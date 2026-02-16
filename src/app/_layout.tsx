@@ -32,9 +32,8 @@ const queryClient = new QueryClient({
 const StackRootLayout = () => {
   const username = useAppSelector((state) => state.user.username);
   const isLoggedIn = !!username;
-  const { colors } = useTheme();
+  const { colors, setColorScheme, colorScheme } = useTheme();
   const [isReady, setIsReady] = useState(false);
-  const { setColorScheme } = useTheme();
 
   useEffect(() => {
     async function prepare() {

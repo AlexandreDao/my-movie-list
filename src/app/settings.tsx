@@ -1,51 +1,30 @@
 import Button from "@/components/Button";
+import ColorSchemeButton from "@/components/ColorSchemeButton";
 import { useAppDispatch, useSignOut, useTheme } from "@/hooks";
 import { SPACING } from "@/utils/constants/spacing";
 import SecureStore from "@/utils/storages/SecureStorage";
 import { signOut } from "@/utils/store/reducers/userReducer";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAxiosError } from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { scheduleOnRN } from "react-native-worklets";
 
 const Settings = () => {
-  const { colors, colorScheme, setColorScheme } = useTheme();
-  const isDarkMode = colorScheme === "dark";
+  const { colors } = useTheme();
   const { mutate } = useSignOut();
   const dispatch = useAppDispatch();
-  const [isPressed, setIsPressed] = useState(false);
 
-  const singleTap = Gesture.Tap()
-    .runOnJS(true)
-    .maxDelay(600)
-    .shouldCancelWhenOutside(true)
-    .maxDistance(5)
-    .onTouchesDown(() => {
-      scheduleOnRN(() => setIsPressed(true));
-    })
-    .onTouchesUp(() => {
-      scheduleOnRN(() => setIsPressed(false));
-    })
-    .onEnd((e) => {
-      if (e.state === 5 && e.numberOfPointers === 1) {
-        setColorScheme(isDarkMode ? "light" : "dark", e.absoluteX, e.absoluteY);
-      }
-    })
-    .onFinalize(() => {
-      scheduleOnRN(() => setIsPressed(false));
-    });
   return (
     <SafeAreaView
-      edges={["bottom"]}
+      collapsable={false}
       style={[
         styles.root,
         {
           backgroundColor: colors.backgroundSecondary,
         },
       ]}
+      edges={["bottom"]}
     >
       <View
         style={[
@@ -63,17 +42,7 @@ const Settings = () => {
           },
         ]}
       >
-        <GestureDetector gesture={singleTap}>
-          <Button
-            disabled
-            isPressed={isPressed}
-            variant="tertiary"
-            text={isDarkMode ? "Light mode" : "Dark mode"}
-            iconName={isDarkMode ? "sunny-outline" : "moon-outline"}
-            icon={Ionicons}
-            style={styles.button}
-          />
-        </GestureDetector>
+        <ColorSchemeButton />
         <Button
           variant="tertiary"
           text="Log out"
