@@ -42,14 +42,17 @@ const AddToListButton: FC<AddToListButtonProps> = ({
       {
         onSuccess: () => {
           setToAdd(!toAdd);
-          queryClient.invalidateQueries({
-            queryKey: ["get-list-favorites"],
-            refetchType: "all",
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["get-list-watchlist"],
-            refetchType: "all",
-          });
+          if (type === "favorite") {
+            queryClient.invalidateQueries({
+              queryKey: ["get-list-favorites"],
+              refetchType: "all",
+            });
+          } else {
+            queryClient.invalidateQueries({
+              queryKey: ["get-list-watchlist"],
+              refetchType: "all",
+            });
+          }
           queryClient.invalidateQueries({
             queryKey: ["get-movie-details", movieId?.toString()],
             refetchType: "all",

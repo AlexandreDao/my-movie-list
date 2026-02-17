@@ -63,20 +63,20 @@ const MyMovie = () => {
       >
         <MovieList
           data={isFavoritesDisplay ? favoritesData : watchlistData}
-          refresh={isFavoritesDisplay ? refetchFavorites : refetchWatchlist}
+          onRefresh={isFavoritesDisplay ? refetchFavorites : refetchWatchlist}
           refreshing={
             isFavoritesDisplay ? isPendingFavorites : isPendingWatchlist
           }
           fetchNextPage={
             isFavoritesDisplay ? fetchNextFavorites : fetchNextWatchlist
           }
-          contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
+          contentContainerStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
+          ListEmptyComponent={
+            <Text style={[styles.emptyListText, { color: colors.textPrimary }]}>
+              {"Nothing here for now.\nTry adding movies to your favorites!"}
+            </Text>
+          }
         />
-        {favoritesData?.length === 0 && (
-          <Text style={[styles.emptyListText, { color: colors.textPrimary }]}>
-            {"Nothing here for now.\nTry adding movies to your favorites!"}
-          </Text>
-        )}
       </Animated.View>
     </View>
   );
