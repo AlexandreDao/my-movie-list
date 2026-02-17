@@ -1,4 +1,4 @@
-export const SPACING = {
+export const SPACING = Object.freeze({
   vertical: {
     xs: 4,
     sm: 8,
@@ -15,4 +15,4 @@ export const SPACING = {
     xl: 32,
     xxl: 48,
   },
-};
+});

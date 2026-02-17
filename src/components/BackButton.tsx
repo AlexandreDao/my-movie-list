@@ -1,15 +1,20 @@
+import IconButton from "@/components/IconButton";
 import { useTheme } from "@/hooks";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { FC } from "react";
-import { Pressable, PressableProps } from "react-native";
+import { PressableProps } from "react-native";
 
 const BackButton: FC<PressableProps> = (props) => {
   const router = useRouter();
   const { colors } = useTheme();
 
   return (
-    <Pressable
+    <IconButton
+      icon={MaterialIcons}
+      name="arrow-back"
+      size={24}
+      color={colors.textPrimary}
       onPress={() => {
         if (router.canGoBack()) {
           router.back();
@@ -17,13 +22,7 @@ const BackButton: FC<PressableProps> = (props) => {
       }}
       hitSlop={24}
       {...props}
-    >
-      <MaterialIcons
-        name="arrow-back"
-        size={24}
-        color={colors.buttonTertiary}
-      />
-    </Pressable>
+    />
   );
 };
 

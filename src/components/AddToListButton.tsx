@@ -51,7 +51,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
             refetchType: "all",
           });
           queryClient.invalidateQueries({
-            queryKey: ["get-movie-details", movieId],
+            queryKey: ["get-movie-details", movieId?.toString()],
             refetchType: "all",
           });
         },
@@ -94,7 +94,7 @@ const AddToListButton: FC<AddToListButtonProps> = ({
           <MaterialCommunityIcons
             name={toAdd ? addIcon : remIcon}
             size={30}
-            color={colors.textPrimary}
+            color={colors.buttonPrimaryText}
           />
           <View style={styles.textContainer}>
             <Text style={[styles.text, { color: colors.buttonPrimaryText }]}>

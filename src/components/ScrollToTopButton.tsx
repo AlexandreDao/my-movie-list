@@ -28,8 +28,8 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
           style={({ pressed }) => [
             styles.button,
             pressed
-              ? { backgroundColor: colors.buttonTertiaryHighlight }
-              : { backgroundColor: colors.buttonTertiary },
+              ? { backgroundColor: colors.buttonSecondaryHighlight }
+              : { backgroundColor: colors.buttonSecondary },
           ]}
           disabled={!isVisible}
           onPress={onPress}
@@ -37,7 +37,7 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
           <MaterialIcons
             name={"arrow-upward"}
             size={30}
-            color={colors.buttonTertiaryText}
+            color={colors.buttonSecondaryText}
           />
         </Pressable>
       </Animated.View>
