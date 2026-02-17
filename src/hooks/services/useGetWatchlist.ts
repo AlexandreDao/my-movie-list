@@ -3,18 +3,18 @@ import tmdbSingleton from "@/utils/singletons/tmdbSingleton";
 import { GetMoviesResponse } from "@/utils/types/tmdbTypes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const queryFn = async (query: string, pageNum: number) => {
+const queryFn = async (accountId: string, pageNum: number) => {
   const { data } = await tmdbSingleton.get<GetMoviesResponse>(
-    `/search/movie?query=${query}&page=${pageNum}`,
+    `/account/${accountId}/watchlist/movies?page=${pageNum}`,
   );
   return data.results.map((entry) => movieDataEntryMapper(entry));
 };
 
-const useSearchMovies = (query: string) => {
+const useGetWatchlist = (accountId: string) => {
   return useInfiniteQuery({
-    queryKey: ["search-movies", query],
+    queryKey: ["get-list-watchlist", accountId],
     queryFn: ({ pageParam }: { pageParam: number }) =>
-      queryFn(query, pageParam),
+      queryFn(accountId, pageParam),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (lastPage?.length === 0 || lastPageParam === 500) {
@@ -23,9 +23,8 @@ const useSearchMovies = (query: string) => {
       return lastPageParam + 1;
     },
     select: (data) => data.pages.flat(),
-    enabled: !!query,
-    staleTime: 60 * 1000 * 60 * 24, // 24 hour
+    enabled: !!accountId,
   });
 };
 
-export default useSearchMovies;
+export default useGetWatchlist;

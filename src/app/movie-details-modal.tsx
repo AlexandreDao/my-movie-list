@@ -47,6 +47,7 @@ const MovieDetailsModal: FC = () => {
     ? `${process.env.EXPO_PUBLIC_TMDB_BASE_URL}${process.env.EXPO_PUBLIC_TMDB_BACKDROP_SIZE}${movieDetails?.backdropPath}`
     : "";
   const { colors } = useTheme();
+
   //TO DO change the date to a prettier format
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const MovieDetailsModal: FC = () => {
           detailsError.response?.data?.status_message || "Unknown error",
         );
       } else {
-        Alert.alert("An unexpected error occurred");
+        Alert.alert("Details fetching error", "An unexpected error occurred");
       }
       if (router.canGoBack()) router.back();
     }
@@ -132,20 +133,20 @@ const MovieDetailsModal: FC = () => {
               grade={movieDetails?.voteAverage}
               radius={75}
               strokeWidth={20}
-              color="#9c1b94"
+              color={colors.grade}
             />
             <View style={styles.buttonContainer}>
               <AddToListButton
                 movieId={movieDetails?.id}
                 accountId={accountId}
                 type="watchlist"
-                isAdded={movieDetails?.accountStates?.watchlist}
+                isAdded={movieDetails?.accountStates.watchlist}
               />
               <AddToListButton
                 movieId={movieDetails?.id}
                 accountId={accountId}
                 type="favorite"
-                isAdded={movieDetails?.accountStates?.favorite}
+                isAdded={movieDetails?.accountStates.favorite}
               />
             </View>
           </View>

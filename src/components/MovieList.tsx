@@ -2,25 +2,30 @@ import MovieDisplay from "@/components/MovieDisplay";
 import { MovieDataEntryMapped } from "@/utils/types/tmdbMappedTypes";
 import { useRouter } from "expo-router";
 import { FC, useRef, useState } from "react";
-import { FlatList, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  FlatList,
+  FlatListProps,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 import ScrollToTopButton from "./ScrollToTopButton";
 
-type MovieListProps = {
+type MovieListProps = Omit<
+  FlatListProps<MovieDataEntryMapped>,
+  "renderItem"
+> & {
   data?: MovieDataEntryMapped[];
   fetchNextPage?: () => void;
-  refresh?: () => void;
-  refreshing?: boolean;
   listStyle?: StyleProp<ViewStyle>;
-  contentStyle?: StyleProp<ViewStyle>;
 };
 
 const MovieList: FC<MovieListProps> = ({
   data,
   fetchNextPage,
-  refresh,
-  refreshing,
   listStyle,
-  contentStyle,
+  ...rest
 }) => {
   const router = useRouter();
   const [isButtonVisible, setIsButtonVisible] = useState(false);
@@ -36,18 +41,15 @@ const MovieList: FC<MovieListProps> = ({
   return (
     <View style={listStyle ?? styles.listStyle}>
       <FlatList
-        contentContainerStyle={contentStyle}
+        {...rest}
         numColumns={2}
         columnWrapperStyle={styles.columnWrapperStyle}
         data={data}
-        ListEmptyComponent={null}
         renderItem={({ item }) => (
           <MovieDisplay data={item} onPress={() => openSheet(item)} />
         )}
         onEndReached={fetchNextPage}
         onEndReachedThreshold={1.5}
-        onRefresh={refresh}
-        refreshing={refreshing}
         scrollEventThrottle={100}
         onScroll={({ nativeEvent }) => {
           if (nativeEvent.contentOffset.y > 5000 && !isButtonVisible) {
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
   },
   scrollButton: {
     position: "absolute",
-    top: 50,
+    bottom: 200,
     alignSelf: "center",
   },
   columnWrapperStyle: {

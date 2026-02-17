@@ -32,7 +32,9 @@ const MovieDisplay: FC<MovieDisplayProps> = ({ data, style, onPress }) => {
             width={165}
             resizeMode={"contain"}
           />
-          <Text style={{ color: colors.textPrimary }}>{data.title}</Text>
+          <Text style={[styles.text, { color: colors.textPrimary }]}>
+            {data.title}
+          </Text>
           {pressed && (
             <View
               style={[
@@ -54,6 +56,9 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
+  },
+  text: {
+    textAlign: "center",
   },
   container: {
     alignItems: "center",
