@@ -62,3 +62,12 @@ export type MovieDetails = {
 export type AccountDetails = {
   id: number;
 };
+
+export type MovieGenre = {
+  id: number;
+  name: string;
+};
+
+export type MovieGenreListResponse = {
+  genres: MovieGenre[];
+};

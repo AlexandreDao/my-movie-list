@@ -29,10 +29,12 @@ const queryClient = new QueryClient({
   },
 });
 
+SplashScreen.preventAutoHideAsync();
+
 const StackRootLayout = () => {
   const username = useAppSelector((state) => state.user.username);
   const isLoggedIn = !!username;
-  const { colors, setColorScheme, colorScheme } = useTheme();
+  const { colors, setColorScheme } = useTheme();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -97,6 +99,17 @@ const StackRootLayout = () => {
             },
           }}
         />
+        <Stack.Screen
+          name="my-movie-filter"
+          options={{
+            presentation: "formSheet",
+            sheetAllowedDetents: "fitToContents",
+            sheetCornerRadius: 24,
+            contentStyle: {
+              backgroundColor: colors.backgroundSecondary,
+            },
+          }}
+        />
       </Stack.Protected>
       <Stack.Protected guard={!isLoggedIn}>
         <Stack.Screen name="index" />
@@ -104,8 +117,6 @@ const StackRootLayout = () => {
     </Stack>
   );
 };
-
-SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
   return (
