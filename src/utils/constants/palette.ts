@@ -103,6 +103,7 @@ export const lightTheme = Object.freeze({
   inputBorder: palette.white["950"],
   skeletonLoader: palette.white["300"],
   skeletonShimmer: palette.white["100"],
+  badge: palette.red["700"],
 });
 
 export type Theme = typeof lightTheme;
@@ -142,4 +143,5 @@ export const darkTheme: Theme = Object.freeze({
   inputBorder: palette.black["950"],
   skeletonLoader: palette.black["700"],
   skeletonShimmer: palette.black["500"],
+  badge: palette.red["700"],
 });

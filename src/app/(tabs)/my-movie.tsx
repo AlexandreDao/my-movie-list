@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import IconButton from "@/components/IconButton";
+import FilterButton from "@/components/FilterButton";
 import MovieList from "@/components/MovieList";
 import {
   useAppSelector,
@@ -11,7 +11,6 @@ import {
 import { SORT_ARRAY } from "@/utils/constants/sort";
 import { SPACING } from "@/utils/constants/spacing";
 import { FilterParam } from "@/utils/types/routeType";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { isAfter, isBefore, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -36,9 +35,9 @@ const MyMovie = () => {
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const { colors } = useTheme();
-
   const router = useRouter();
   const params = useLocalSearchParams<FilterParam>();
+
   const displayedData = isFavoritesDisplay ? favoritesData : watchlistData;
   const filteredGenreData = params.filter
     ? displayedData?.filter((d) =>
@@ -78,6 +77,8 @@ const MyMovie = () => {
         return 0;
       })
     : filteredDateData;
+
+  const isFilterActive = !!(params.sort || params.filter || params.date);
 
   return (
     <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
@@ -126,18 +127,8 @@ const MyMovie = () => {
           }
         />
       </Animated.View>
-      <IconButton
-        style={[
-          styles.fab,
-          {
-            backgroundColor: colors.buttonSecondary,
-            bottom: bottomTabBarHeight + 12,
-          },
-        ]}
-        size={35}
-        icon={MaterialCommunityIcons}
-        name="filter-variant"
-        color={colors.buttonSecondaryText}
+      <FilterButton
+        shouldShowBadge={isFilterActive}
         onPress={() => router.push({ pathname: "/my-movie-filter", params })}
       />
     </View>
@@ -145,15 +136,6 @@ const MyMovie = () => {
 };
 
 const styles = StyleSheet.create({
-  fab: {
-    width: 55,
-    height: 50,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    right: "5%",
-  },
   root: {
     flex: 1,
   },
