@@ -92,16 +92,20 @@ const Home: FC = () => {
         >
           <MovieList
             data={query ? moviesToDisplay : moviesData}
-            refresh={query ? refetchSearch : refetchPop}
+            onRefresh={query ? refetchSearch : refetchPop}
             refreshing={query ? isPendingSearch : isPendingPop}
             fetchNextPage={fetchNextPage}
-            contentStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
+            contentContainerStyle={{ paddingBottom: bottomTabBarHeight + 60 }}
+            ListEmptyComponent={
+              <Text
+                style={[styles.emptyListText, { color: colors.textPrimary }]}
+              >
+                {searchInput
+                  ? "No movies correspond to this search"
+                  : "No movies were found in the Database... Strange"}
+              </Text>
+            }
           />
-          {searchInput && moviesToDisplay?.length === 0 && (
-            <Text style={[styles.emptyListText, { color: colors.textPrimary }]}>
-              {"No movies correspond to this search"}
-            </Text>
-          )}
         </Animated.View>
       )}
       <FloatingSearchBar

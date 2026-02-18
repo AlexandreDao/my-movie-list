@@ -4,22 +4,17 @@ import DateTimeSpinner from "@/components/DateTimeSpinner";
 import TextButton from "@/components/TextButton";
 import { useTheme } from "@/hooks";
 import useMovieGenreList from "@/hooks/services/useMovieGenreList";
+import { SORT_ARRAY } from "@/utils/constants/sort";
 import { SPACING } from "@/utils/constants/spacing";
 import { TYPOGRAPHY } from "@/utils/constants/typography";
 import { FilterParam } from "@/utils/types/routeType";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { startOfDay } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { FC, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 // TODO: when scrolling afficher un alphabet qui permet de skip a une lettre ?
-
-const SORT_ARRAY = [
-  { text: "Alphabetic", id: 1 },
-  { text: "Popular", id: 2 },
-  { text: "Rating", id: 3 },
-];
 
 const MyMovieFilter: FC = () => {
   const {
@@ -131,7 +126,7 @@ const MyMovieFilter: FC = () => {
         </Text>
         <Button
           variant="tertiary"
-          text="Before a date"
+          text={`Before ${dateFilter === "before" ? format(date, "y-MM-dd") : "a date"}`}
           iconName="sort-calendar-ascending"
           style={styles.button}
           icon={MaterialCommunityIcons}
@@ -150,7 +145,7 @@ const MyMovieFilter: FC = () => {
         />
         <Button
           variant="tertiary"
-          text="After a date"
+          text={`After ${dateFilter === "after" ? format(date, "y-MM-dd") : "a date"}`}
           iconName="sort-calendar-descending"
           style={styles.button}
           icon={MaterialCommunityIcons}

@@ -47,7 +47,7 @@ const CircleGrade: FC<CircleGradeProps> = ({
   useEffect(() => {
     theta.value = withTiming(animateTo.value, { duration: duration ?? 1500 });
     textOpacity.value = withTiming(1, {
-      duration: duration ? duration * 2 : 3000,
+      duration: duration ?? 3000,
     });
   }, [textOpacity, theta, animateTo, duration]);
 
@@ -55,7 +55,6 @@ const CircleGrade: FC<CircleGradeProps> = ({
     <View
       style={[
         styles.mainContainer,
-        { backgroundColor: colors.grade },
         style,
         { width: radius * 2, height: radius * 2 },
       ]}

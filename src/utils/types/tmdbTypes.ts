@@ -30,6 +30,8 @@ export type MovieDataEntry = {
   release_date: string;
   title: string;
   vote_average: number;
+  genre_ids: number[];
+  popularity: number;
 };
 
 export type GetMoviesResponse = {

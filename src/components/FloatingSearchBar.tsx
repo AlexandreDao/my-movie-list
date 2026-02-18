@@ -15,6 +15,7 @@ import Animated, {
   Easing,
   ReduceMotion,
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
@@ -35,11 +36,11 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   ...textInputProps
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
+  const unCollapsing = useSharedValue(false);
   const inputRef = useRef<TextInput>(null);
   const { width: screenWidth } = useWindowDimensions();
-  const fullBarWidth = screenWidth * 0.9;
-  const buttonWidth = 55;
   const headerHeight = useHeaderHeight();
+  const width = useSharedValue(55);
   const { colors } = useTheme();
 
   const forceFocus = () => {
@@ -47,18 +48,17 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
   };
 
   const animatedWidth = useAnimatedStyle(() => {
-    const widthTarget = isCollapsed ? buttonWidth : fullBarWidth;
-
     return {
       width: withTiming(
-        widthTarget,
+        width.value,
         {
           duration: 450,
           easing: Easing.inOut(Easing.circle),
           reduceMotion: ReduceMotion.System,
         },
         (finished) => {
-          if (finished && widthTarget === fullBarWidth) {
+          if (finished && unCollapsing.value) {
+            unCollapsing.value = false;
             scheduleOnRN(forceFocus);
           }
         },
@@ -77,8 +77,16 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
       ]}
     >
       <Pressable
-        onPress={() => setIsCollapsed(!isCollapsed)}
-        style={[styles.buttonStyle, { width: buttonWidth }]}
+        onPress={() => {
+          if (isCollapsed) unCollapsing.value = true;
+          if (isCollapsed) {
+            width.value = screenWidth * 0.9;
+          } else {
+            width.value = 55;
+          }
+          setIsCollapsed(!isCollapsed);
+        }}
+        style={styles.buttonStyle}
       >
         <MaterialIcons
           name="search"
@@ -92,10 +100,18 @@ const FloatingSearchBar: FC<FloatingSearchBarProps> = ({
           value={searchString}
           ref={inputRef}
           placeholder={"search a movie name:"}
-          onBlur={() => setIsCollapsed(searchString.length === 0)}
+          onBlur={() => {
+            if (searchString.length === 0) {
+              setIsCollapsed(true);
+              width.value = 55;
+            }
+          }}
           autoCapitalize="none"
           onSubmitEditing={() => {
-            setIsCollapsed(searchString.length === 0);
+            if (searchString.length === 0) {
+              setIsCollapsed(true);
+              width.value = 55;
+            }
             onSubmit();
           }}
           {...textInputProps}
@@ -114,6 +130,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     borderRadius: 8,
+    width: 55,
     alignItems: "center",
     justifyContent: "center",
   },

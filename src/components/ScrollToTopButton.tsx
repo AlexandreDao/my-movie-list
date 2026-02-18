@@ -1,8 +1,8 @@
 import { useTheme } from "@/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC } from "react";
-import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
+import { Pressable, StyleSheet, ViewStyle } from "react-native";
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 
 type ScrollToTopButtonProps = {
   onPress: () => void;
@@ -21,8 +21,8 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
     isVisible && (
       <Animated.View
         style={style}
-        entering={FadeInUp.duration(500)}
-        exiting={FadeOutUp.duration(500)}
+        entering={FadeInDown.duration(500)}
+        exiting={FadeOutDown.duration(500)}
       >
         <Pressable
           style={({ pressed }) => [
@@ -39,9 +39,6 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
             size={30}
             color={colors.buttonSecondaryText}
           />
-          <Text style={[styles.text, { color: colors.buttonSecondaryText }]}>
-            {"Go back to the Top"}
-          </Text>
         </Pressable>
       </Animated.View>
     )
@@ -50,9 +47,9 @@ const ScrollToTopButton: FC<ScrollToTopButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    width: 180,
-    height: 70,
-    borderRadius: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
   },

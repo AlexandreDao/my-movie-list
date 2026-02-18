@@ -3,7 +3,7 @@ import { SPACING } from "@/utils/constants/spacing";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { ScrollView, StyleProp, ViewStyle } from "react-native";
 
-type ChipGroupData = { text: string; id: number }[];
+type ChipGroupData = readonly { text: string; id: number }[];
 
 type ChipGroupProps = {
   data: ChipGroupData;
