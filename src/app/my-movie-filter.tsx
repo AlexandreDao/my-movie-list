@@ -1,3 +1,4 @@
+import BottomSheetHandle from "@/components/BottomSheetHandle";
 import Button from "@/components/Button";
 import ChipGroup from "@/components/ChipGroup";
 import DateTimeSpinner from "@/components/DateTimeSpinner";
@@ -14,7 +15,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { FC, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-// TODO: when scrolling afficher un alphabet qui permet de skip a une lettre ?
 
 const MyMovieFilter: FC = () => {
   const {
@@ -52,14 +52,7 @@ const MyMovieFilter: FC = () => {
       ]}
       edges={["bottom"]}
     >
-      <View
-        style={[
-          styles.handle,
-          {
-            backgroundColor: colors.backgroundPrimary,
-          },
-        ]}
-      />
+      <BottomSheetHandle />
       <View
         style={[
           styles.container,
@@ -211,18 +204,12 @@ export default MyMovieFilter;
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: SPACING.vertical.sm,
-    paddingBottom: SPACING.vertical.xxl,
+    paddingTop: SPACING.vertical.md,
+    paddingBottom: SPACING.vertical.xl,
     rowGap: SPACING.vertical.md,
   },
-  handle: {
-    width: "25%",
-    height: 4,
-    borderRadius: 4,
-    alignSelf: "center",
-  },
   container: {
-    paddingVertical: SPACING.vertical.sm,
+    paddingVertical: SPACING.vertical.md,
     marginHorizontal: SPACING.horizontal.md,
     borderRadius: 10,
   },
@@ -232,7 +219,7 @@ const styles = StyleSheet.create({
   },
   heading3: {
     marginLeft: SPACING.horizontal.md,
-    marginBottom: SPACING.vertical.xs,
+    marginBottom: SPACING.vertical.md,
   },
   divider: {
     height: 1,

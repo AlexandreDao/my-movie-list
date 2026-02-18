@@ -1,4 +1,5 @@
 import { useTheme } from "@/hooks";
+import { SPACING } from "@/utils/constants/spacing";
 import { TYPOGRAPHY } from "@/utils/constants/typography";
 import React, { FC } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
@@ -7,7 +8,7 @@ type TextButtonProps = {
   text: string;
   onPress?: () => void;
 };
-// TODO: merge with main
+
 const TextButton: FC<TextButtonProps> = ({ text, onPress }) => {
   const { colors } = useTheme();
   return (
@@ -36,8 +37,8 @@ const TextButton: FC<TextButtonProps> = ({ text, onPress }) => {
 const styles = StyleSheet.create({
   text: {
     textTransform: "uppercase",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingHorizontal: SPACING.horizontal.sm,
+    paddingVertical: SPACING.horizontal.xs,
   },
 });
 

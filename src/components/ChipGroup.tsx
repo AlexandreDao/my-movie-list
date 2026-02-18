@@ -27,7 +27,7 @@ const ChipGroup: FC<ChipGroupProps> = ({
       style={style}
       contentContainerStyle={{
         paddingHorizontal: SPACING.horizontal.md,
-        gap: SPACING.vertical.sm,
+        gap: SPACING.vertical.md,
       }}
     >
       {data.map(({ text, id }) => (
