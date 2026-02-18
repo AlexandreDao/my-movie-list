@@ -1,7 +1,7 @@
 import IconButton from "@/components/IconButton";
 import { useBottomTabBarTotalHeight, useTheme } from "@/hooks";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -9,6 +9,7 @@ const MyMovie = () => {
   const { colors } = useTheme();
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const router = useRouter();
+  const params = useLocalSearchParams();
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,7 +25,7 @@ const MyMovie = () => {
         icon={MaterialCommunityIcons}
         name="filter-variant"
         color={colors.buttonSecondaryText}
-        onPress={() => router.push("/my-movie-filter")}
+        onPress={() => router.push({ pathname: "/my-movie-filter", params })}
       />
     </View>
   );

@@ -1,7 +1,7 @@
+import Chip from "@/components/Chip";
 import { SPACING } from "@/utils/constants/spacing";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { ScrollView, StyleProp, ViewStyle } from "react-native";
-import Chip from "./Chip";
 
 type ChipGroupData = { text: string; id: number }[];
 

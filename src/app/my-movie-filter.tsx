@@ -1,15 +1,18 @@
 import Button from "@/components/Button";
 import ChipGroup from "@/components/ChipGroup";
+import DateTimeSpinner from "@/components/DateTimeSpinner";
 import TextButton from "@/components/TextButton";
 import { useTheme } from "@/hooks";
 import useMovieGenreList from "@/hooks/services/useMovieGenreList";
 import { SPACING } from "@/utils/constants/spacing";
 import { TYPOGRAPHY } from "@/utils/constants/typography";
+import { FilterParam } from "@/utils/types/routeType";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { startOfDay } from "date-fns";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { FC, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 // TODO: when scrolling afficher un alphabet qui permet de skip a une lettre ?
 
 const SORT_ARRAY = [
@@ -19,10 +22,30 @@ const SORT_ARRAY = [
 ];
 
 const MyMovieFilter: FC = () => {
+  const {
+    sort = "",
+    filter = "",
+    date: dateParam = "",
+    dateFilter: dateFilterParam = "",
+  } = useLocalSearchParams<FilterParam>();
   const { colors } = useTheme();
   const { data } = useMovieGenreList();
-  const [selectedSort, setSelectedSort] = useState<number[]>([]);
-  const [selectedGenreFilter, setSelectedGenreFilter] = useState<number[]>([]);
+  const [selectedSort, setSelectedSort] = useState<number[]>(
+    sort ? [parseInt(sort)] : [],
+  );
+  const [selectedGenreFilter, setSelectedGenreFilter] = useState<number[]>(
+    filter ? filter.split(",").map((elem) => parseInt(elem)) : [],
+  );
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [date, setDate] = useState(new Date(dateParam || 0));
+  const [dateFilter, setDateFilter] = useState<"before" | "after" | null>(
+    dateFilterParam || null,
+  );
+  const [isBeforeOrAfter, setIsBeforeOrAfter] = useState<
+    "before" | "after" | null
+  >(null);
+  const router = useRouter();
+
   return (
     <SafeAreaView
       collapsable={false}
@@ -112,6 +135,10 @@ const MyMovieFilter: FC = () => {
           iconName="sort-calendar-ascending"
           style={styles.button}
           icon={MaterialCommunityIcons}
+          onPress={() => {
+            setIsBeforeOrAfter("before");
+            setIsDatePickerVisible(true);
+          }}
         />
         <View
           style={[
@@ -127,21 +154,60 @@ const MyMovieFilter: FC = () => {
           iconName="sort-calendar-descending"
           style={styles.button}
           icon={MaterialCommunityIcons}
+          onPress={() => {
+            setIsBeforeOrAfter("after");
+            setIsDatePickerVisible(true);
+          }}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 16,
-        }}
-      >
-        <TextButton text={"Cancel"} />
-        <View style={{ flexDirection: "row", gap: 4 }}>
-          <TextButton text={"Clear"} />
-          <TextButton text={"Confirm"} />
+      <View style={styles.buttonContainer}>
+        <TextButton
+          text={"Cancel"}
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            }
+          }}
+        />
+        <View style={styles.actionButtonContainer}>
+          <TextButton
+            text={"Clear"}
+            onPress={() => {
+              setIsBeforeOrAfter(null);
+              setDateFilter(null);
+              setDate(new Date());
+              setSelectedSort([]);
+              setSelectedGenreFilter([]);
+            }}
+          />
+          <TextButton
+            text={"Confirm"}
+            onPress={() => {
+              if (router.canDismiss()) {
+                router.dismissTo({
+                  pathname: "/(tabs)/my-movie",
+                  params: {
+                    sort: selectedSort[0],
+                    filter: selectedGenreFilter.join(","),
+                    dateFilter: dateFilter,
+                    date: dateFilter ? date.toISOString() : "",
+                  },
+                });
+              }
+            }}
+          />
         </View>
       </View>
+      <DateTimeSpinner
+        isVisible={isDatePickerVisible}
+        value={dateFilter === isBeforeOrAfter ? date : new Date()}
+        onChange={(date) => {
+          setDateFilter(isBeforeOrAfter);
+          setIsBeforeOrAfter(null);
+          setDate(startOfDay(date!));
+        }}
+        onDismiss={() => setIsDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 };
@@ -177,5 +243,14 @@ const styles = StyleSheet.create({
     height: 1,
     width: "60%",
     alignSelf: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+  },
+  actionButtonContainer: {
+    flexDirection: "row",
+    gap: 4,
   },
 });

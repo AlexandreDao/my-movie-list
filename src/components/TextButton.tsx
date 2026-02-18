@@ -7,9 +7,6 @@ type TextButtonProps = {
   text: string;
   onPress?: () => void;
 };
-// TODO: popup to choose date
-// TODO: interpolate color in chip ??
-// TODO: filter and sort add to redux
 // TODO: merge with main
 const TextButton: FC<TextButtonProps> = ({ text, onPress }) => {
   const { colors } = useTheme();
