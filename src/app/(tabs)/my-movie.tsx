@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import FilterButton from "@/components/FilterButton";
 import MovieList from "@/components/MovieList";
 import {
   useAppSelector,
@@ -8,6 +9,8 @@ import {
   useTheme,
 } from "@/hooks";
 import { SPACING } from "@/utils/constants/spacing";
+import { filterMyMovieData } from "@/utils/functions/filterMyMovieData";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -30,6 +33,16 @@ const MyMovie = () => {
 
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const { colors } = useTheme();
+  const router = useRouter();
+  const filter = useAppSelector((state) => state.filter);
+  const displayedData = isFavoritesDisplay ? favoritesData : watchlistData;
+  const filteredData = filterMyMovieData([...displayedData], filter);
+
+  const isFilterActive = !!(
+    filter.sort.length ||
+    filter.genreFilter.length ||
+    filter.dateFilter
+  );
 
   return (
     <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
@@ -62,7 +75,7 @@ const MyMovie = () => {
         entering={FadeIn.duration(400)}
       >
         <MovieList
-          data={isFavoritesDisplay ? favoritesData : watchlistData}
+          data={filteredData}
           onRefresh={isFavoritesDisplay ? refetchFavorites : refetchWatchlist}
           refreshing={
             isFavoritesDisplay ? isPendingFavorites : isPendingWatchlist
@@ -78,6 +91,10 @@ const MyMovie = () => {
           }
         />
       </Animated.View>
+      <FilterButton
+        shouldShowBadge={isFilterActive}
+        onPress={() => router.push("/my-movie-filter")}
+      />
     </View>
   );
 };

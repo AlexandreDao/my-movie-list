@@ -30,6 +30,8 @@ export type MovieDataEntryMapped = {
   releaseDate: string;
   title: string;
   voteAverage: number;
+  genreIds: number[];
+  popularity: number;
 };
 
 export type MovieDetailsMapped = {

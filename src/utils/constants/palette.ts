@@ -85,6 +85,10 @@ export const lightTheme = Object.freeze({
   buttonTertiary: palette.white["100"],
   buttonTertiaryHighlight: palette.white["300"],
   buttonTertiaryText: palette.black["950"],
+  chipText: palette.white["50"],
+  chipBackground: palette.white["300"],
+  chipHighlight: palette.black["300"],
+  chipFocused: palette.black["800"],
   tabBar: palette.white["50"],
   tabBarGradient: palette.white["700"],
   focusedTabBar: palette.white["200"],
@@ -99,6 +103,7 @@ export const lightTheme = Object.freeze({
   inputBorder: palette.white["950"],
   skeletonLoader: palette.white["300"],
   skeletonShimmer: palette.white["100"],
+  badge: palette.red["700"],
 });
 
 export type Theme = typeof lightTheme;
@@ -120,6 +125,10 @@ export const darkTheme: Theme = Object.freeze({
   buttonTertiary: palette.black["900"],
   buttonTertiaryHighlight: palette.white["500"],
   buttonTertiaryText: palette.white["50"],
+  chipText: palette.white["50"],
+  chipBackground: palette.black["400"],
+  chipHighlight: palette.black["300"],
+  chipFocused: palette.black["950"],
   tabBar: palette.black["950"],
   tabBarGradient: palette.black["700"],
   focusedTabBar: palette.white["700"],
@@ -134,4 +143,5 @@ export const darkTheme: Theme = Object.freeze({
   inputBorder: palette.black["950"],
   skeletonLoader: palette.black["700"],
   skeletonShimmer: palette.black["500"],
+  badge: palette.red["700"],
 });

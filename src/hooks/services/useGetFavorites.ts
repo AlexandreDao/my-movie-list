@@ -22,6 +22,10 @@ const useGetFavorites = (accountId: string) => {
       }
       return lastPageParam + 1;
     },
+    initialData: {
+      pages: [],
+      pageParams: [],
+    },
     select: (data) => data.pages.flat(),
     enabled: !!accountId,
   });
