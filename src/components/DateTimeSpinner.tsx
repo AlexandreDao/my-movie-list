@@ -15,12 +15,13 @@ const DateTimeSpinner: FC<DateTimeSpinnerProps> = ({
   onChange,
   onDismiss,
 }) => {
-  const { colorScheme } = useTheme();
+  const { colorScheme, colors } = useTheme();
 
   return isVisible ? (
     <DateTimePicker
       value={value}
-      positiveButton={{ label: "CONFIRM" }}
+      positiveButton={{ label: "CONFIRM", textColor: colors.textPrimary }}
+      negativeButton={{ label: "CANCEL", textColor: colors.textPrimary }}
       themeVariant={colorScheme}
       onChange={(event, date) => {
         onDismiss?.();

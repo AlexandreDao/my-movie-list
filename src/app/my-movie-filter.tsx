@@ -3,42 +3,37 @@ import Button from "@/components/Button";
 import ChipGroup from "@/components/ChipGroup";
 import DateTimeSpinner from "@/components/DateTimeSpinner";
 import TextButton from "@/components/TextButton";
-import { useTheme } from "@/hooks";
+import { useAppDispatch, useAppSelector, useTheme } from "@/hooks";
 import useMovieGenreList from "@/hooks/services/useMovieGenreList";
 import { SORT_ARRAY } from "@/utils/constants/sort";
 import { SPACING } from "@/utils/constants/spacing";
 import { TYPOGRAPHY } from "@/utils/constants/typography";
-import { FilterParam } from "@/utils/types/routeType";
+import { setFilter } from "@/utils/store/reducers/filterReducer";
+import { DateFilter } from "@/utils/types/filterType";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { format, startOfDay } from "date-fns";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { FC, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const MyMovieFilter: FC = () => {
   const {
-    sort = "",
-    filter = "",
-    date: dateParam = "",
-    dateFilter: dateFilterParam = "",
-  } = useLocalSearchParams<FilterParam>();
+    sort: savedSort,
+    genreFilter: savedGenreFilter,
+    dateFilter: savedDateFilter,
+    date: savedDate,
+  } = useAppSelector((state) => state.filter);
+  const dispatch = useAppDispatch();
   const { colors } = useTheme();
   const { data } = useMovieGenreList();
-  const [selectedSort, setSelectedSort] = useState<number[]>(
-    sort ? [parseInt(sort)] : [],
-  );
-  const [selectedGenreFilter, setSelectedGenreFilter] = useState<number[]>(
-    filter ? filter.split(",").map((elem) => parseInt(elem)) : [],
-  );
+  const [selectedSort, setSelectedSort] = useState<number[]>(savedSort);
+  const [selectedGenreFilter, setSelectedGenreFilter] =
+    useState<number[]>(savedGenreFilter);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [date, setDate] = useState(new Date(dateParam || 0));
-  const [dateFilter, setDateFilter] = useState<"before" | "after" | null>(
-    dateFilterParam || null,
-  );
-  const [isBeforeOrAfter, setIsBeforeOrAfter] = useState<
-    "before" | "after" | null
-  >(null);
+  const [date, setDate] = useState(new Date(savedDate));
+  const [dateFilter, setDateFilter] = useState<DateFilter>(savedDateFilter);
+  const [isBeforeOrAfter, setIsBeforeOrAfter] = useState<DateFilter>(null);
   const router = useRouter();
 
   return (
@@ -171,16 +166,16 @@ const MyMovieFilter: FC = () => {
           <TextButton
             text={"Confirm"}
             onPress={() => {
-              if (router.canDismiss()) {
-                router.dismissTo({
-                  pathname: "/(tabs)/my-movie",
-                  params: {
-                    sort: selectedSort[0],
-                    filter: selectedGenreFilter.join(","),
+              if (router.canGoBack()) {
+                dispatch(
+                  setFilter({
+                    sort: selectedSort,
+                    genreFilter: selectedGenreFilter,
                     dateFilter: dateFilter,
-                    date: dateFilter ? date.toISOString() : "",
-                  },
-                });
+                    date: date.toISOString(),
+                  }),
+                );
+                router.back();
               }
             }}
           />

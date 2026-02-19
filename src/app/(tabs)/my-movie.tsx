@@ -8,11 +8,9 @@ import {
   useGetWatchlist,
   useTheme,
 } from "@/hooks";
-import { SORT_ARRAY } from "@/utils/constants/sort";
 import { SPACING } from "@/utils/constants/spacing";
-import { FilterParam } from "@/utils/types/routeType";
-import { isAfter, isBefore, parse } from "date-fns";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { filterMyMovieData } from "@/utils/functions/filterMyMovieData";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -36,49 +34,15 @@ const MyMovie = () => {
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const { colors } = useTheme();
   const router = useRouter();
-  const params = useLocalSearchParams<FilterParam>();
-
+  const filter = useAppSelector((state) => state.filter);
   const displayedData = isFavoritesDisplay ? favoritesData : watchlistData;
-  const filteredGenreData = params.filter
-    ? displayedData?.filter((d) =>
-        d.genreIds.some((item) => params.filter!.includes(item.toString())),
-      )
-    : displayedData;
-  const filteredDateData = params.date
-    ? displayedData?.filter((d) =>
-        params.dateFilter === "before"
-          ? isBefore(
-              parse(d.releaseDate, "y-MM-dd", new Date()),
-              new Date(params.date!),
-            )
-          : isAfter(
-              parse(d.releaseDate, "y-MM-dd", new Date()),
-              new Date(params.date!),
-            ),
-      )
-    : filteredGenreData;
-  const sortedData = params.sort
-    ? displayedData?.sort((a, b) => {
-        if (params.sort === SORT_ARRAY[0].id.toString()) {
-          if (a.title < b.title) return -1;
-          if (a.title > b.title) return 1;
-          return 0;
-        }
-        if (params.sort === SORT_ARRAY[1].id.toString()) {
-          if (a.popularity < b.popularity) return 1;
-          if (a.popularity > b.popularity) return -1;
-          return 0;
-        }
-        if (params.sort === SORT_ARRAY[2].id.toString()) {
-          if (a.voteAverage < b.voteAverage) return 1;
-          if (a.voteAverage > b.voteAverage) return -1;
-          return 0;
-        }
-        return 0;
-      })
-    : filteredDateData;
+  const filteredData = filterMyMovieData([...displayedData], filter);
 
-  const isFilterActive = !!(params.sort || params.filter || params.date);
+  const isFilterActive = !!(
+    filter.sort.length ||
+    filter.genreFilter.length ||
+    filter.dateFilter
+  );
 
   return (
     <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
@@ -111,7 +75,7 @@ const MyMovie = () => {
         entering={FadeIn.duration(400)}
       >
         <MovieList
-          data={sortedData}
+          data={filteredData}
           onRefresh={isFavoritesDisplay ? refetchFavorites : refetchWatchlist}
           refreshing={
             isFavoritesDisplay ? isPendingFavorites : isPendingWatchlist
@@ -129,7 +93,7 @@ const MyMovie = () => {
       </Animated.View>
       <FilterButton
         shouldShowBadge={isFilterActive}
-        onPress={() => router.push({ pathname: "/my-movie-filter", params })}
+        onPress={() => router.push("/my-movie-filter")}
       />
     </View>
   );
