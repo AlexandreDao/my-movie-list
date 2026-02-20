@@ -1,3 +1,4 @@
+import BottomSheetHandle from "@/components/BottomSheetHandle";
 import Button from "@/components/Button";
 import ColorSchemeButton from "@/components/ColorSchemeButton";
 import { useAppDispatch, useSignOut, useTheme } from "@/hooks";
@@ -26,14 +27,7 @@ const Settings = () => {
       ]}
       edges={["bottom"]}
     >
-      <View
-        style={[
-          styles.handle,
-          {
-            backgroundColor: colors.backgroundPrimary,
-          },
-        ]}
-      />
+      <BottomSheetHandle />
       <View
         style={[
           styles.container,
@@ -75,15 +69,9 @@ const Settings = () => {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: SPACING.vertical.sm,
+    paddingTop: SPACING.vertical.md,
     paddingBottom: SPACING.vertical.xxl,
     rowGap: SPACING.vertical.md,
-  },
-  handle: {
-    width: "25%",
-    height: 4,
-    borderRadius: 4,
-    alignSelf: "center",
   },
   container: {
     marginHorizontal: SPACING.horizontal.md,

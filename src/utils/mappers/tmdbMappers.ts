@@ -66,6 +66,8 @@ export const movieDataEntryMapper = (
     releaseDate: data.release_date,
     title: data.title,
     voteAverage: data.vote_average,
+    genreIds: data.genre_ids,
+    popularity: data.popularity,
   };
 };
 

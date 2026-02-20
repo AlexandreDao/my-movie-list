@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const FONT_SIZE = Object.freeze({
   xs: 12,
   sm: 14,
@@ -14,9 +16,11 @@ export const FONT_WEIGHT = Object.freeze({
   bold: "700",
 });
 
-export const TYPOGRAPHY = Object.freeze({
+export const TYPOGRAPHY = StyleSheet.create({
   heading1: { fontSize: 32, fontWeight: "700" },
   heading2: { fontSize: 24, fontWeight: "700" },
+  heading3: { fontSize: 20, fontWeight: "500" },
   body: { fontSize: 16, fontWeight: "400" },
   caption: { fontSize: 12, fontWeight: "400" },
+  textButton: { fontSize: 16, fontWeight: "500" },
 });
