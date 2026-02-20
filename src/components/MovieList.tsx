@@ -41,7 +41,6 @@ const MovieList: FC<MovieListProps> = ({
   return (
     <View style={listStyle ?? styles.listStyle}>
       <FlatList
-        {...rest}
         numColumns={2}
         columnWrapperStyle={styles.columnWrapperStyle}
         data={data}
@@ -60,6 +59,7 @@ const MovieList: FC<MovieListProps> = ({
         }}
         ref={listRef}
         keyExtractor={(entry, index) => entry.id.toString() + index}
+        {...rest}
       />
       <ScrollToTopButton
         isVisible={isButtonVisible}

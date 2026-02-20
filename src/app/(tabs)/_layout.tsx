@@ -47,7 +47,7 @@ export const TabLayout: FC = () => {
             <TabTrigger name="index" href="/" asChild>
               <CustomTabButton icon="home">Home</CustomTabButton>
             </TabTrigger>
-            <TabTrigger name="my-movie" href="/my-movie" asChild>
+            <TabTrigger name="my-movies" href="/(tabs)/my-movies" asChild>
               <CustomTabButton icon="local-movies">My movie</CustomTabButton>
             </TabTrigger>
           </CustomBottomTabBar>

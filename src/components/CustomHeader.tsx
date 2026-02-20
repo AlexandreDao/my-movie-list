@@ -4,8 +4,8 @@ import { NavigationContext } from "@/utils/contexts/NavigationContext";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { FC, useContext, useRef } from "react";
-import { StyleSheet, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const CustomHeader: FC = () => {
   const title = useHeaderTitle();
@@ -13,11 +13,11 @@ const CustomHeader: FC = () => {
   const { setNavigationState } = useContext(NavigationContext);
   const { colors } = useTheme();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.header }]}
-      edges={["top"]}
+    <View
+      style={{ backgroundColor: colors.header, paddingTop: insets.top }}
       onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
         if (!isInitialized.current) {
@@ -29,13 +29,17 @@ const CustomHeader: FC = () => {
         }
       }}
     >
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
-      <IconButton
-        name="settings-outline"
-        icon={Ionicons}
-        onPress={() => router.push("/settings")}
-      />
-    </SafeAreaView>
+      <View style={styles.container}>
+        <Text style={[styles.title, { color: colors.textPrimary }]}>
+          {title}
+        </Text>
+        <IconButton
+          name="settings-outline"
+          icon={Ionicons}
+          onPress={() => router.push("/settings")}
+        />
+      </View>
+    </View>
   );
 };
 

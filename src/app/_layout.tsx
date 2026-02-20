@@ -72,7 +72,12 @@ const StackRootLayout = () => {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: colors.backgroundPrimary },
+      }}
+    >
       <Stack.Protected guard={isLoggedIn}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="map" />
