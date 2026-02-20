@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks";
 import {
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
@@ -16,8 +17,20 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator);
 
 function MyMoviesLayout() {
+  const { colors } = useTheme();
+
   return (
-    <MaterialTopTabs>
+    <MaterialTopTabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: colors.backgroundPrimary,
+        },
+        tabBarIndicatorStyle: { backgroundColor: colors.buttonPrimary },
+        tabBarLabelStyle: { fontWeight: "bold" },
+        tabBarActiveTintColor: colors.textPrimary,
+        tabBarInactiveTintColor: colors.idleTextTabBar,
+      }}
+    >
       <MaterialTopTabs.Screen name="index" options={{ title: "Favorites" }} />
       <MaterialTopTabs.Screen
         name="watchlist"

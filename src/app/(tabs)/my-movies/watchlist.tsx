@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   emptyListText: {
+    alignSelf: "center",
     textAlign: "center",
     position: "absolute",
     marginBottom: 100,
