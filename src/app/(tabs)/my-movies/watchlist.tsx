@@ -1,3 +1,4 @@
+import FilterButton from "@/components/FilterButton";
 import MovieList from "@/components/MovieList";
 import {
   useAppSelector,
@@ -5,6 +6,8 @@ import {
   useGetWatchlist,
   useTheme,
 } from "@/hooks";
+import { filterMyMovieData } from "@/utils/functions/filterMyMovieData";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -17,9 +20,17 @@ const Watchlist = () => {
     isPending: isPendingWatchlist,
     fetchNextPage: fetchNextWatchlist,
   } = useGetWatchlist(accountId);
-
   const bottomTabBarHeight = useBottomTabBarTotalHeight();
   const { colors } = useTheme();
+  const router = useRouter();
+  const filter = useAppSelector((state) => state.filter);
+  const filteredData = filterMyMovieData([...watchlistData], filter);
+
+  const isFilterActive = !!(
+    filter.sort.length ||
+    filter.genreFilter.length ||
+    filter.dateFilter
+  );
 
   return (
     <View style={[styles.root, { backgroundColor: colors.backgroundPrimary }]}>
@@ -40,6 +51,10 @@ const Watchlist = () => {
           }
         />
       </Animated.View>
+      <FilterButton
+        shouldShowBadge={isFilterActive}
+        onPress={() => router.push("/my-movie-filter")}
+      />
     </View>
   );
 };
